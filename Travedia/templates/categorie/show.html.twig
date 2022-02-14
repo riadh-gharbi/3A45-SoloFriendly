@@ -1,0 +1,32 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Categorie {% endblock %}
+
+{% block body %}
+    <h1>Categorie</h1>
+
+    <table class="table">
+        <tbody>
+        {% for categorie in categorie %}
+            <tr>
+                <th>Id</th>
+                <td>{{ categorie.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ categorie.nom }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ categorie.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('categorie_show') }}">back to list</a>
+
+    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">edit</a>
+    <a href="{{ path('categorie_delete',{'id':categorie.Id}) }}">delete</a>
+        {% endfor %}
+
+{% endblock %}
