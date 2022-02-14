@@ -1,0 +1,57 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Plannings{% endblock %}
+
+{% block body %}
+    <h1>Planning</h1>
+
+    <table class="table">
+    <tbody>
+    {% for planning in planning %}
+        <tr>
+            <th>Id</th>
+            <td>{{ planning.id }}</td>
+        </tr>
+        <tr>
+            <th>Date depart</th>
+            <td>{{ planning.date_depart|date('d-m-y') }}</td>
+        </tr>
+        <tr>
+            <th>Date Fin</th>
+            <td>{{ planning.date_fin|date('d-m-y') }}</td>
+        </tr>
+        <tr>
+            <th>Prix</th>
+            <td>{{ planning.prix }}</td>
+        </tr>
+        <tr>
+            <th>Type Plan</th>
+            <td>{{ planning.type_plan }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ planning.description  }}</td>
+        </tr>
+        <tr>
+            <th>Voyageur</th>
+            <td>{{ planning.utilisateur.nom }}</td>
+        </tr>
+        <tr>
+            <th>Evenement</th>
+            <td>{{ planning.evenement.nom }}</td>
+        </tr>
+        <tr>
+            <th>Destination</th>
+            <td>{{ planning.destination.nom }}</td>
+        </tr>
+
+        </tbody>
+        </table>
+
+        <a href="{{ path('evenement_show') }}">back to list</a>
+
+        <a href="{{ path('evenement_edit', {'id': evenement.id}) }}">edit</a>
+        <a href="{{ path('evenement_delete',{'id':evenement.Id}) }}">delete</a>
+    {% endfor %}
+
+{% endblock %}
