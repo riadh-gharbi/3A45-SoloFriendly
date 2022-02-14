@@ -1,0 +1,48 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Events {% endblock %}
+
+{% block body %}
+    <h1>Events</h1>
+
+    <table class="table">
+    <tbody>
+    {% for evenement in evenement %}
+        <tr>
+            <th>Id</th>
+            <td>{{ evenement.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ evenement.nom }}</td>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <td>{{ evenement.image }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ evenement.description }}</td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>{{ evenement.categorie.nom }}</td>
+        </tr>
+        <tr>
+            <th>Date Start</th>
+            <td>{{ evenement.datedeb|date('d-m-y')  }}</td>
+        </tr>
+        <tr>
+            <th>Date end</th>
+            <td>{{ evenement.datefin|date('d-m-y') }}</td>
+        </tr>
+        </tbody>
+        </table>
+
+        <a href="{{ path('evenement_show') }}">back to list</a>
+
+        <a href="{{ path('evenement_edit', {'id': evenement.id}) }}">edit</a>
+        <a href="{{ path('evenement_delete',{'id':evenement.Id}) }}">delete</a>
+    {% endfor %}
+
+{% endblock %}

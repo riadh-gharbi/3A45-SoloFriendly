@@ -62,7 +62,7 @@ class CategorieController extends AbstractController
 
     /**
      * @param $id
-     * @param ClassroomRepository $rep
+     * @param CategorieRepository $rep
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/categorie/update/{id}", name="categorie_edit")
@@ -89,7 +89,7 @@ class CategorieController extends AbstractController
      * @param $id
      * @param CategorieRepository $rep
      * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/category/delete/{id}", name="categorie_delete")
+     * @Route("/categorie/delete/{id}", name="categorie_delete")
      */
     public function suppcat($id,CategorieRepository $rep)
     {
