@@ -3,30 +3,49 @@
 {% block title %}Categorie {% endblock %}
 
 {% block body %}
-    <h1>Categorie</h1>
-
-    <table class="table">
-        <tbody>
-        {% for categorie in categorie %}
-            <tr>
-                <th>Id</th>
-                <td>{{ categorie.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ categorie.nom }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ categorie.image }}</td>
-            </tr>
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"></h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('categorie_add') }}">Ajouter</a></li>
+                    {# <li class="breadcrumb-item active" aria-current="page"> Form elements </li> #}
+                </ol>
+            </nav>
+        </div>
+    <div class="col-lg-12 stretch-card">
+    <div class="card">
+    <div class="card-body">
+    <h4 class="card-title">List Categories</h4>
+    <p class="card-description"> Categories
+    </p>
+    <div class="table-responsive">
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>NOM</th>
+        <th>IMAGE</th>
+        <th>CONTROLER</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for categorie in categorie %}
+<tr class="table-info">
+        <td>{{ categorie.id }}</td>
+        <td>{{ categorie.nom }}</td>
+        <td>{{ categorie.image }}</td>
+        <td><a href="{{ path('categorie_edit', {'id': categorie.id}) }}">modifier</a>
+            <a href="{{ path('categorie_delete',{'id':categorie.Id}) }}">supprimer</a>
+        </td>
+        </tr>
+    {% endfor %}
         </tbody>
-    </table>
-
-    <a href="{{ path('categorie_show') }}">back to list</a>
-
-    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">edit</a>
-    <a href="{{ path('categorie_delete',{'id':categorie.Id}) }}">delete</a>
-        {% endfor %}
-
+        </table>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
 {% endblock %}
