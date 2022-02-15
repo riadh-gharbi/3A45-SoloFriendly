@@ -1,4 +1,4 @@
-{% extends 'baseback.html.twig' %}
+{% extends 'basefront.html.twig' %}
 
 {% block title %}Plannings{% endblock %}
 
@@ -35,30 +35,30 @@
             <th>Description</th>
             <td>{{ planning.description  }}</td>
         </tr>
-           <tr>
+        <tr>
             <th>Voyageur</th>
             <td>{{ planning.utilisateur.nom }}</td>
         </tr>
         <tr>
             <th>Evenement</th>
-    {% for evenement in planning.evenements %}
-            <td>{{ evenement.nom }}</td>
-    {% endfor %}
+            {% for evenement in planning.evenements %}
+                <td>{{ evenement.nom }}</td>
+            {% endfor %}
         </tr>
         <tr>
             <th>Destination</th>
-    {% for destination in planning.destinations %}
-            <td>{{ destination.nom }}</td>
-    {% endfor %}
+            {% for destination in planning.destinations %}
+                <td>{{ destination.nom }}</td>
+            {% endfor %}
         </tr>
 
         </tbody>
         </table>
 
-         <a href="{{ path('Planning_show') }}">back to list</a>
+        <a href="{{ path('PlanningFront_show') }}">back to list</a>
 
-        <a href="{{ path('Planning_edit', {'id':planning.id}) }}">edit</a>
-        <a href="{{ path('Planning_del',{'id':planning.id}) }}">delete</a>
+        <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}">edit</a>
+        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}">delete</a>
     {% endfor %}
 
 {% endblock %}

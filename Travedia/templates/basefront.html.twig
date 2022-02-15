@@ -175,8 +175,7 @@
             </div>
         </div>
     </header>
-
-    {%block body%} {%endblock%}
+    {%block body%}{%endblock%}
 
     <footer>
         <div class="footy-sec mn no-margin">
@@ -186,8 +185,8 @@
                     <li><a href="#" title="">FAQ</a></li>
                     <li><a href="#" title="">Community Guidelines</a></li>
                 </ul>
-                <p><img src="front/images/copy-icon2.png" alt="">Copyright 2022</p>
-                <img class="fl-rgt" src="front/images/logo-titre11.png" alt="">
+                <p><img src="{{ asset("front/images/copy-icon2.png")}}" alt="">Copyright 2022</p>
+                <img class="fl-rgt" src="{{ asset("front/images/logo-titre11.png")}}" alt="">
             </div>
         </div>
     </footer>
@@ -195,13 +194,13 @@
 </div>
 
 {%block js%}
-<script type="text/javascript" src="front/js/jquery.min.js"></script>
-<script type="text/javascript" src="front/js/popper.js"></script>
-<script type="text/javascript" src="front/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="front/js/jquery.mCustomScrollbar.js"></script>
-<script type="text/javascript" src="front/lib/slick/slick.min.js"></script>
-<script type="text/javascript" src="front/js/scrollbar.js"></script>
-<script type="text/javascript" src="front/js/script.js"></script>
+<script type="text/javascript" src="{{ asset("front/js/jquery.min.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/js/popper.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/js/bootstrap.min.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/js/jquery.mCustomScrollbar.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/lib/slick/slick.min.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/js/scrollbar.js")}}"></script>
+<script type="text/javascript" src="{{ asset("front/js/script.js")}}"></script>
 {%endblock%}
 
 </body>
