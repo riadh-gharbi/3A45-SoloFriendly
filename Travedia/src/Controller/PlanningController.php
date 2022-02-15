@@ -24,7 +24,7 @@ class PlanningController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('planning/index.html.twig', [
+        return $this->render('baseback.html.twig', [
             'controller_name' => 'PlanningController',
         ]);
     }
@@ -108,6 +108,15 @@ class PlanningController extends AbstractController
 
 
         return $this->redirectToRoute('Planning_show');
+    }
+    /**
+     * @Route("/planningFront", name="planningFront")
+     */
+    public function indexFront(): Response
+    {
+        return $this->render('basefront.html.twig', [
+            'controller_name' => 'PlanningController',
+        ]);
     }
 
     /**
