@@ -37,8 +37,21 @@ class EvenementController extends AbstractController
         $evenment = new Evenement();
         $form = $this->createForm(EvenementType::class, $evenment);
         $form->handleRequest($request);
-
+//winou code limage houni
         if ($form->isSubmitted() && $form->isValid()) {
+            $picture = $form->get('picture')->getData();
+
+            if ($picture) {
+                $newFilename = uniqid().'.'.$picture->guessExtension();
+
+                try {
+                    $picture->move(
+                        $this->getParameter('event_picture'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {}
+                $evenment->setPicture($newFilename);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($evenment);
             $entityManager->flush();
@@ -78,6 +91,18 @@ class EvenementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $picture = $form->get('picture')->getData();
+            if ($picture) {
+                $newFilename = uniqid().'.'.$picture->guessExtension();
+
+                try {
+                    $picture->move(
+                        $this->getParameter('event_picture'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {}
+                $evenement->setPicture($newFilename);
+            }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->flush();
 

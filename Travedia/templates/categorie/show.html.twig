@@ -35,7 +35,7 @@
 <tr class="table-info">
         <td>{{ categorie.id }}</td>
         <td>{{ categorie.nom }}</td>
-        <td>{{ categorie.image }}</td>
+    <td><a href="{{ asset('front/images/uploads/event_picture/' ~ categorie.image)}}">{{ categorie.image }}</a></td>
         <td><a href="{{ path('categorie_edit', {'id': categorie.id}) }}">modifier</a>
             <a href="{{ path('categorie_delete',{'id':categorie.Id}) }}">supprimer</a>
         </td>

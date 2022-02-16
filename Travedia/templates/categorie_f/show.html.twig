@@ -1,0 +1,29 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Categories {% endblock %}
+
+{% block body %}
+<div class="top-profiles">
+    <div class="pf-hd">
+        <h3>Top Categorie</h3>
+        <i class="la la-ellipsis-v"></i>
+    </div>
+    <div class="profiles-slider">
+        {% for categorie in categorie %}
+        <div class="user-profy company-up-info">
+            <img src="images/resources/user1.png" alt="">
+            <h3>{{ categorie.nom }}</h3>
+            <img src="{{ asset('front/images/uploads/event_picture/' ~ categorie.image)}}" alt="">
+            <span>{{ categorie.image }}</span>
+
+            <ul>
+                <li><a href="{{ path('categorief_edit', {'id': categorie.id}) }}" title="" class="followw">Modifier</a></li>
+                <li><a href="{{ path('categorief_delete',{'id':categorie.Id}) }}" title="" class="hire">Supprimer</a></li>
+            </ul>
+            <a href="{{ path('evenementf_show',{'categorie':categorie.nom}) }}" title="">Voir Evenements</a>
+        </div>
+
+{% endfor %}
+    </div>
+</div>
+{% endblock %}

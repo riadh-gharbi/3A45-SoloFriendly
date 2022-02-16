@@ -37,12 +37,12 @@
         {{ form_widget(form.datefin, { 'attr': {'class': "form-control"} }) }}
         <hr>
         <div class="form-group">
-            {{ form_errors(form.image) }}
-            {{ form_label(form.image,"upload image") }}
+            {{ form_errors(form.picture) }}
+            {{ form_label(form.picture,"upload image") }}
             <input type="file" name="img[]" class="file-upload-default" />
             <div class="input-group col-xs-12">
                 <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image" />
-                {{ form_widget(form.image, { 'attr': {'class': "form-control file-upload-info"} }) }}
+                {{ form_widget(form.picture, { 'attr': {'class': "form-control"} }) }}
                 <span class="input-group-append">
                     <button class="file-upload-browse btn btn-primary" type="button"> Upload </button>
                 </span>

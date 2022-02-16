@@ -1,0 +1,43 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}New Categorie{% endblock %}
+
+{% block body %}
+    <center>
+<main>
+    <div class="main-section">
+        <div class="container">
+            <div class="main-section-data">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="filter-secs">
+                            <div class="filter-heading">
+                                <h3>Créer une catégorie</h3>
+                            </div>
+                            {{ form_start(form) }}
+                            <div class="paddy">
+                                <div class="filter-dd">
+                                    <div class="filter-ttl">
+                                        {{ form_errors(form.nom) }}
+                                        <h3>{{ form_label(form.nom,"nom de categorie") }}</h3>
+                                    </div>
+                                        {{ form_widget(form.nom, { 'attr': {'class': "form-control"} }) }}
+                                    <div class="filter-ttl">
+                                    {{ form_errors(form.picture) }}
+                                    <h3>{{ form_label(form.picture,"upload image") }}</h3>
+                                    </div>
+                                </div>
+                                    {{ form_widget(form.picture, { 'attr': {'class': "form-control"} }) }}
+                            </div>
+                            {{ form_row(form.Ajouter, { 'attr': {'class': "btn btn-primary mr-2"} }) }}
+                            {{ form_end(form) }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+    </center>
+{% endblock %}
