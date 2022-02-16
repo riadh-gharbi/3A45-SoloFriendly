@@ -20,7 +20,7 @@
                 <li><a href="{{ path('categorief_edit', {'id': categorie.id}) }}" title="" class="followw">Modifier</a></li>
                 <li><a href="{{ path('categorief_delete',{'id':categorie.Id}) }}" title="" class="hire">Supprimer</a></li>
             </ul>
-            <a href="{{ path('evenementf_show',{'categorie':categorie.nom}) }}" title="">Voir Evenements</a>
+            <a href="{{ path('evenementf_show',{'id':categorie.id}) }}" title="">Voir Evenements</a>
         </div>
 
 {% endfor %}

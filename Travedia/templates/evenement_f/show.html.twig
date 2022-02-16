@@ -9,7 +9,7 @@
             <i class="la la-ellipsis-v"></i>
         </div>
         <div class="profiles-slider">
-            {% for evenement in evenement %}
+            {% for evenement in event %}
                 <div class="user-profy company-up-info">
                     <img src="images/resources/user1.png" alt="">
                     <h3>{{ evenement.nom }}</h3>
@@ -17,10 +17,10 @@
                     <span>{{ evenement.description }}</span>
                     <span>de {{ evenement.datedeb|date('d-m-y')}}</span>
                     <span>au {{ evenement.datefin|date('d-m-y')}}</span>
-                    <span>{{ evenement.categorie.nom }}</span>
+                    {# <span>{{ evenement.categorie.nom }}</span> #}
                     <ul>
-                        <li><a href="{{ path('evenementf_edit', {'id': evenement.id}) }}" title="" class="followw">Modifier</a></li>
-                        <li><a href="{{ path('evenementf_delete',{'id':evenement.Id}) }}" title="" class="hire">Supprimer</a></li>
+                       {# <li><a href="{{ path('evenementf_edit', {'id': evenement.id}) }}" title="" class="followw">Modifier</a></li>
+                        <li><a href="{{ path('evenementf_delete',{'id': evenement.id}) }}" title="" class="hire">Supprimer</a></li> #}
                     </ul>
 
                 </div>

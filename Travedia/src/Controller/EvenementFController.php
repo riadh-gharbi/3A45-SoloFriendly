@@ -20,10 +20,11 @@ class EvenementFController extends AbstractController
     /**
      * @Route("/evenement_f", name="evenementf")
      */
-    public function index(): Response
+    public function index(EvenementRepository $rep): Response
     {
+        $evenement=$rep->findAll();
         return $this->render('evenement_f/index.html.twig', [
-            'controller_name' => 'EvenementFController',
+            'evenement' => $evenement,
         ]);
     }
 
@@ -55,7 +56,7 @@ class EvenementFController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($evenment);
             $entityManager->flush();
-            return $this->redirectToRoute('evenementf_show');
+            return $this->redirectToRoute('evenementf');
         }
 
         return $this->render('evenement_f/new.html.twig', [
@@ -67,14 +68,20 @@ class EvenementFController extends AbstractController
     /**
      * @param EvenementRepository $rep
      * @return Response
-     * @Route("/evenement_f/show", name="evenementf_show")
+     * @Route("/evenement_f/show/{id}", name="evenementf_show")
      */
-    public function affcat(EvenementRepository $rep)
+    public function affcat(EvenementRepository $rep, $id)
     {
+        /*$evenement=$rep->findAll();
+        return $this->render('evenement_f/show.html.twig', [
+            'evenement' => $evenement,
+        ]);*/
         $evenement=$rep->findAll();
         return $this->render('evenement_f/show.html.twig', [
             'evenement' => $evenement,
+            'event' => $rep->getEventsByCategoryID($id),
         ]);
+
     }
 
     /**
@@ -128,6 +135,6 @@ class EvenementFController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('evenementf_show');
+        return $this->redirectToRoute('evenementf');
     }
 }

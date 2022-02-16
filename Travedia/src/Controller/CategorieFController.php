@@ -118,26 +118,12 @@ class CategorieFController extends AbstractController
      */
     public function suppcat($id,CategorieRepository $rep)
     {
-        $categorie=$rep->find($id);
-        $entityManager=$this->getDoctrine()->getManager();
+        $categorie = $rep->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($categorie);
         $entityManager->flush();
 
 
         return $this->redirectToRoute('categorief_show');
     }
-   /* /**
-     * @param $id
-     * @param CategorieRepository $rep
-     * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/categorie_f/redirect/{id_categorie}", name="categorief_delete")
-     */
-    /*public function redirect($id,CategorieRepository $rep)
-    {
-        $categorie=$rep->findBy($id);
-        return $this->render('evenement_f/show.html.twig', [
-            'categorie' => $categorie,
-        ]);
-
-    }*/
 }
