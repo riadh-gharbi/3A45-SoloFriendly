@@ -1,64 +1,153 @@
 {% extends 'baseback.html.twig' %}
-
-{% block title %}Plannings{% endblock %}
+{% block title %}Ajouter destination
+{% endblock %}
 
 {% block body %}
-    <h1>Planning</h1>
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"></h3>
+            <nav aria-label="breadcrumb">
+                            </nav>
+        </div>
+        <div id="layoutSidenav_content">
 
-    <table class="table">
-    <tbody>
-    <p>
+                <div class="container-fluid">
+                    <div class="card-body">
+                        <div class="table-responsive">
 
-    </p>
-    {% for planning in planning %}
-        <tr>
-            <th>Id</th>
-            <td>{{ planning.id }}</td>
-        </tr>
-        <tr>
-            <th>Date Depart</th>
-            <td>{{ planning.dateDepart|date('d-m-y') }}</td>
-        </tr>
-        <tr>
-            <th>Date Fin</th>
-            <td>{{ planning.dateFin|date('d-m-y') }}</td>
-        </tr>
-        <tr>
-            <th>Prix</th>
-            <td>{{ planning.prix }}</td>
-        </tr>
-        <tr>
-            <th>Type Plan</th>
-            <td>{{ planning.typePlan }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ planning.description  }}</td>
-        </tr>
-           <tr>
-            <th>Voyageur</th>
-            <td>{{ planning.utilisateur.nom }}</td>
-        </tr>
-        <tr>
-            <th>Evenement</th>
-    {% for evenement in planning.evenements %}
-            <td>{{ evenement.nom }}</td>
-    {% endfor %}
-        </tr>
-        <tr>
-            <th>Destination</th>
-    {% for destination in planning.destinations %}
-            <td>{{ destination.nom }}</td>
-    {% endfor %}
-        </tr>
 
-        </tbody>
-        </table>
 
-         <a href="{{ path('Planning_show') }}">back to list</a>
 
-        <a href="{{ path('Planning_edit', {'id':planning.id}) }}">edit</a>
-        <a href="{{ path('Planning_del',{'id':planning.id}) }}">delete</a>
-    {% endfor %}
+                        </div>
+                        <div class="col-lg-16 stretch-card">
+                            <div class="card-body">
 
-{% endblock %}
+                                    <h4 class="card-title">Liste des Planning</h4>
+
+                                    <div
+                                            class="table-responsive">
+
+
+                                        {# <table class="table table-hover" > #}
+                                        <table class="table table-bordered">
+
+                                            <thead>
+
+
+                                            <tr class="table-info">
+
+                                                <th>
+                                                    Id
+                                                </th>
+
+                                                <th>
+                                                    Date Depart
+                                                </th>
+                                                <th>
+                                                    Date Fin
+                                                </th>
+                                                <th>
+                                                    Prix
+                                                </th>
+                                                <th>
+                                                    TypePlan
+                                                </th>
+                                                <th>
+                                                    Description
+                                                </th>
+                                                <th>
+                                                    Nom
+                                                </th>
+                                                <th>
+                                                    Evenement
+                                                </th>
+                                                <th>
+                                                    Destination
+                                                </th>
+                                                <th>
+                                                    Hotel
+                                                </th>
+                                            </thead>
+
+                                            <tbody id="tab">
+                                            {% for planning in planning %}
+
+
+                                                <td>{{ planning.id }}</td>
+
+
+
+                                                <td>{{ planning.dateDepart|date('d-m-y') }}</td>
+
+
+                                                <td>{{ planning.dateFin|date('d-m-y') }}</td>
+
+
+
+                                                <td>{{ planning.prix }}</td>
+
+                                                <td>{{ planning.typePlan }}</td>
+
+
+                                                <td>{{ planning.description  }}</td>
+
+
+
+                                                <td>{{ planning.utilisateur.nom }}</td>
+
+
+
+                                                {% for evenement in planning.evenements %}
+                                                    <td>{{ evenement.nom }}</td>
+                                                {% endfor %}
+
+
+
+                                                {% for destination in planning.destinations %}
+                                                    <td>{{ destination.nom }}</td>
+                                                {% endfor %}
+
+                                                {% for hotel in planning.hotels %}
+                                                    <td>{{ hotel.nom }}</td>
+                                                {% endfor %}
+
+
+                                                <td>
+                                                    <div align="right">
+
+                                                        <a href="{{ path('Planning_edit', {'id':planning.id}) }}" class="mdi mdi-tooltip-edit" name='edit' title=" modifier">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a href="{{ path('Planning_del',{'id':planning.id}) }}" class="mdi mdi-delete" onclick="return confirm('Etes-vous sûr de supprimer cette destination?');" title=" supprimer">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                                </tr>
+
+
+                                                {% endfor %}
+                                            </tbody>
+
+                                        </table>
+
+                                        <p align="center">
+                                            {{ knp_pagination_render(planning) }}
+                                        </p>
+
+
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    {% endblock %}

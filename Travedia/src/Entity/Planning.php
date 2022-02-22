@@ -6,6 +6,8 @@ use App\Repository\PlanningRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=PlanningRepository::class)
@@ -31,6 +33,7 @@ class Planning
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Positive(message="La Prix doit etre postive")
      */
     private $prix;
 
@@ -41,6 +44,7 @@ class Planning
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="La description est necessaire")
      */
     private $description;
 
@@ -50,12 +54,13 @@ class Planning
     private $utilisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Evenement::class, mappedBy="planning")
+     * @ORM\ManyToMany(targetEntity=Evenement::class, inversedBy="plannings")
      */
     private $evenements;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Destination::class, mappedBy="planning")
+     * @ORM\ManyToMany(targetEntity=Destination::class, inversedBy="plannings")
+     * @Assert\NotBlank(message="La destination est necessaire")
      */
     private $destinations;
 
@@ -69,11 +74,17 @@ class Planning
      */
     private $factures;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Hotel::class, inversedBy="plannings")
+     */
+    private $hotels;
+
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
         $this->destinations = new ArrayCollection();
         $this->factures = new ArrayCollection();
+        $this->hotels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +256,30 @@ class Planning
                 $facture->setPlanning(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Hotel[]
+     */
+    public function getHotels(): Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(Hotel $hotel): self
+    {
+        if (!$this->hotels->contains($hotel)) {
+            $this->hotels[] = $hotel;
+        }
+
+        return $this;
+    }
+
+    public function removeHotel(Hotel $hotel): self
+    {
+        $this->hotels->removeElement($hotel);
 
         return $this;
     }

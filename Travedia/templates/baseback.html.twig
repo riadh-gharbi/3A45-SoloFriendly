@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" style="margin : auto"><head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -12,14 +11,16 @@
     <link rel="stylesheet" href="{{asset("back/vendors/font-awesome/css/font-awesome.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/css/style.css") }}" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     {% endblock %}
     <link rel="shortcut icon" href="{{asset("back/images/favicon.png" ) }}"/>
+    {% block stylesheet %}{% endblock %}
 </head>
 <body>
 <div class="container-scroller">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
-            <a class="sidebar-brand brand-logo" href="index.html"><img src="{{asset("back/images/logo-titre2.png")}}" alt="logo" /></a>
+            <a class="sidebar-brand brand-logo" href="{{path('planningBack')}}" title=""><img src="{{asset("back/images/logo-titre2.png")}}" alt="logo" /></a>
             <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img src="{{ asset("back/images/logo-mini.svg")}}" alt="logo" /></a>
         </div>
         <ul class="nav">
@@ -70,6 +71,12 @@
                 <a class="nav-link" href="{{path('Planning_add')}}">
                     <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                     <span class="menu-title">Planning</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{path('hotel_add')}}">
+                    <i class="mdi mdi-bank menu-icon"></i>
+                    <span class="menu-title">Hotel</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -191,7 +198,8 @@
                 </button>
             </div>
         </nav>
-       {% block body %}{% endblock %}
+       {% block body %}
+       {% endblock %}
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
                     <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
@@ -222,6 +230,9 @@
 <script src="{{ asset("back/js/off-canvas.js")}}"></script>
 <script src="{{ asset("back/js/hoverable-collapse.js")}}"></script>
 <script src="{{ asset("back/js/misc.js")}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
 <!-- endinject -->
 <!-- Custom js for this page -->
 <script src="{{ asset("back/js/dashboard.js")}}"></script>

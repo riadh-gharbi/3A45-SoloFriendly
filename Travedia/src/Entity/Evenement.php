@@ -61,7 +61,7 @@ class Evenement
     private $destination;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Planning::class, inversedBy="evenements")
+     * @ORM\ManyToMany(targetEntity=Planning::class, mappedBy="evenement")
      */
     private $planning;
 

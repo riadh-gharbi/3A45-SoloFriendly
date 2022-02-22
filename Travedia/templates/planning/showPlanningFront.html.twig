@@ -3,9 +3,23 @@
 {% block title %}Plannings{% endblock %}
 
 {% block body %}
-    <h1>Planning</h1>
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"></h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
 
-    <table class="table">
+                    <li class="breadcrumb-item">
+                        <h4>Plannings</h4>
+
+                    </li>
+
+
+                </ol>
+            </nav>
+        </div>
+        <table class="table">
     <tbody>
     <p>
 
@@ -51,14 +65,25 @@
                 <td>{{ destination.nom }}</td>
             {% endfor %}
         </tr>
+    <tr>
+        <th>Hotels</th>
+        {% for hotel in planning.hotels %}
+            <td>{{ hotel.nom }}</td>
+        {% endfor %}
+    </tr>
 
         </tbody>
+
         </table>
+        <a href="{{ path('PlanningFront_show') }}" class="btn btn-primary mr-2",style="height:40px; width:40px;">back to list</a>
 
-        <a href="{{ path('PlanningFront_show') }}">back to list</a>
+        <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}" class="btn btn-warning mr-2",style="width:80px;">edit</a>
+        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}"class="btn btn-danger mr-2",onclick="return confirm('Etes-vous sûr de supprimer ce planning?');">delete</a>
 
-        <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}">edit</a>
-        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}">delete</a>
+
     {% endfor %}
+    {{ knp_pagination_render(planning) }}
+    </div>
+</div>
 
 {% endblock %}
