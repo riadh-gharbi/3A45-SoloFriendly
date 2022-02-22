@@ -16,11 +16,11 @@ class CategorieFController extends AbstractController
     /**
      * @Route("/categorie_f", name="categorief")
      */
-    public function index(): Response
+    public function index(CategorieRepository $rep): Response
     {
-        return $this->render('categorie_f/index.html.twig', [
-            'controller_name' => 'CategorieFController',
-        ]);
+        $categorie=$rep->findAll();
+        return $this->render('categorie_f/show.html.twig', [
+            'categorie' => $categorie, ]);
     }
 
     /**
@@ -51,7 +51,7 @@ class CategorieFController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($categorie);
             $entityManager->flush();
-            return $this->redirectToRoute('categorief_show');
+            return $this->redirectToRoute('categorief');
         }
 
         return $this->render('categorie_f/new.html.twig', [
@@ -102,7 +102,7 @@ class CategorieFController extends AbstractController
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return $this->redirectToRoute('categorief_show');
+            return $this->redirectToRoute('categorief');
         }
 
         return $this->render('categorie_f/edit.html.twig', [
@@ -124,6 +124,6 @@ class CategorieFController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('categorief_show');
+        return $this->redirectToRoute('categorief');
     }
 }

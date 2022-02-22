@@ -6,9 +6,12 @@ use App\Repository\EvenementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=EvenementRepository::class)
+ * @UniqueEntity("nom")
  */
 class Evenement
 {
@@ -21,27 +24,40 @@ class Evenement
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\GreaterThanOrEqual(
+     *      value = "today"
+     * )
      */
     private $datedeb;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\GreaterThanOrEqual(
+     *      value = "today"
+     * )
+     * @Assert\Expression(
+     *     "this.getDatefin() >= this.getDatedeb()",
+     *     message="Verifier votre date"
+     * )
      */
     private $datefin;
 
 
     /**
      * @ORM\Column(type="string", length=255)
+
      */
     private $image;
 
@@ -87,7 +103,7 @@ class Evenement
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 

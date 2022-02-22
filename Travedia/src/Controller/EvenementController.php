@@ -9,10 +9,12 @@ use App\Form\EvenementType;
 use App\Repository\CatRepository;
 use App\Repository\EvenementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\File;
 
 
 class EvenementController extends AbstractController
@@ -88,8 +90,21 @@ class EvenementController extends AbstractController
     {
         $evenement=$rep->find($id);
         $form = $this->createForm(EvenementType::class, $evenement);
-        $form->handleRequest($request);
+        $form->remove('picture');
+        $form->add('picture', FileType::class, [
+            'mapped' => false,
+            'required' => false,
+            'constraints' => [
+                new File([
+                    'mimeTypes' => [
+                        'image/*',
+                    ],
+                    'mimeTypesMessage' => 'Verify your image type',
+                ])
+            ],
+        ]);
 
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $picture = $form->get('picture')->getData();
             if ($picture) {
