@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Facture;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\AST\LikeExpression;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +21,29 @@ class FactureRepository extends ServiceEntityRepository
         parent::__construct($registry, Facture::class);
     }
 
+
+    public function findFacturesByUser(Utilisateur $user):array
+    {
+        $entityManager=$this->getEntityManager();
+
+       // $query= $entityManager->createQuery(
+       //     'SELECT facture
+       //     FROM App\Entity\Facture facture
+       //     WHERE facture.owner.id=user.id OR facture.client.id=user.id
+       //     '
+       // )->setParameter('user',$user);
+
+            $qb = $this->createQueryBuilder('f')
+                ->join('f.client','fc')
+                ->addSelect('fc')
+                ->where('fc.id=:user.id')
+                ->setParameter('user',$user)
+                ->getQuery();
+
+
+
+        return $qb->getResult();
+    }
     // /**
     //  * @return Facture[] Returns an array of Facture objects
     //  */

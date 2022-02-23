@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ReclamationRepository::class)
@@ -19,11 +20,15 @@ class Reclamation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="La reclamation ne doit pas être vide")
      */
     private $contenu;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="La reclamation ne doit pas être vide")
+     * @Assert\Choice ("
+
      */
     private $etat_reclamation;
 

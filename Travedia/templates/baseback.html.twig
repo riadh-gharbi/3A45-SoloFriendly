@@ -8,7 +8,7 @@
     {% block css %}
     <link rel="stylesheet" href="{{asset("back/vendors/mdi/css/materialdesignicons.min.css") }}" />
     <link rel="stylesheet" href="{{asset("back/vendors/flag-icon-css/css/flag-icon.min.css") }}" />
-    <link rel="stylesheet" href="{{asset("back/vendors/css/vendor.bundle.base.css" ) }}"/>
+    <link rel="stylesheet" href="{{asset("back/vendors/css/vendor.bundle.base.css") }}"/>
     <link rel="stylesheet" href="{{asset("back/vendors/font-awesome/css/font-awesome.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/css/style.css") }}" />
@@ -16,17 +16,17 @@
     <link rel="shortcut icon" href="{{asset("back/images/favicon.png" ) }}"/>
 </head>
 <body>
-<div class="container-scroller">
+<div class="container-scroller" >
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
-            <a class="sidebar-brand brand-logo" href="index.html"><img src="back/images/logo-titre2.png" alt="logo" /></a>
-            <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img src="back/images/logo-mini.svg" alt="logo" /></a>
+            <a class="sidebar-brand brand-logo" href="index.html"><img src="{{asset("back/images/logo-titre2.png")}}" alt="logo" /></a>
+            <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img src="{{ asset("back/images/logo-mini.svg")}}" alt="logo" /></a>
         </div>
         <ul class="nav">
             <li class="nav-item nav-profile">
                 <a href="#" class="nav-link">
                     <div class="nav-profile-image">
-                        <img src="back/images/faces/face1.jpg" alt="profile" />
+                        <img src="{{ asset("back/images/faces/face1.jpg")}}" alt="profile" />
                         <span class="login-status online"></span>
                         <!--change to offline or busy as needed-->
                     </div>
@@ -127,7 +127,7 @@
         </div>
         <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
             <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
-                <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="{{ asset("back/images/logo-mini.svg")}}" alt="logo" /></a>
                 <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
                     <i class="mdi mdi-menu"></i>
                 </button>
@@ -139,7 +139,7 @@
                             <span class="count count-varient2">5</span>
                         </a>
                         <div class="dropdown-menu navbar-dropdown navbar-dropdown-large preview-list" aria-labelledby="messageDropdown">
-                            <h6 class="p-3 mb-0">Messages</h6>
+                            <h6 class="p-3 mb-0">Reclamations</h6>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-item-content flex-grow">
                                     <span class="badge badge-pill badge-success">Request</span>
@@ -161,7 +161,7 @@
                                 </div>
                                 <p class="text-small text-muted align-self-start"> 4:10 PM </p>
                             </a>
-                            <h6 class="p-3 mb-0">See all activity</h6>
+                            <h6 class="p-3 mb-0"><a href="">Afficher tout</a></h6>
                         </div>
                     </li>
                     <li class="nav-item nav-search border-0 ml-1 ml-md-3 ml-lg-5 d-none d-md-flex">
@@ -177,7 +177,7 @@
 
                     <li class="nav-item nav-profile dropdown border-0">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown">
-                            <img class="nav-profile-img mr-2" alt="" src="back/images/faces/face1.jpg" />
+                            <img class="nav-profile-img mr-2" alt="" src="{{ asset("back/images/faces/face1.jpg")}}" />
                             <span class="profile-name">Henry Klein</span>
                         </a>
                         <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
@@ -189,9 +189,13 @@
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
                     <span class="mdi mdi-menu"></span>
                 </button>
+
             </div>
+
         </nav>
-       {% block body %}{% endblock %}
+        {% block body %}
+
+        {% endblock %}
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
                     <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
@@ -206,25 +210,25 @@
 <!-- container-scroller -->
 <!-- plugins:js -->
 {% block js %}
-<script src="back/vendors/js/vendor.bundle.base.js"></script>
+<script src="{{ asset ("back/vendors/js/vendor.bundle.base.js")}}"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
-<script src="back/vendors/chart.js/Chart.min.js"></script>
-<script src="back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="back/vendors/flot/jquery.flot.js"></script>
-<script src="back/vendors/flot/jquery.flot.resize.js"></script>
-<script src="back/vendors/flot/jquery.flot.categories.js"></script>
-<script src="back/vendors/flot/jquery.flot.fillbetween.js"></script>
-<script src="back/vendors/flot/jquery.flot.stack.js"></script>
-<script src="back/vendors/flot/jquery.flot.pie.js"></script>
+<script src="{{ asset("back/vendors/chart.js/Chart.min.js")}}"></script>
+<script src="{{ asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.resize.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.categories.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.fillbetween.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.stack.js")}}"></script>
+<script src="{{ asset("back/vendors/flot/jquery.flot.pie.js")}}"></script>
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="back/js/off-canvas.js"></script>
-<script src="back/js/hoverable-collapse.js"></script>
-<script src="back/js/misc.js"></script>
+<script src="{{ asset("back/js/off-canvas.js")}}"></script>
+<script src="{{ asset("back/js/hoverable-collapse.js")}}"></script>
+<script src="{{ asset("back/js/misc.js")}}"></script>
 <!-- endinject -->
 <!-- Custom js for this page -->
-<script src="back/js/dashboard.js"></script>
+<script src="{{ asset("back/js/dashboard.js")}}"></script>
 {% endblock %}
 <!-- End custom js for this page -->
 </body>

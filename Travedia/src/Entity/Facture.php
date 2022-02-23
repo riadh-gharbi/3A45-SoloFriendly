@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\FactureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=FactureRepository::class)
+ * @ORM\Table(name="Facture")
  */
 class Facture
 {
@@ -24,21 +26,29 @@ class Facture
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice("En Cours","Effectué","Annulé")
      */
     private $statut;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Date
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $date_creation;
 
     /**
+     *
      * @ORM\Column(type="date", nullable=true)
+     *  @Assert\Date
+     * @Assert\GreaterThanOrEqual(propertyPath="dateCreation",
+    message="La date de paiement doit être supérieur ou égale à la date de creation")
      */
     private $date_paiement;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice("En Ligne","Cash")
      */
     private $type_paiement;
 
@@ -83,7 +93,7 @@ class Facture
         return $this->statut;
     }
 
-    public function setStatut(string $statut): self
+    public function setStatut(?string $statut): self
     {
         $this->statut = $statut;
 
@@ -95,7 +105,7 @@ class Facture
         return $this->date_creation;
     }
 
-    public function setDateCreation(\DateTimeInterface $date_creation): self
+    public function setDateCreation(?\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
 
@@ -119,7 +129,7 @@ class Facture
         return $this->type_paiement;
     }
 
-    public function setTypePaiement(string $type_paiement): self
+    public function setTypePaiement(?string $type_paiement): self
     {
         $this->type_paiement = $type_paiement;
 
