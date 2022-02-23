@@ -27,7 +27,7 @@ class Reclamation
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La reclamation ne doit pas être vide")
-     * @Assert\Choice ("
+     * @Assert\Choice ("En Cours", "Résolue")
 
      */
     private $etat_reclamation;
