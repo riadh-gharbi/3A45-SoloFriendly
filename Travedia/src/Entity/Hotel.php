@@ -65,7 +65,7 @@ class Hotel
         return $this->Nom;
     }
 
-    public function setNom(string $Nom): self
+    public function setNom(?string $Nom): self
     {
         $this->Nom = $Nom;
 
@@ -89,7 +89,7 @@ class Hotel
         return $this->Email;
     }
 
-    public function setEmail(string $Email): self
+    public function setEmail(?string $Email): self
     {
         $this->Email = $Email;
 
@@ -101,7 +101,7 @@ class Hotel
         return $this->NumTel;
     }
 
-    public function setNumTel(int $NumTel): self
+    public function setNumTel(?int $NumTel): self
     {
         $this->NumTel = $NumTel;
 

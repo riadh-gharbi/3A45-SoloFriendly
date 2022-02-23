@@ -78,7 +78,7 @@
         <a href="{{ path('PlanningFront_show') }}" class="btn btn-primary mr-2",style="height:40px; width:40px;">back to list</a>
 
         <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}" class="btn btn-warning mr-2",style="width:80px;">edit</a>
-        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}"class="btn btn-danger mr-2",onclick="return confirm('Etes-vous sûr de supprimer ce planning?');">delete</a>
+        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}"class="btn btn-danger mr-2" onclick="return confirm('Etes-vous sûr de supprimer ce planning?');">delete</a>
 
 
     {% endfor %}

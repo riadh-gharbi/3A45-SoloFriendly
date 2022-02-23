@@ -39,9 +39,9 @@ class PlanningType extends AbstractType
             ])
             ->add('description',TextareaType::class)
             ->add('utilisateur',EntityType::class,['class'=>Utilisateur::class,'choice_label'=>'nom'])
-            ->add('evenements',EntityType::class,['class'=>Evenement::class,'choice_label'=>'nom','multiple'=>'true'])
-            ->add('destinations',EntityType::class,['class'=>Destination::class,'choice_label'=>'nom','multiple'=>'true'])
-            ->add('hotels',EntityType::class,['class'=>Hotel::class,'choice_label'=>'nom','multiple'=>'true'])
+            ->add('evenements',EntityType::class,['class'=>Evenement::class,'choice_label'=>'nom','multiple'=>'true','expanded'=>'true'])
+            ->add('destinations',EntityType::class,['class'=>Destination::class,'choice_label'=>'nom','multiple'=>'true','expanded'=>'true'])
+            ->add('hotels',EntityType::class,['class'=>Hotel::class,'choice_label'=>'nom','multiple'=>'true','expanded'=>'true'])
             // ->add('actualite')
             ->add('Ajouter', SubmitType::class)
         ;

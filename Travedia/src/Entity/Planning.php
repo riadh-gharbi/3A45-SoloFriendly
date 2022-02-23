@@ -22,18 +22,24 @@ class Planning
     private $id;
 
     /**
+     * @var \Date
      * @ORM\Column(type="date")
+     * @Assert\Date
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $date_depart;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Date
+     * @Assert\GreaterThanOrEqual(propertyPath="date_depart",
+    message="La date du fin doit être supérieure à la date début")
      */
     private $date_fin;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Assert\Positive(message="La Prix doit etre postive")
+     * @Assert\Positive(message="La Prix doit etre positive")
      */
     private $prix;
 
@@ -97,7 +103,7 @@ class Planning
         return $this->date_depart;
     }
 
-    public function setDateDepart(\DateTimeInterface $date_depart): self
+    public function setDateDepart(?\DateTimeInterface $date_depart): self
     {
         $this->date_depart = $date_depart;
 
@@ -109,7 +115,7 @@ class Planning
         return $this->date_fin;
     }
 
-    public function setDateFin(\DateTimeInterface $date_fin): self
+    public function setDateFin(?\DateTimeInterface $date_fin): self
     {
         $this->date_fin = $date_fin;
 
@@ -145,7 +151,7 @@ class Planning
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

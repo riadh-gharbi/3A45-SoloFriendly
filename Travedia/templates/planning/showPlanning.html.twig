@@ -25,8 +25,7 @@
 
                                     <h4 class="card-title">Liste des Planning</h4>
 
-                                    <div
-                                            class="table-responsive">
+                                    <div class="table-responsive">
 
 
                                         {# <table class="table table-hover" > #}
@@ -109,7 +108,7 @@
                                                 {% endfor %}
 
                                                 {% for hotel in planning.hotels %}
-                                                    <td>{{ hotel.nom }}</td>
+                                                    <th>{{ hotel.nom }}</th>
                                                 {% endfor %}
 
 
@@ -119,7 +118,7 @@
                                                         <a href="{{ path('Planning_edit', {'id':planning.id}) }}" class="mdi mdi-tooltip-edit" name='edit' title=" modifier">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="{{ path('Planning_del',{'id':planning.id}) }}" class="mdi mdi-delete" onclick="return confirm('Etes-vous sûr de supprimer cette destination?');" title=" supprimer">
+                                                        <a href="{{ path('Planning_del',{'id':planning.id}) }}" class="mdi mdi-delete" onclick="return confirm('Etes-vous sûr de supprimer ce planning?');" title=" supprimer">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
 
