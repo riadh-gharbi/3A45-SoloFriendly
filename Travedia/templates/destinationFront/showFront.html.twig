@@ -1,0 +1,91 @@
+{# {% extends 'basefront.html.twig' %}
+ {% block title %}Travedia{% endblock %}
+
+  {% block body %}
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+ 
+ 
+
+	<div class="main-panel">
+		<div class="content-wrapper">
+	
+			
+										<div align="middle" class="table-responsive">
+
+									
+                    <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="820" height="312"  align="middle" alt="photo">
+
+</div>
+				<h1>	
+         welcome to {{ destinationfront.nom }}
+</h1>
+
+{{ destinationfront.region.nom }}
+<br>
+{{ destinationfront.description }}
+
+
+
+</div> 
+   </div>
+
+ 
+  
+
+
+        {% endblock %} #}
+        {% extends 'basefront.html.twig' %}
+{% block title %}afficher destination
+{% endblock %}
+
+{% block body %}
+	
+<div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title"> </h3>
+				<nav aria-label="breadcrumb">
+					
+				</nav>
+			</div>
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid">
+					 <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Vos destinations</h4>
+				
+					<br><br>
+          <center>
+
+                    <div class="table-responsive">
+                  		
+                    <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="820" height="312"  align="middle" alt="photo">
+
+</div>
+
+				<h1>	
+         welcome to {{ destinationfront.nom }}
+</h1>
+
+{{ destinationfront.region.nom }}
+<br>
+{{ destinationfront.description }}
+
+
+</center>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			
+
+
+		{% endblock %}

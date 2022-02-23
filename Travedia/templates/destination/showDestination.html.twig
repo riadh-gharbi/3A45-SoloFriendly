@@ -1,0 +1,36 @@
+{% extends 'baseback.html.twig' %}
+ {% block title %}Travedia{% endblock %}
+
+  {% block body %}
+<div class="main-panel">
+          <div class="content-wrapper">
+        
+					<div align="middle" class="table-responsive">
+                    {# <img src="{{ asset('/public/uploads/brochures/{{ destination.image }}')}}"/> #}
+                    <img src="{{ asset('uploads/brochures/' ~ destination.image)}}"  width="1120" 
+     height="450"  align="middle" alt="photo">
+
+<hr>
+
+				<h1>	
+ welcome to {{ destination.nom }}
+</h1>
+
+{{ destination.region.nom }}
+<br>
+<p align="left" >  <strong> description : </strong>
+{{ destination.description }}
+</p>
+<hr>
+
+
+
+
+  {# </div>  </div>
+
+  </div>  #}
+   </div>
+  </div>
+
+
+        {% endblock %}

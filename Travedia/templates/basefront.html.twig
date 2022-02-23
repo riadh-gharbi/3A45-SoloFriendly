@@ -1,16 +1,17 @@
 
 <!DOCTYPE html>
 <html>
+        {% block header %}
 
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:32 GMT -->
 <head>
     <meta charset="UTF-8">
-    <title> {%block title%} Travedia {%endblock%}</title>
+    <title> {% block title %} Travedia {% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
-    {%block css%}
+    {% block css %}
     <link rel="stylesheet" type="text/css" href="{{asset("front/css/animate.css")}}">
     <link rel="stylesheet" type="text/css" href="{{asset("front/css/bootstrap.min.css") }}">
     <link rel="stylesheet" type="text/css" href="{{asset("front/css/line-awesome.css") }}">
@@ -22,7 +23,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset("front/lib/slick/slick-theme.css") }}">
     <link rel="stylesheet" type="text/css" href="{{asset("front/css/style.css") }}">
     <link rel="stylesheet" type="text/css" href="{{asset("front/css/responsive.css") }}">
-    {%endblock%}
+    {% endblock %}
+    <link rel="shortcut icon" href="{{asset("back/images/iconeb.png" ) }}"/>
 
 </head>
 <body>
@@ -31,7 +33,7 @@
         <div class="container">
             <div class="header-data">
                 <div class="logo">
-                    <a href="index.html" title=""><img src="{{asset("front/images/logo2-sansbg.png") }}" alt=""></a>
+                    <a href="index.html" title=""><img src="{{asset("front/images/iconeb.png")}}"  alt=""></a>
                 </div>
                 <div class="search-bar">
                     <form>
@@ -48,13 +50,16 @@
                             </a>
                         </li>
                         <li>
-                            <a href="companies.html" title="">
+                            <a href="/regionlistefront" title="">
                                 <span><img src="{{asset("front/images/icon2.png")}}" alt=""></span>
                                 Destinations
                             </a>
                             <ul>
-                                <li><a href="companies.html" title="">Companies</a></li>
-                                <li><a href="company-profile.html" title="">Company Profile</a></li>
+                                <li><a href="/regionlistefront" title="">PAR REGION</a></li>
+                                
+                              <li><a href="/destinationlistefront" title=""> tous</a></li>
+
+
                             </ul>
                         </li>
                         <li>
@@ -175,8 +180,10 @@
             </div>
         </div>
     </header>
+        {% endblock %}
 
-    {%block body%} {%endblock%}
+    {% block body %} {% endblock %}
+        {% block footer %}
 
     <footer>
         <div class="footy-sec mn no-margin">
@@ -194,7 +201,7 @@
 
 </div>
 
-{%block js%}
+{% block js %}
 <script type="text/javascript" src="front/js/jquery.min.js"></script>
 <script type="text/javascript" src="front/js/popper.js"></script>
 <script type="text/javascript" src="front/js/bootstrap.min.js"></script>
@@ -202,9 +209,9 @@
 <script type="text/javascript" src="front/lib/slick/slick.min.js"></script>
 <script type="text/javascript" src="front/js/scrollbar.js"></script>
 <script type="text/javascript" src="front/js/script.js"></script>
-{%endblock%}
+{% endblock %}
 
 </body>
 
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:53 GMT -->
-</html>
+</html>        {% endblock %}

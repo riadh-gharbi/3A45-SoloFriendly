@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+{% block header %}
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>{% block title %}Breeze Admin {% endblock %} </title>
+    <title>{% block title %}Travedia Admin {% endblock %} </title>
     {% block css %}
     <link rel="stylesheet" href="{{asset("back/vendors/mdi/css/materialdesignicons.min.css") }}" />
     <link rel="stylesheet" href="{{asset("back/vendors/flag-icon-css/css/flag-icon.min.css") }}" />
@@ -13,13 +14,13 @@
     <link rel="stylesheet" href="{{asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/css/style.css") }}" />
     {% endblock %}
-    <link rel="shortcut icon" href="{{asset("back/images/favicon.png" ) }}"/>
+    <link rel="shortcut icon" href="{{asset("back/images/iconeb.png" ) }}"/>
 </head>
 <body>
 <div class="container-scroller">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
-            <a class="sidebar-brand brand-logo" href="index.html"><img src="back/images/logo-titre2.png" alt="logo" /></a>
+            <a class="sidebar-brand brand-logo" href="index.html"><img src="back/images/logo-titre11.png" alt="logo" /></a>
             <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img src="back/images/logo-mini.svg" alt="logo" /></a>
         </div>
         <ul class="nav">
@@ -31,7 +32,7 @@
                         <!--change to offline or busy as needed-->
                     </div>
                     <div class="nav-profile-text d-flex flex-column pr-3">
-                        <span class="font-weight-medium mb-2">Henry Klein</span>
+                        <span class="font-weight-medium mb-2">Admin</span>
 
                     </div>
                 </a>
@@ -42,24 +43,43 @@
                     <span class="menu-title">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            {# <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="/destinationliste" aria-expanded="false" aria-controls="ui-basic">
                     <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                    
                     <span class="menu-title">Destinations</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item">
-                            <a class="nav-link" href="pages/ui-features/buttons.html">Ajouter</a>
+                            <a class="nav-link" href="pages/ui-features/buttons.html">Regions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="pages/ui-features/dropdowns.html">Afficher</a>
+                            <a class="nav-link" href="pages/ui-features/dropdowns.html">Destinations</a>
                         </li>
 
                     </ul>
                 </div>
-            </li>
+            </li> #}
+             <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="/destinationliste" aria-expanded="false" aria-controls="ui-basic">
+              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+              <span class="menu-title"> Destinations</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link"  href="/regionliste">Regions</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link"href="/destinationliste">Destinations</a>
+                </li>
+               
+              </ul>
+            </div>
+          </li>
             <li class="nav-item">
                 <a class="nav-link" href="pages/icons/mdi.html">
                     <i class="mdi mdi-contacts menu-icon"></i>
@@ -95,6 +115,9 @@
                     <span class="menu-title">FAQ</span>
                 </a>
             </li>
+            <ul class="mt-4 pl-0">
+                <li></li>
+            </ul>
             <li class="nav-item sidebar-actions">
                 <div class="nav-link">
                     <div class="mt-4">
@@ -190,8 +213,17 @@
                     <span class="mdi mdi-menu"></span>
                 </button>
             </div>
+           
         </nav>
-       {% block body %}{% endblock %}
+        
+
+        {% endblock %}
+
+       {% block body %}
+
+       {% endblock %}
+
+        {% block footer %}
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
                     <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
@@ -228,4 +260,5 @@
 {% endblock %}
 <!-- End custom js for this page -->
 </body>
+{% endblock %}
 </html>

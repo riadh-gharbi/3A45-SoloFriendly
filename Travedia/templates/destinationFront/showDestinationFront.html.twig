@@ -1,0 +1,100 @@
+{% extends 'basefront.html.twig' %}
+{% block title %}afficher destination
+{% endblock %}
+
+{% block body %}
+	
+<div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title"> </h3>
+				<nav aria-label="breadcrumb">
+					
+				</nav>
+			</div>
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid">
+					 <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Vos destinations</h4>
+				
+					<br><br>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+
+								{% if destinationfront %}
+
+								
+
+													<thead>
+
+
+														<tr class="table-info">
+
+															
+
+															<th>
+																nom de destination
+															</th>
+															
+															<th> region
+                                                            </th>
+															<th>
+															image
+															</th>
+                                                            <th> 
+                                                            </th>
+														</tr>
+													</thead>
+
+													<tbody id="tab">
+														{% for dest in destinationfront %}
+
+															<tr>
+															
+
+																<td>
+
+																	{{ dest.nom }}
+																</td>
+																<td>
+
+																	{{ dest.region.nom }}
+
+																</td>
+<td class="py-1">
+<img  width="80" 
+     height="60" src="{{ asset('uploads/brochures/' ~ dest.image) }}" alt="" />
+</td>
+																<td>
+																	<div align="right">
+																		<a href="/destinationshowfront/{{ dest.id }}" class="mdi mdi-cursor-default" title="details">
+																			<i class="fas fa-book-open"></i>
+																		</a>
+                                                                        </td>
+															</tr>
+
+
+														{% endfor %}
+													</tbody>
+
+												</table>
+											{% endif %}
+                    							{{ knp_pagination_render(destinationfront) }}
+
+												</div>
+			</div>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			
+
+
+		{% endblock %}

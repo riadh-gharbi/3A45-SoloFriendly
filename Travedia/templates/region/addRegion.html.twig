@@ -1,0 +1,34 @@
+{% extends 'baseback.html.twig' %}
+ {% block title %}Ajouter region{% endblock %}
+
+  {% block body %}
+
+ <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Créer une nouvelle region</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/regionliste">liste des regions</a></li>
+                  {# <li class="breadcrumb-item active" aria-current="page"> Form elements </li> #}
+                </ol>
+              </nav>
+            </div>
+        
+                      {{ form_start(form,  {'attr' : {'novalidate': 'novalidate'}}) }} 
+                      {# {{ form_errors(form.nom) }} #}
+                      {{ form_label(form.nom,"nom de region") }} 
+                       {{ form_widget(form.nom, { 'attr': {'class': "form-control"} }) }}
+<hr>
+{{ form_row(form.image) }}
+
+<br><br>
+
+{{ form_row(form.Create, { 'label': 'Créer' },{ 'attr': {'class': "btn btn-primary mr-2"} }) }}
+
+                      {{ form_end(form) }}
+                    
+</div>
+        {% endblock %}
+
+
