@@ -69,6 +69,55 @@ class FactureController extends AbstractController
         ]);
 
     }
+
+    /**
+     * @Route("/facture/create", name="createFactureFront")
+     */
+    public function createFactureFront(Request $request)
+    {
+        //PLACE HOLDER UNTIL MERGE WITH KARIM
+        $rep = $this->getDoctrine()->getRepository(Planning::class);
+        $planning=$rep->find(1);
+
+        //PLACE HOLDER UNTIL MERGE WITH IBTIHEL
+        $repUser = $this->getDoctrine()->getRepository(Utilisateur::class);
+        $user = $repUser->findOneBy(['role'=>'User']);
+
+        $guide = $repUser->findOneBy(['role'=>'Guide']);
+
+        $facture = new Facture();
+        $facture->setClient($user);
+        $facture->setOwner($guide);
+        $facture->setPlanning($planning);
+        $facture->setPrix(200);
+        $facture->setDateCreation(new \DateTime());
+
+        //Le statut est en attente par défault. Le status changera dans ces deux cas
+        // CAS 1: Paiement en ligne. L'API Stripe nous donnera le nouvel état et cela changera ce champs dans
+        //      l'enregistrement de la base
+        //CAS 2: Paiement cash. Le Guide aura le moyen de modifier l'état du paiement en recevant l'argent du voyageur
+        //aprés le voyage. Il ne pourra pas modifier un paiement de type "En Ligne"
+        $facture->setStatut("En Attente");
+        $form=$this->createForm(FactureType::class,$facture);
+        $form->add('Accepter',SubmitType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($facture);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('afficherFactureListe');
+
+        }
+
+
+
+        return $this->render('facture/newFactureFront.html.twig', [
+            'controller_name' => 'FactureController', 'form'=>$form->createView()
+        ]);
+
+    }
     /**
      * @Route("/admin/facture/afficherListe" ,name="afficherFactureListeBack")
      */
