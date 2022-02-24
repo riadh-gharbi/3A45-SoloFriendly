@@ -14600,7 +14600,8 @@ dl {
     padding-right: 15px;
     width: calc(100% - 260px);
     height: 70px;
-    background: #000; }
+    box-shadow:  0 2px 4px 0 rgba(0,0,0,.2);
+    background: #ffffff; }
     @media (max-width: 991px) {
       .navbar .navbar-menu-wrapper {
         width: 100%;
@@ -14617,7 +14618,7 @@ dl {
           width: 34px;
           height: 34px;
           border-radius: 50px;
-          background: #3f3f40;
+          background: #e6e5f2;
           text-align: center;
           line-height: 2.2; }
     .navbar .navbar-menu-wrapper .navbar-text {
@@ -14673,7 +14674,7 @@ dl {
               width: 34px;
               height: 34px;
               border-radius: 50px;
-              background: #3f3f40;
+              background: #e6e5f2;
               text-align: center;
               line-height: 2.2; }
         .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .count-indicator {
