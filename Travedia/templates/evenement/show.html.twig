@@ -44,8 +44,9 @@
                                     <td>{{ evenement.datefin|date('d-m-y')}}</td>
                                     <td><a href="{{ asset('front/images/uploads/event_picture/' ~ evenement.image)}}">{{ evenement.image }}</a></td>
                                     <td>{{ evenement.categorie.nom }}</td>
-                                    <td><a href="{{ path('evenement_edit', {'id': evenement.id}) }}">modifier</a>
-                                        <a href="{{ path('evenement_delete',{'id':evenement.Id}) }}">supprimer</a>
+                                    <td><a href="{{ path('evenement_edit', {'id': evenement.id}) }}" class="mdi mdi-tooltip-edit"></a>
+                                        <a href="{{ path('evenement_delete',{ 'id':evenement.id })}}" class="mdi mdi-delete" onclick="return confirm('Etes-vous sûr de supprimer ce evenement ?');" title=" supprimer"></a>
+
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -56,4 +57,5 @@
             </div>
         </div>
     </div>
+</div>
     {% endblock %}

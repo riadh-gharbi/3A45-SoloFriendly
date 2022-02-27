@@ -1,0 +1,31 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Categories {% endblock %}
+
+{% block body %}
+    <div class="top-profiles">
+        <div class="pf-hd">
+            <h3>Top Event</h3>
+            <i class="la la-ellipsis-v"></i>
+        </div>
+        <div class="profiles-slider">
+            {% for evenement in evenement %}
+                <div class="user-profy company-up-info">
+                    <img src="images/resources/user1.png" alt="">
+                    <h3>{{ evenement.nom }}</h3>
+                    <img src="{{ asset('front/images/uploads/event_picture/' ~ evenement.image)}}" alt="">
+                    <span>{{ evenement.description }}</span>
+                    <span>de {{ evenement.datedeb|date('d-m-y')}}</span>
+                    <span>au {{ evenement.datefin|date('d-m-y')}}</span>
+                    <span>{{ evenement.categorie.nom }}</span>
+                    <ul>
+                        <li><a href="{{ path('evenementf_edit', {'id': evenement.id}) }}" title="" class="followw">Modifier</a></li>
+                        <li><a href="{{ path('evenementf_delete',{'id': evenement.id}) }}" title="" class="hire">Supprimer</a></li>
+                    </ul>
+
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

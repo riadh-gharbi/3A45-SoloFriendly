@@ -23,7 +23,7 @@ class EvenementRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT * FROM evenement INNER JOIN categorie ON evenement.categorie_id = '.$id.' AND categorie.id = '.$id.'';
+        $sql = 'SELECT *  FROM evenement WHERE categorie_id='.$id.'';
 
         $stmt = $conn->prepare($sql);
         $result =  $stmt->executeQuery(['id'=> $id]);

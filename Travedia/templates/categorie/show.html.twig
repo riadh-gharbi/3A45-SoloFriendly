@@ -36,8 +36,8 @@
         <td>{{ categorie.id }}</td>
         <td>{{ categorie.nom }}</td>
     <td><a href="{{ asset('front/images/uploads/event_picture/' ~ categorie.image)}}">{{ categorie.image }}</a></td>
-        <td><a href="{{ path('categorie_edit', {'id': categorie.id}) }}">modifier</a>
-            <a href="{{ path('categorie_delete',{'id':categorie.Id}) }}">supprimer</a>
+        <td><a href="{{ path('categorie_edit', {'id': categorie.id}) }}" class="mdi mdi-tooltip-edit">modifier</a>
+            <a href="{{ path('categorie_delete',{ 'id':categorie.Id })}}" class="mdi mdi-delete" onclick="return confirm('Etes-vous sûr de supprimer cette catégorie ?');" title=" supprimer">
         </td>
         </tr>
     {% endfor %}
