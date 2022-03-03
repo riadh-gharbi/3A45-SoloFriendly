@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 
 class FullcalendarController extends AbstractController
@@ -41,5 +42,23 @@ class FullcalendarController extends AbstractController
         $data = json_encode($rdvs);
 
         return $this->render('fullcalendar/index.html.twig', compact('data'));
+    }
+    /**
+     * @Route("/fullcalendar/{id}/edit", name="fullcalendar_edit", methods={"PUT"})
+     */
+    public function editCalendar(Evenement $event, Request $request )
+    {
+        $donnees = json_decode($request->getContent());
+
+            $code= 200;
+        $event->setDatefin(new \DateTime($donnees->End));
+
+        $event->setDatedeb(new \DateTime($donnees->Start));
+            $em= $this->getDoctrine()->getManager();
+            $em->persist($event);
+            $em->flush();
+            return new Response('OK', $code);
+
+
     }
 }

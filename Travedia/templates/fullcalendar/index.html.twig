@@ -37,11 +37,22 @@
 
     <script>
         var data = {{ data|raw }};
+        function getDate(date)
+        {
+            if(date == null)return null;
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = date.getFullYear();
+
+            return mm + '/' + dd + '/' + yyyy;
+
+        }
         window.onload = () => {
             let calendarElt = document.querySelector("#calendrier")
             let calendar = new FullCalendar.Calendar(calendarElt, {
                 initialView: 'timeGridWeek',
                 locale: 'fr',
+
                 timeZone: 'Europe/Paris',
                 headerToolbar: {
                     start: 'prev,next today',
@@ -49,9 +60,19 @@
                     end: 'dayGridMonth,timeGridWeek'
                 },
                 events: data,
-                editable: false,
+                editable: true,
                 eventResizableFromStart: true
             })
+            calendar.on('eventChange', (e)=> {let url= `/fullcalendar/${e.event.id}/edit`
+                var theEnd = getDate(e.event.end);
+            let donnees = {"Title":e.event.title,
+                "Start":getDate(e.event.start), "End":(theEnd==null?getDate(e.event.start):theEnd)
+            }
+            console.log(donnees);
+            let xhr = new XMLHttpRequest
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+            } )
 
             calendar.render()
         }
