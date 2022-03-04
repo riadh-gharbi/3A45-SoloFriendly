@@ -61,6 +61,7 @@ class RegionController extends AbstractController
           //  ->add('save', SubmitType::class, array( 'label' => 'Créer' ))->getForm();
 
             $entityManager->flush();
+            $this->addFlash('success', 'region a été créé');
 
             return $this->redirectToRoute('listegion');
 
@@ -124,6 +125,7 @@ class RegionController extends AbstractController
             }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->flush();
+            $this->addFlash('info', 'region a été modifié');
 
             return $this->redirectToRoute('listegion');
         }
@@ -158,6 +160,7 @@ class RegionController extends AbstractController
         $entityManager->remove($region);
         $entityManager->flush();
 
+        $this->addFlash('error', 'region a été supprimé');
 
         return $this->redirectToRoute('listegion');
     }

@@ -55,7 +55,7 @@
 			<div id="layoutSidenav_content">
 				<main>
 					<div class="container-fluid">
-					 <div class="col-lg-12 grid-margin stretch-card">
+					 {# <div class="col-lg-12 grid-margin stretch-card"> #}
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Vos destinations</h4>
@@ -64,28 +64,66 @@
           <center>
 
                     <div class="table-responsive">
-                  		
-                    <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="820" height="312"  align="middle" alt="photo">
+                  					<h1>	
+         welcome to {{ destinationfront.nom }}
+                              </h1>
+                   <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="1120" height="412"  align="right" alt="photo">
 
 </div>
 
-				<h1>	
-         welcome to {{ destinationfront.nom }}
-</h1>
+	
 
-{{ destinationfront.region.nom }}
+<p> Region : </p>{{ destinationfront.region.nom }}
 <br>
-{{ destinationfront.description }}
+<p> Description : </p>{{ destinationfront.description }}
+<br>
+<p> here's a map for you  so you don't get lost </p>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+<script>
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A"
 
+navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+  enableHighAccuracy: true
+})
 
+function successLocation(position) {
+  setupMap([position.coords.longitude, position.coords.latitude])
+}
+
+{# function errorLocation() {
+  setupMap([-2.24, 53.48])
+} #}
+
+function setupMap(center) {
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: center,
+    zoom: 10
+  })
+
+ 
+}
+</script>
+<div id='map' style='width: 900px; height: 300px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11'
+});
+</script>
 </center>
 										</div>
 									</div>
+									
 								</div>
 							</div>
 						</div>
 					</div>
 			
 
-
+ 
 		{% endblock %}

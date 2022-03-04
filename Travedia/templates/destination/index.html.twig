@@ -3,10 +3,28 @@
 {% endblock %}
 
 {% block body %}
+ 
 
 	<div class="main-panel">
+	
 		<div class="content-wrapper">
+		{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+		{% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+		{% for message in app.flashes('info') %}
+            <div class="alert alert-info">
+                {{ message }}
+            </div>
+        {% endfor %}
 			<div class="page-header">
+			
 				<h3 class="page-title"> Liste des destination</h3>
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
@@ -48,9 +66,9 @@
 
 														<tr class="table-info">
 
-															<th>
+															{# <th>
 																ID
-															</th>
+															</th> #}
 
 															<th>
 																nom de destination
@@ -67,11 +85,11 @@
 														{% for dest in destination %}
 
 															<tr>
-																<td>
+																{# <td>
 
 																	{{ dest.id }}
 
-																</td>
+																</td> #}
 
 																<td>
 
@@ -106,7 +124,10 @@
 												</table>
 											{% endif %}
 											<p align="right">
-												{{ knp_pagination_render(destination) }}
+											<div class="navigation">
+												{{ knp_pagination_render(destination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig',{'rounded': true,'size': 'small' }) }}
+												
+												</div>
 											</p>
 
 
@@ -118,6 +139,13 @@
 					</div>
 				</div>
 		
-
+<div id='map' style='width: 400px; height: 300px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11'
+});
+</script>
 
 		{% endblock %}

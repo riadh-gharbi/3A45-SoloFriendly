@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% block header %}
+{# {% block header %} #}
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
@@ -12,7 +12,13 @@
     <link rel="stylesheet" href="{{asset("back/vendors/css/vendor.bundle.base.css" ) }}"/>
     <link rel="stylesheet" href="{{asset("back/vendors/font-awesome/css/font-awesome.min.css")}}" />
     <link rel="stylesheet" href="{{asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css")}}" />
-    <link rel="stylesheet" href="{{asset("back/css/style.css") }}" />
+    <link rel="stylesheet" href="{{ asset("back/css/style.css") }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+   
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+
+
     {% endblock %}
     <link rel="shortcut icon" href="{{asset("back/images/iconeb.png" ) }}"/>
 </head>
@@ -23,6 +29,7 @@
             <a class="sidebar-brand brand-logo" href="index.html"><img src="back/images/logo-titre11.png" alt="logo" /></a>
             <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img src="back/images/logo-mini.svg" alt="logo" /></a>
         </div>
+      
         <ul class="nav">
             <li class="nav-item nav-profile">
                 <a href="#" class="nav-link">
@@ -37,36 +44,19 @@
                     </div>
                 </a>
             </li>
+        
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="mdi mdi-home menu-icon"></i>
                     <span class="menu-title">Dashboard</span>
                 </a>
             </li>
-            {# <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="/destinationliste" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-                    
-                    <span class="menu-title">Destinations</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-basic">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="pages/ui-features/buttons.html">Regions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="pages/ui-features/dropdowns.html">Destinations</a>
-                        </li>
-
-                    </ul>
-                </div>
-            </li> #}
+           
              <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="/destinationliste" aria-expanded="false" aria-controls="ui-basic">
               <i class="mdi mdi-crosshairs-gps menu-icon"></i>
               <span class="menu-title"> Destinations</span>
-              <i class="menu-arrow"></i>
+              <i class="menu-arrow"> </i>
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
@@ -74,7 +64,7 @@
                   <a class="nav-link"  href="/regionliste">Regions</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link"href="/destinationliste">Destinations</a>
+                  <a class="nav-link" href="/destinationliste">Destinations</a>
                 </li>
                
               </ul>
@@ -148,7 +138,7 @@
                 <div class="tiles dark"></div>
             </div>
         </div>
-        <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
+        <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row {{ app.session.flashbag.peek('success')|length > 0 ? '' : 'mb-5' }}">
             <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
                 <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
                 <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
@@ -201,7 +191,7 @@
                     <li class="nav-item nav-profile dropdown border-0">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown">
                             <img class="nav-profile-img mr-2" alt="" src="back/images/faces/face1.jpg" />
-                            <span class="profile-name">Henry Klein</span>
+                            <span class="profile-name">Amani Salem</span>
                         </a>
                         <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="#">
@@ -215,10 +205,14 @@
             </div>
            
         </nav>
+ 
+      
+      
+   
+
+        {# {% endblock %} #}
+ 
         
-
-        {% endblock %}
-
        {% block body %}
 
        {% endblock %}
@@ -226,8 +220,8 @@
         {% block footer %}
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                    <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard template</a> from Bootstrapdash.com</span>
+                    <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © SoloFriendly 2021 </span>
+                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> made by  <a href="/esprit.tn" target="_blank">ESPRIT</a> students</span>
                 </div>
             </footer>
         </div>
@@ -238,27 +232,34 @@
 <!-- container-scroller -->
 <!-- plugins:js -->
 {% block js %}
-<script src="back/vendors/js/vendor.bundle.base.js"></script>
+<script src="{{ asset ("back/vendors/js/vendor.bundle.base.js")}}"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
-<script src="back/vendors/chart.js/Chart.min.js"></script>
-<script src="back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="back/vendors/flot/jquery.flot.js"></script>
-<script src="back/vendors/flot/jquery.flot.resize.js"></script>
-<script src="back/vendors/flot/jquery.flot.categories.js"></script>
-<script src="back/vendors/flot/jquery.flot.fillbetween.js"></script>
-<script src="back/vendors/flot/jquery.flot.stack.js"></script>
-<script src="back/vendors/flot/jquery.flot.pie.js"></script>
+<script src="{{ asset ("back/vendors/chart.js/Chart.min.js")}}"></script>
+<script src="{{ asset ("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.resize.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.categories.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.fillbetween.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.stack.js")}}"></script>
+<script src="{{ asset ("back/vendors/flot/jquery.flot.pie.js")}}"></script>
+ <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="back/js/off-canvas.js"></script>
-<script src="back/js/hoverable-collapse.js"></script>
-<script src="back/js/misc.js"></script>
+<script src="{{ asset ("back/js/off-canvas.js")}}"></script>
+<script src="{{ asset ("back/js/hoverable-collapse.js")}}"></script>
+<script src="{{ asset ("back/js/misc.js")}}"></script>
 <!-- endinject -->
 <!-- Custom js for this page -->
-<script src="back/js/dashboard.js"></script>
+<script src="{{ asset ("back/js/dashboard.js")}}"></script>
+   <!-- Flashy depends on jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
 {% endblock %}
 <!-- End custom js for this page -->
+ <!-- Include Flashy default partial -->
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 </body>
 {% endblock %}
 </html>

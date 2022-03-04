@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Destination;
 use App\Entity\Region;
 use App\Entity\RegionType;
+use MercurySeries\FlashyBundle\FlashyNotifier;
+//use MercurySeries\FlashyBundle\DependencyInjection\MercurySeriesFlashyExtension;
 
 use App\Form\DestinationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,16 +25,29 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert ; 
 
- 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Symfony\Component\Serializer\Serializer;
 
 
 
 class DestinationController extends AbstractController
 {
+//     public function __construct(FlashyNotifier $flashy)
+// {
+//     $this->flashy = $flashy;
+// }
     /**
      * @Route("/destinationadd", name="destination")
      */
-    public function add(Request $request): Response
+    public function add(Request $request, FlashyNotifier $flashy): Response
     {
         $destination = new Destination();
 
@@ -61,7 +76,12 @@ class DestinationController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'destination a été créé');
+           // $this->addFlash('success', 'destination a été créé');
+           //$this->flashy->success('destination created!', 'http://your-awesome-link.com');
+
+           $this->addFlash('success', 'destination a été créé');
+        //   $flashy->success('destination created!', 'http://your-awesome-link.com');
+
             return $this->redirectToRoute('listeD');
 
         }
@@ -82,7 +102,7 @@ class DestinationController extends AbstractController
   /**
      * @Route("/destinationliste", name="listeD")
      */
-    public function liste(Request $request,PaginatorInterface $paginator )
+    public function liste(Request $request,PaginatorInterface $paginator ):Response
           {
             $destination= $this->getDoctrine()->getRepository(Destination::class)->findAll();
             $destination = $paginator->paginate(
@@ -132,6 +152,7 @@ class DestinationController extends AbstractController
           }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->flush();
+            $this->addFlash('info', 'destination a été modifié');
 
             return $this->redirectToRoute('listeD');
         }
@@ -151,6 +172,8 @@ class DestinationController extends AbstractController
      $entityManager = $this->getDoctrine()->getManager();
       $entityManager->remove($destination);
        $entityManager->flush();
+       $this->addFlash('error', 'destination a été supprimé');
+
          return $this->redirectToRoute('listeD'); 
  }
 
@@ -222,18 +245,92 @@ class DestinationController extends AbstractController
         ]);
 
     }
-    // public function affcat(EvenementRepository $rep, $id)
-    // {
-    //     /*$evenement=$rep->findAll();
-    //     return $this->render('evenement_f/show.html.twig', [
-    //         'evenement' => $evenement,
-    //     ]);*/
-    //     $evenement=$rep->findAll();
-    //     return $this->render('evenement_f/show.html.twig', [
-    //         'evenement' => $evenement,
-    //         'event' => $rep->getEventsByCategoryID($id),
-    //     ]);
+   //jason
+    /**
+     * @Route("/afficherDestinations" , name="afficherDestinations")
+     */
+    public function afficherDestinationJson(DestinationRepository $rep, SerializerInterface $serializer): Response
+    {
+       $Destinations=$rep->findAll();
+        //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
+        //dump($json);
+        //die;
+        //return new Response(json_encode($json));
 
-    // }
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($Destinations, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+
+    /**
+     * @param DestinationRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/ajouterDestination" , name="ajouterDestinationJSON")
+     */
+    public function ajouterDestinationJson(Request $request, DestinationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $destination= new Destination();
+        $destination->setNom($request->get('nom'));
+        //$reclamation->setUtilisateur($request->get('utilisateurID'));
+      //  $destination->setUtilisateur($repU->find($request->get('utilisateurID')));
+        $destination->setDescription($request->get('description'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($destination);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+
+    }
+
+    /**
+     * @param Request $request
+     * @param DestinationRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalize
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierDestinaation", name="modifierdestinationJson")
+     */
+    public function modifierdestinationJson(Request $request,DestinationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $destination = $rep->find($request->get('id'));
+        $destination->setNom($request->get('nom'));
+       // $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+
+        $destination->setDescription($request->get('description'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param DestinationRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteDestination",name="deleteDestinationJson")
+     */
+    public function deleteDestinationJson(Request $request,DestinationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $destination = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($destination);
+        $em->flush();
+        $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
 
 }
