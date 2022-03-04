@@ -13,10 +13,11 @@
         <link rel="stylesheet" href="{{asset("back/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css")}}" />
         <link rel="stylesheet" href="{{asset("back/css/style.css") }}" />
     {% endblock %}
-    <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>
+    {% block icon %}  <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
 </head>
 <body>
 <div class="container-scroller">
+    {% block sidebar %}
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
             <a class="sidebar-brand brand-logo" href="index.html"><img src="{{ asset('/back/images/logo-titre2.png') }}" alt="logo" /></a>
@@ -31,7 +32,9 @@
                         <!--change to offline or busy as needed-->
                     </div>
                     <div class="nav-profile-text d-flex flex-column pr-3">
-                        <span class="font-weight-medium mb-2">Admin Foulen</span>
+                        {% if app.user != null %}
+                        <span class="font-weight-medium mb-2">{{ app.user.nom }} {{ app.user.prenom }}</span>
+                        {% endif %}
 
                     </div>
                 </a>
@@ -109,6 +112,7 @@
             </li>
         </ul>
     </nav>
+    {% endblock %}
     <div class="container-fluid page-body-wrapper">
         <div id="theme-settings" class="settings-panel">
             <i class="settings-close mdi mdi-close"></i>
@@ -125,6 +129,7 @@
                 <div class="tiles dark"></div>
             </div>
         </div>
+        {% block header %}
         <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
             <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
                 <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="{{ asset('/back/images/logo-mini.svg') }}" alt="logo" /></a>
@@ -178,10 +183,14 @@
                     <li class="nav-item nav-profile dropdown border-0">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown">
                             <img class="nav-profile-img mr-2" alt="" src="{{ asset('/back/images/faces/face1.jpg') }}" />
-                            <span class="profile-name">Admin Foulen</span>
+                            {% if app.user != null %}
+                            <span class="profile-name">{{ app.user.nom }} {{ app.user.prenom }}</span>
+                                {% else %}
+                                    <span class="profile-name">User</span>
+                            {% endif %}
                         </a>
                         <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{{ path('app_logout') }}">
                                 <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>
                         </div>
                     </li>
@@ -191,6 +200,7 @@
                 </button>
             </div>
         </nav>
+        {% endblock %}
         {% block body %}{% endblock %}
         <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">

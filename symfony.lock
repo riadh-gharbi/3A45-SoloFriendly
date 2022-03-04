@@ -1,4 +1,7 @@
 {
+    "babdev/pagerfanta-bundle": {
+        "version": "v3.6.1"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -85,6 +88,12 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
+    "gregwar/captcha": {
+        "version": "v1.1.9"
+    },
+    "gregwar/captcha-bundle": {
+        "version": "v2.1.5"
+    },
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
@@ -96,6 +105,15 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "pagerfanta/core": {
+        "version": "v3.5.2"
+    },
+    "pagerfanta/doctrine-orm-adapter": {
+        "version": "v3.5.2"
+    },
+    "pagerfanta/twig": {
+        "version": "v3.5.2"
     },
     "phar-io/manifest": {
         "version": "2.0.3"
@@ -215,6 +233,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "swiftmailer/swiftmailer": {
+        "version": "v6.3.0"
     },
     "symfony/asset": {
         "version": "v4.4.37"
@@ -492,6 +513,20 @@
     "symfony/stopwatch": {
         "version": "v4.4.37"
     },
+    "symfony/swiftmailer-bundle": {
+        "version": "3.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "f0b2fccdca2dfd97dc2fd5ad216d5e27c4f895ac"
+        },
+        "files": [
+            "./config/packages/dev/swiftmailer.yaml",
+            "./config/packages/swiftmailer.yaml",
+            "./config/packages/test/swiftmailer.yaml"
+        ]
+    },
     "symfony/translation": {
         "version": "4.4",
         "recipe": {
@@ -572,6 +607,21 @@
     },
     "symfony/yaml": {
         "version": "v4.4.37"
+    },
+    "symfonycasts/reset-password-bundle": {
+        "version": "1.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "97c1627c0384534997ae1047b93be517ca16de43"
+        },
+        "files": [
+            "./config/packages/reset_password.yaml"
+        ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.9.0"
     },
     "theseer/tokenizer": {
         "version": "1.2.1"

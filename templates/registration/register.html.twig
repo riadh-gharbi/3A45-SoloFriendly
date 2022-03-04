@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+{% block icon %}  <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>Créer Compte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/animate.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/bootstrap.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/line-awesome.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/line-awesome-font-awesome.min.css") }}">
+    <link href="{{ asset("front/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/font-awesome.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/jquery.mCustomScrollbar.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/lib/slick/slick.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/lib/slick/slick-theme.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/style.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("front/css/responsive.css") }}">
+
+</head>
+<body class="sign-in">
+<div class="wrapper">
+    <div class="sign-in-page">
+        <div class="signin-popup">
+            <div class="signin-pop">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="cmp-info">
+                            <div class="cm-logo">
+                                <img src="{{ asset('/back/images/logo-titre11.png') }}" alt="">
+
+                                <p>  <br> <br> Salut!</p>
+                                <p>Le plus beau voyage, c'est celui qu'on n'a pas encore fait</p>
+                            </div>
+
+                            <img  style="margin-top: 25px;" src="{{ asset('/front/images/travel.jpg') }}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="login-sec">
+                            <ul class="sign-control">
+                            </ul>
+                            <div class="sign_in_sec current">
+                                <div class="dff-tab current" id="tab-3">
+                                    {{ form_start(registrationForm) }}
+                                    <div class="row">
+
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.nom) }}
+                                                <i class="la la-user"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.prenom) }}
+                                                <i class="la la-user"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.email) }}
+                                                <i class="la la-mail-forward"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.plainPassword) }}
+                                                <i class="la la-lock"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.roles) }}
+                                                <i class="la la-building"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                {{ form_row(registrationForm.langue) }}
+                                                <i class="la la-globe"></i>
+                                            </div>
+                                        </div>
+
+                                        {% block captcha_widget %}
+                                            <div class="col-lg-12 no-pdd">
+                                                <div class="sn-field">
+                                                    {{ form_row(registrationForm.captcha) }}
+                                                </div>
+                                            </div>
+                                        {% endblock %}
+                                        <div class="col-lg-12 no-pdd">
+                                            <button type="submit" value="submit">S'inscrire</button>
+                                        </div>
+                                    </div>
+                                    {{ form_row(registrationForm._token) }}
+
+                                    {{ form_end(registrationForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{ asset("front/js/jquery.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/js/popper.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/js/bootstrap.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/js/jquery.mCustomScrollbar.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/lib/slick/slick.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/js/scrollbar.js") }}"></script>
+<script type="text/javascript" src="{{ asset("front/js/script.js") }}"></script>
+</body>
+
+</html>
+
+
+{#
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail">Email</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Sign in
+    </button>
+</form>
+#}

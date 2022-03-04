@@ -1,0 +1,123 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}  Modifier compte {% endblock %}
+
+{% block body %}
+
+{% block table %}
+
+<div class="col-lg-12 grid-margin stretch-card" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+    <h1 style="text-align: center; margin-bottom: 30px; font-weight: bold; font-size:24px;"><B> Modifier compte</B></h1>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-description" style="margin-bottom: 20px;">Modifier votre compte</p>
+                        <div>
+                            {{ form_start(form) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.cin) }}
+                                        {{ form_label(form.cin,"Cin utilisateur",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                                        {{ form_widget(form.cin, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.nom) }}
+                                        {{ form_label(form.nom,"Nom utilisateur",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                                        {{ form_widget(form.nom, { 'attr': {'class': "form-control col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.prenom) }}
+                                        {{ form_label(form.prenom,"Prenom utilisateur",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.prenom, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.numTel) }}
+                                        {{ form_label(form.numTel,"Numéro Téléphone" ,{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.numTel, { 'attr': {'class': "form-control   col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.adresse) }}
+                                        {{ form_label(form.adresse,"Adresse" ,{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.adresse, { 'attr': {'class': "form-control   col-sm-9"} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.langue) }}
+                                        {{ form_label(form.langue,"Langue",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.langue, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.email) }}
+                                        {{ form_label(form.email,"Email",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.email, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.profile.description) }}
+                                        {{ form_label(form.profile.description,"Description",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.profile.description, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.profile.image) }}
+                                        {{ form_label(form.profile.image,"Image",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.profile.image) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.old_password) }}
+                                        {{ form_label(form.old_password,"Ancien Mot De Passe",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.old_password, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.new_password.first) }}
+                                        {{ form_label(form.new_password.first,"Nouveau Mot De Passe",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.new_password.first, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        {{ form_errors(form.new_password.second) }}
+                                        {{ form_label(form.new_password.second,"Confirmer Mot De Passe",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                        {{ form_widget(form.new_password.second, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="col-md-4">
+                                    <input type="submit" class="btn btn-outline-warning" value="Modifier">
+                                </div>
+                            </center>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

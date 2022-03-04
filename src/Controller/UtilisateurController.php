@@ -2,214 +2,318 @@
 
 namespace App\Controller;
 
-use App\Entity\Profile;
 use App\Entity\Utilisateur;
-use App\Form\SignupType;
-use App\Form\UtilisateurType;
-use App\Form\UserType;
+use App\Form\ProfileFormType;
+use App\Form\RegistrationFormType;
+use App\Repository\ProfileRepository;
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
-
+use Symfony\Component\Routing\Annotation\Route;
 
 class UtilisateurController extends AbstractController
 {
     /**
-     * @Route("/utilisateur", name="utilisateur")
+     * @Route("/user/profile", name="user_profile")
      */
-    public function index(): Response
+    //TODO: complete function
+    public function getUserProfile(): Response
     {
-        return $this->render('utilisateur/index.html.twig', [
-            'controller_name' => 'UtilisateurController',
-        ]);
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($user->getRoles() == ["ADMIN"]) {
+            return $this->redirectToRoute('admin_profile');
+        } else {
+            return $this->render('utilisateur/userProfile.html.twig', [
+                'utilisateur' => $user,
+            ]);
+        }
     }
 
-
     /**
-     * @param utilisateurRepository $rep
-     * @return Response
-     * @Route("/utilisateur/admin/table", name="user_list")
+     * @Route("/user/delete", name="user_delete")
      */
-    public function afficher(UtilisateurRepository $rep)
+    //TODO: verify before deleting account
+    public function deleteCurrentUser(): Response
     {
-        $utilisateur=$rep->findAll();
-        return $this->render('utilisateur/admin/table.html.twig', [
-            'utilisateur' => $utilisateur,
-        ]);
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        } else {
+            $session = $this->get('session');
+            $session = new Session();
+            $session->invalidate();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+
+            return $this->redirectToRoute('app_logout');
+        }
     }
 
-
-
     /**
-     * @param utilisateurRepository $rep
-     * @return Response
-     * @Route("/utilisateur/table", name="user_list_front")
+     * @Route("/user/edit", name="edit_user")
      */
-    public function afficherfront(UtilisateurRepository $rep)
+    public function editUserAccount(Request $req, UserPasswordEncoderInterface $encoder): Response
     {
-        $utilisateur=$rep->findAll();
-        return $this->render('utilisateur/table.html.twig', [
-            'utilisateur' => $utilisateur,
-        ]);
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        } else {
+            $profile = $user->getProfile();
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createFormBuilder($user)
+                ->add('cin')
+                ->add('nom')
+                ->add('prenom')
+                ->add('numTel')
+                ->add('adresse')
+                ->add('langue')
+                ->add('email')
+                ->add('old_password', PasswordType::class, [
+                    'mapped' => false,
+                    'label' => false,
+                    'required'=>false,
+                ])
+                ->add('new_password', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'mapped' => false,
+                    'required' => false,
+                    'first_options' => [
+                        'label' => false,
+                    ],
+                    'second_options' => [
+                        'label' => false,
+                    ]
+                ])
+                ->add('profile',ProfileFormType::class)
+                ->getForm();
+            $form->handleRequest($req);
+            $profilePicture = $form->get('profile')->get('image')->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                if ($profilePicture) {
+                    $newFilename = uniqid() . '.' . $profilePicture->guessExtension();
+                    try {
+                        $profilePicture->move(
+                            $this->getParameter('profile_image'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {}
+                    $profile->setImage($newFilename);
+                }
+
+                $old_password = $form->get('old_password')->getData();
+                if ($encoder->isPasswordValid($user, $old_password)) {
+                    $new_password = $form->get('new_password')->getData();
+                    $password = $encoder->encodePassword($user, $new_password);
+                    $user->setPassword($password);
+                    $em->flush();
+                    return $this->redirectToRoute('user_profile');
+                }
+            }
+            return $this->render('utilisateur/editProfile.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
     }
 
+    /**
+     * @Route("/admin/profile", name="admin_profile")
+     */
+    //TODO: complete function
+    public function getAdminProfile(): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($user->getRoles() != ["ADMIN"]) {
+            return $this->redirectToRoute('user_profile');
+        } else {
+            return $this->render('utilisateur/adminProfile.html.twig', [
+                'utilisateur' => $user,
+            ]);
+        }
+    }
 
     /**
-     * @param Request $request
-     * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/utilisateur/admin/add", name="utilisateur_add")
+     * @Route("/admin/edit", name="edit_admin")
      */
-    public function add (Request $request): Response
+    public function editAdminAccount(Request $req, UserPasswordEncoderInterface $encoder): Response
     {
-        $utilisateur = new Utilisateur();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
-        $form->add('Ajouter', SubmitType::class);
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($user->getRoles() != ["ADMIN"]) {
+            return $this->redirectToRoute('home');
+        } else {
+            $profile = $user->getProfile();
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createFormBuilder($user)
+                ->add('cin')
+                ->add('nom')
+                ->add('prenom')
+                ->add('numTel')
+                ->add('adresse')
+                ->add('email')
+                ->add('old_password', PasswordType::class, [
+                    'mapped' => false,
+                    'label' => false,
+                    'required'=>false,
+                    'attr' => [
+                        'placeholder' => 'old password'
+                    ]
+                ])
+                ->add('new_password', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'mapped' => false,
+                    'required' => false,
+                    'first_options' => [
+                        'label' => false,
+                    ],
+                    'second_options' => [
+                        'label' => false,
+                    ]
+                ])
+                ->add('profile',ProfileFormType::class)
+                ->getForm();
+            $form->handleRequest($req);
+            $profilePicture = $form->get('profile')->get('image')->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                if ($profilePicture) {
+                    $newFilename = uniqid() . '.' . $profilePicture->guessExtension();
+                    try {
+                        $profilePicture->move(
+                            $this->getParameter('profile_image'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {}
+                    $profile->setImage($newFilename);
+                }
+
+                $old_password = $form->get('old_password')->getData();
+                if ($encoder->isPasswordValid($user, $old_password)) {
+                    $new_password = $form->get('new_password')->getData();
+                    $password = $encoder->encodePassword($user, $new_password);
+                    $user->setPassword($password);
+                    $em->flush();
+                    return $this->redirectToRoute('user_profile');
+                }
+            }
+            return $this->render('utilisateur/editProfile.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/admin/delete/{id}", name="delete_user")
+     */
+    public function deleteUser($id, UtilisateurRepository $repo)
+    {
+        $user = $repo->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+        return $this->redirectToRoute('all_users');
+    }
+
+    /**
+     * @Route("/admin/allUsers/{page<\d+>}",name="all_users")
+     */
+    public function getAllUsers(UtilisateurRepository $repo,int $page = 1): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($user->getRoles() == ["ADMIN"]) {
+            $qb = $repo->createQueryBuilder('utilisateur')->addSelect('utilisateur');
+            $pagerfanta = new Pagerfanta(new QueryAdapter($qb));
+            $pagerfanta->setMaxPerPage(2);
+            $pagerfanta->setCurrentPage($page);
+
+            return $this->render('utilisateur/allUsers.html.twig',[
+                'utilisateur'=>$pagerfanta,
+                 'profile'=>$pagerfanta
+            ]);
+        } else {
+            //TODO:GENERATE A 404 PAGE
+            return $this->redirectToRoute('home');
+        }
+    }
+
+    /**
+     * @Route("/admin/add", name="add_account")
+     */
+    public function addAccount(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager)
+    {
+        $user = new Utilisateur();
+        $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($utilisateur);
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('user_list');
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('all_users');
         }
 
-        return $this->render('utilisateur/admin/add.html.twig', [
-            'utilisateur' => $utilisateur,
+        return $this->render('registration/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-
-
     /**
-     * @param Request $request
-     * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/utilisateur/add", name="utilisateur_add_front")
+     * @Route("/admin/editUser/{id}", name="edit_account")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function editUserAccountByAdmin(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager, $id,UtilisateurRepository $repo)
     {
-        $utilisateur = new Utilisateur();
-        $profile = new Profile();
-        $form = $this->createForm(SignupType::class, $utilisateur);
-        $form->add('Create', SubmitType::class);
+        $user = $repo->find($id);
+        $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $utilisateur->setMotDePasse(
-                $passwordEncoder->encodePassword(
-                    $utilisateur,
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordEncoder->encodePassword(
+                    $user,
                     $form->get('plainPassword')->getData()
                 )
             );
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($utilisateur);
-            $entityManager->persist($profile);
+
+            $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute($profile);
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('all_users');
         }
 
-        return $this->render('utilisateur/add.html.twig', [
-            'utilisateur' => $utilisateur,
-            'profile' => $profile,
-            'formf'=>$form->createView(),
+        return $this->render('registration/add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
-
-
-
-    /**
-     * @param $id
-     * @param UtilisateurRepository $rep
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     * @Route("/utilisateur/admin/update/{id}", name="user_edit")
-     */
-    public function edit($id,UtilisateurRepository $rep,Request $request)
-    {
-        $utilisateur=$rep->find($id);
-        $form=$this ->createForm(UtilisateurType::class,$utilisateur);
-        $form->add('Modifier', SubmitType::class);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {$em=$this->getDoctrine()->getManager();
-            $em->flush();
-            return $this->redirectToRoute('user_list');
-        }
-        return $this->render('utilisateur/admin/update.html.twig', [
-            'form'=>$form->createView(),
-        ]);
-    }
-
-
-
-
-    /**
-     * @param $id
-     * @param UtilisateurRepository $rep
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     * @Route("/utilisateur/update/{id}", name="user_edit_front")
-     */
-    public function editfront($id,UtilisateurRepository $rep,Request $request)
-    {
-        $utilisateur=$rep->find($id);
-        $form=$this ->createForm(UserType::class,$utilisateur);
-        $form->add('Modifier', SubmitType::class);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {$em=$this->getDoctrine()->getManager();
-            $em->flush();
-            return $this->redirectToRoute('user_list_front');
-
-        }
-
-        return $this->render('utilisateur/updatef.html.twig', [
-            'form'=>$form->createView(),
-        ]);
-    }
-
-
-    /**
-     * @param $id
-     * @param UtilisateurRepository $rep
-     * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/utilisateur/admin/delete/{id}", name="user_delete")
-     */
-    public function supp($id,UtilisateurRepository $rep)
-    {
-        $utilisateur=$rep->find($id);
-        $entityManager=$this->getDoctrine()->getManager();
-        $entityManager->remove($utilisateur);
-        $entityManager->flush();
-
-
-        return $this->redirectToRoute('user_list');
-    }
-
-
-
-
-    /**
-     * @param $id
-     * @param UtilisateurRepository $rep
-     * @return \symfony\Component_HttpFoundation\RedirectResponse
-     * @Route("/utilisateur/delete/{id}", name="user_delete_front")
-     */
-    public function suppfront($id,UtilisateurRepository $rep)
-    {
-        $utilisateur=$rep->find($id);
-        $entityManager=$this->getDoctrine()->getManager();
-        $entityManager->remove($utilisateur);
-        $entityManager->flush();
-
-
-        return $this->redirectToRoute('user_list_front');
-    }
-
-
 }

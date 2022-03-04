@@ -1,0 +1,135 @@
+{% extends 'baseback.html.twig' %}
+
+
+
+
+   {% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+
+    {% block table %}
+        <div class="col-lg-12 grid-margin stretch-card" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+            <h1 style="text-align: center;">Utilisateurs</h1>
+
+            <div class="card" style=" margin-top: 20px;">
+                <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des utilisateurs
+                <div class="card-body">
+                    </p>
+                    <div class="table-responsive">
+                        <a href="{{ path('add_account') }}">
+                            <button type="button" class="btn btn-success btn-rounded btn-fw"> + Ajouter un compte
+                            </button>
+                        </a>
+                        <br>
+                        <br>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Cin</th>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Adresse</th>
+                                <th>NumTel</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Langue</th>
+                                <th>Modifier</th>
+                                <th>supprimer</th>
+                            </tr>
+                            </thead>
+
+                            {% for c in utilisateur %}
+                                <tr>
+                                    <td class="py-1">{{ c.id }}</td>
+                                    <td>{{ c.cin }}</td>
+                                    <td>{{ c.nom }}</td>
+                                    <td>{{ c.prenom }}</td>
+                                    <td>{{ c.adresse }}</td>
+                                    <td>{{ c.numTel }}</td>
+                                    <td>{{ c.email }}</td>
+                                    <td>{{ c.roles|join(', ') }}</td>
+                                    <td>{{ c.langue }}</td>
+                                    <td>
+                                        <a href="{{ path('edit_account',{'id':c.id}) }}" class="btn btn-outline-warning"
+                                           onclick="return confirm('Etes-vous sûr de modifier ce compte?');"
+                                           title=" Modifier">Modifier</a>
+                                    </td>
+                                    <td><a href="{{ path('delete_user',{'id':c.id}) }}" class="btn btn-outline-danger"
+                                           onclick="return confirm('Etes-vous sûr de supprimer ce compte?');"
+                                           title=" Supprimer">Supprimer</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {{ pagerfanta(utilisateur) }}
+                </div></div>
+            <div style="margin-top: 60px;">
+            <h1 style="text-align: center;">Profiles</h1>
+
+
+            <div class="card" style="margin-top: 20px;">
+
+
+
+                    <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des profiles
+                    <div class="card-body"></p>
+
+                        <div class="table-responsive">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nom</th>
+                                    <th>Prenom</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Evaluation</th>
+                                    <th>Modifier</th>
+                                    <th>supprimer</th>
+                                </tr>
+                                </thead>
+
+                                {% for c in profile %}
+                                    {% for c in utilisateur %}
+                                        <tr>
+                                            <td class="py-1">{{ c.id }}</td>
+                                            <td>{{ c.profile.utilisateur.nom }}</td>
+                                            <td>{{ c.profile.utilisateur.prenom }}</td>
+                                            <td>  <img src="{{ asset('back/images/uploads/profile_image/' ~ c.profile.image)}}" alt="">
+                                                <span>{{ c.profile.image }}</span>
+                                            </td>
+                                            <td>{{ c.profile.description }}</td>
+                                            <td>{{ c.profile.evaluation }}</td>
+                                            <td>
+                                                <a href="{{ path('edit_account',{'id':c.id}) }}" class="btn btn-outline-warning"
+                                                   onclick="return confirm('Etes-vous sûr de modifier ce compte?');"
+                                                   title=" Modifier">Modifier</a>
+                                            </td>
+                                            <td><a href="{{ path('delete_user',{'id':c.id}) }}" class="btn btn-outline-danger"
+                                                   onclick="return confirm('Etes-vous sûr de supprimer ce compte?');"
+                                                   title=" Supprimer">Supprimer</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {{ pagerfanta(profile) }}
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    {% endblock %}
+
+{% endblock %}
+
+

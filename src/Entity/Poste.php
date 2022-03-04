@@ -48,7 +48,7 @@ class Poste
      * @ORM\ManyToOne(targetEntity=Profile::class, inversedBy="postes")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $profile;
+//    private $profile;
 
     /**
      * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="poste")
@@ -125,17 +125,17 @@ class Poste
         return $this;
     }
 
-    public function getProfile(): ?Profile
-    {
-        return $this->profile;
-    }
-
-    public function setProfile(?Profile $profile): self
-    {
-        $this->profile = $profile;
-
-        return $this;
-    }
+//    public function getProfile(): ?Profile
+//    {
+//        return $this->profile;
+//    }
+//
+//    public function setProfile(?Profile $profile): self
+//    {
+//        $this->profile = $profile;
+//
+//        return $this;
+//    }
 
     /**
      * @return Collection|Commentaire[]
