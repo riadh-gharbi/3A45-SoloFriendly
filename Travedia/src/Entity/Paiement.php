@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\FactureRepository;
+use App\Repository\PaiementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=FactureRepository::class)
- * @ORM\Table(name="Facture")
+ * @ORM\Entity(repositoryClass=PaiementRepository::class)
+ * @ORM\Table(name="Paiement")
  */
-class Facture
+class Paiement
 {
     /**
      * @ORM\Id
@@ -48,7 +48,6 @@ class Facture
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice("En Ligne","Cash")
      */
     private $type_paiement;
 

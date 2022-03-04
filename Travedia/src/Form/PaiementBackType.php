@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Facture;
+use App\Entity\Paiement;
 use App\Entity\Planning;
 use App\Entity\Utilisateur;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -61,7 +61,7 @@ class PaiementBackType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Facture::class,
+            'data_class' => Paiement::class,
         ]);
     }
 }

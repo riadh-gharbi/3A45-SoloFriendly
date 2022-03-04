@@ -65,7 +65,7 @@ class Planning
     private $actualite;
 
     /**
-     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="planning")
+     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="planning")
      */
     private $factures;
 
@@ -220,14 +220,14 @@ class Planning
     }
 
     /**
-     * @return Collection|Facture[]
+     * @return Collection|Paiement[]
      */
     public function getFactures(): Collection
     {
         return $this->factures;
     }
 
-    public function addFacture(Facture $facture): self
+    public function addFacture(Paiement $facture): self
     {
         if (!$this->factures->contains($facture)) {
             $this->factures[] = $facture;
@@ -237,7 +237,7 @@ class Planning
         return $this;
     }
 
-    public function removeFacture(Facture $facture): self
+    public function removeFacture(Paiement $facture): self
     {
         if ($this->factures->removeElement($facture)) {
             // set the owning side to null (unless already changed)

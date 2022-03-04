@@ -4,7 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Reclamation;
 use App\Entity\Utilisateur;
+use App\Entity\ReclamationReponse;
+use App\Form\ReclamationReponseType;
 use App\Form\ReclamationType;
+use App\Repository\ReclamationRepository;
+use App\Repository\UtilisateurRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,6 +17,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Symfony\Component\Serializer\Serializer;
+
+
 
 class ReclamationController extends AbstractController
 {
@@ -114,13 +130,33 @@ class ReclamationController extends AbstractController
     }
 
     /**
-     * @Route("admin/reclamation/afficher/{id}", name="reclamation_afficher_back")
+     * @Route("admin/reclamation/{id}", name="reclamation_afficher_back")
      */
-    public function afficherReclamationBack( $id): Response
+    public function afficherReclamationBack($id): Response
     {
+        //Afficher avec les réponses des reclamations
+
+        $reclamationExiste = false;
+        $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+        if ($this->getDoctrine()->getRepository(ReclamationReponse::class)->findOneBy(['reclamation'=>$reclamation]) !=null)
+        {
+            $reclamationExiste=true;
+        }
+        $reclamationResponse=new ReclamationReponse();
+
+        $reclamationResponse->setReclamation($reclamation);
+        $form=$this->createForm(ReclamationReponseType::class);
+        $form->add("Envoyer",SubmitType::class);
+        if($form->isSubmitted()&& $form->isValid())
+        {
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($reclamationResponse);
+            $em->flush();
+            $this->redirectToRoute('reclamation_afficher_back', ['reclamation'=>$reclamation , 'reclamationResponse'=>$reclamationResponse]);
+        }
         $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
         return $this->render('reclamation/reclamationAfficherBack.html.twig', [
-            'reclamation' => $reclamation,
+            'reclamation' => $reclamation, 'form'=>$form->createView(), 'reclamationExiste' =>$reclamationExiste,
         ]);
     }
 
@@ -196,13 +232,106 @@ class ReclamationController extends AbstractController
     /**
      * @Route("admin/reclamation/supprimer/{id}", name="reclamationSupprimerBack")
      */
-    public function SupprimerReclamationBack($id):Response
+    public function SupprimerReclamationBack($id, ReclamationRepository $rep):Response
     {
-        $rep =$this->getDoctrine()->getRepository(Reclamation::class);
+        //$reclamation =$this->getDoctrine()->getRepository(ReclamationRepository::class)->find($id);
+        //$reclamation = $rep->find($id);
         $reclamation = $rep->find($id);
+        $reponse = $this->getDoctrine()->getRepository(ReclamationReponse::class)->find($reclamation->getReclamationRep());
+
         $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->remove($reclamation->getReclamationRep());
         $entityManager->remove($reclamation);
         $entityManager->flush();
         return $this->redirectToRoute("reclamation_Liste_back");
+    }
+
+
+    /**
+     * @Route("/afficherReclamations" , name="afficherReclamationJson")
+     */
+    public function afficherReclamationJson(ReclamationRepository $rep, SerializerInterface $serializer): Response
+    {
+       $reclamations=$rep->findAll();
+        //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
+        //dump($json);
+        //die;
+        //return new Response(json_encode($json));
+
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($reclamations, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+
+    /**
+     * @param ReclamationRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/ajouterReclamation" , name="ajouterRecJSON")
+     */
+    public function ajouterReclamationJson(Request $request, ReclamationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer,UtilisateurRepository $repU):Response
+    {
+        $reclamation= new Reclamation();
+        $reclamation->setContenu($request->get('contenu'));
+        //$reclamation->setUtilisateur($request->get('utilisateurID'));
+        $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+        $reclamation->setEtatReclamation($request->get('etatReclamation'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($reclamation);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+
+    }
+
+    /**
+     * @param Request $request
+     * @param ReclamationRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @param UtilisateurRepository $repU
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierReclamation", name="modifierReclamationJson")
+     */
+    public function modifierReclamationJson(Request $request,ReclamationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer,UtilisateurRepository $repU):Response
+    {
+        $reclamation = $rep->find($request->get('id'));
+        $reclamation->setContenu($request->get('contenu'));
+        $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+
+        $reclamation->setEtatReclamation($request->get('etatReclamation'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param ReclamationRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteReclamation",name="deleteReclamationJson")
+     */
+    public function deleteReclamationJson(Request $request,ReclamationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $reclamation = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($reclamation);
+        $em->flush();
+        $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
     }
 }

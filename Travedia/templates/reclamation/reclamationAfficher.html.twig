@@ -1,18 +1,41 @@
 {% extends "basefront.html.twig" %}
 
 {% block body %}
-    <div>
-    <li class="form-group col-md-6" style="display: inline-block">
+    <div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+    <div class="card">
+    <div class="card-body">
+    <h4 class="card-title">Reclamation</h4>
 
-        {{ reclamation.etatReclamation }}
-    </li>
+    <div class="text-info" style="display: inline-block">
 
-    <li class="h2" style="horiz-align: center">
-
-        {{ reclamation.contenu }}
-
-    </li>
+        Etat Reclamation : {{ reclamation.etatReclamation }}
     </div>
+
+    <div class="h4" style="horiz-align: center">
+
+        Sujet Reclamation
+
+    </div>
+        <div class="text-black">
+            {{ reclamation.contenu }}
+        </div>
+
+
+
+        <li class="h4" style="horiz-align: center">
+
+            Réponse
+        </li>
+        <div class="text-black">
+            {{ reclamationRep.contenu }}
+
+        </div>
+    </div>
+    </div>
+    </div>
+
 
 
 {% endblock %}

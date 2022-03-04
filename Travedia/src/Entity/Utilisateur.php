@@ -95,12 +95,12 @@ class Utilisateur
     private $newsletter;
 
     /**
-     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="owner")
+     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="owner")
      */
     private $factures_proposee;
 
     /**
-     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="client")
+     * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="client")
      */
     private $factures_recu;
 
@@ -391,14 +391,14 @@ class Utilisateur
     }
 
     /**
-     * @return Collection|Facture[]
+     * @return Collection|Paiement[]
      */
     public function getFacturesProposee(): Collection
     {
         return $this->factures_proposee;
     }
 
-    public function addFacturesProposee(Facture $facturesProposee): self
+    public function addFacturesProposee(Paiement $facturesProposee): self
     {
         if (!$this->factures_proposee->contains($facturesProposee)) {
             $this->factures_proposee[] = $facturesProposee;
@@ -408,7 +408,7 @@ class Utilisateur
         return $this;
     }
 
-    public function removeFacturesProposee(Facture $facturesProposee): self
+    public function removeFacturesProposee(Paiement $facturesProposee): self
     {
         if ($this->factures_proposee->removeElement($facturesProposee)) {
             // set the owning side to null (unless already changed)
@@ -421,14 +421,14 @@ class Utilisateur
     }
 
     /**
-     * @return Collection|Facture[]
+     * @return Collection|Paiement[]
      */
     public function getFacturesRecu(): Collection
     {
         return $this->factures_recu;
     }
 
-    public function addFacturesRecu(Facture $facturesRecu): self
+    public function addFacturesRecu(Paiement $facturesRecu): self
     {
         if (!$this->factures_recu->contains($facturesRecu)) {
             $this->factures_recu[] = $facturesRecu;
@@ -438,7 +438,7 @@ class Utilisateur
         return $this;
     }
 
-    public function removeFacturesRecu(Facture $facturesRecu): self
+    public function removeFacturesRecu(Paiement $facturesRecu): self
     {
         if ($this->factures_recu->removeElement($facturesRecu)) {
             // set the owning side to null (unless already changed)

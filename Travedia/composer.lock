@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9d5792ae2f1c5bbf6d2276e9a4b48cb",
+    "content-hash": "3c4b842151b7a18e8e9102d1773fac24",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -6026,16 +6026,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v4.4.37",
+            "version": "v4.4.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "91a221aa75f5e47aa3a49267587b189cc33fbe5c"
+                "reference": "5a13555173ff3a1c5281751c1c5d069504863867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/91a221aa75f5e47aa3a49267587b189cc33fbe5c",
-                "reference": "91a221aa75f5e47aa3a49267587b189cc33fbe5c",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/5a13555173ff3a1c5281751c1c5d069504863867",
+                "reference": "5a13555173ff3a1c5281751c1c5d069504863867",
                 "shasum": ""
             },
             "require": {
@@ -6100,7 +6100,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v4.4.37"
+                "source": "https://github.com/symfony/serializer/tree/v4.4.38"
             },
             "funding": [
                 {
@@ -6116,7 +6116,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-02T09:41:36+00:00"
+            "time": "2022-02-24T08:36:41+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -9624,7 +9624,8 @@
     "platform": {
         "php": ">=7.1.3",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"

@@ -2,23 +2,23 @@
 
 namespace App\Repository;
 
-use App\Entity\Facture;
+use App\Entity\Paiement;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\AST\LikeExpression;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Facture|null find($id, $lockMode = null, $lockVersion = null)
- * @method Facture|null findOneBy(array $criteria, array $orderBy = null)
- * @method Facture[]    findAll()
- * @method Facture[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Paiement|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Paiement|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Paiement[]    findAll()
+ * @method Paiement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FactureRepository extends ServiceEntityRepository
+class PaiementRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Facture::class);
+        parent::__construct($registry, Paiement::class);
     }
 
 
@@ -27,9 +27,9 @@ class FactureRepository extends ServiceEntityRepository
         $entityManager=$this->getEntityManager();
 
        // $query= $entityManager->createQuery(
-       //     'SELECT facture
-       //     FROM App\Entity\Facture facture
-       //     WHERE facture.owner.id=user.id OR facture.client.id=user.id
+       //     'SELECT paiement
+       //     FROM App\Entity\Paiement paiement
+       //     WHERE paiement.owner.id=user.id OR paiement.client.id=user.id
        //     '
        // )->setParameter('user',$user);
 
@@ -45,7 +45,7 @@ class FactureRepository extends ServiceEntityRepository
         return $qb->getResult();
     }
     // /**
-    //  * @return Facture[] Returns an array of Facture objects
+    //  * @return Paiement[] Returns an array of Paiement objects
     //  */
     /*
     public function findByExampleField($value)
@@ -62,7 +62,7 @@ class FactureRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Facture
+    public function findOneBySomeField($value): ?Paiement
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.exampleField = :val')
