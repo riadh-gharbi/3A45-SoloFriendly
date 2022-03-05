@@ -306,6 +306,7 @@ class UtilisateurController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setIsVerified(true);
 
             $entityManager->persist($user);
             $entityManager->flush();

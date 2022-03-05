@@ -74,6 +74,11 @@ class Utilisateur implements UserInterface
      */
     private $profile;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -248,6 +253,18 @@ class Utilisateur implements UserInterface
         }
 
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
