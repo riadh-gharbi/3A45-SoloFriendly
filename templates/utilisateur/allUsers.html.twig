@@ -12,11 +12,12 @@
                      flex-direction: column;
                       margin-top: 90px;">
             <h1 style="text-align: center;">Utilisateurs</h1>
+            {# <button name="sweet" id="sweet">test</button> #}
 
             <div class="card" style=" margin-top: 20px;">
-                <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des utilisateurs
+                <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des utilisateurs</p>
                 <div class="card-body">
-                    </p>
+
                     <div class="table-responsive">
                         <a href="{{ path('add_account') }}">
                             <button type="button" class="btn btn-success btn-rounded btn-fw"> + Ajouter un compte
@@ -65,18 +66,20 @@
                             {% endfor %}
                         </table>
                     </div>
-                    {{ pagerfanta(utilisateur) }}
-                </div></div>
+                    <div class="navigation">
+                        {{ knp_pagination_render(utilisateur) }}
+                    </div>
+                </div>
+            </div>
             <div style="margin-top: 60px;">
-            <h1 style="text-align: center;">Profiles</h1>
+                <h1 style="text-align: center;">Profiles</h1>
 
 
-            <div class="card" style="margin-top: 20px;">
+                <div class="card" style="margin-top: 20px;">
 
 
-
-                    <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des profiles
-                    <div class="card-body"></p>
+                    <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des profiles</p>
+                    <div class="card-body">
 
                         <div class="table-responsive">
 
@@ -95,39 +98,46 @@
                                 </thead>
 
                                 {% for c in profile %}
-                                    {% for c in utilisateur %}
-                                        <tr>
-                                            <td class="py-1">{{ c.id }}</td>
-                                            <td>{{ c.profile.utilisateur.nom }}</td>
-                                            <td>{{ c.profile.utilisateur.prenom }}</td>
-                                            <td>  <img src="{{ asset('back/images/uploads/profile_image/' ~ c.profile.image)}}" alt="">
-                                                <span>{{ c.profile.image }}</span>
-                                            </td>
-                                            <td>{{ c.profile.description }}</td>
-                                            <td>{{ c.profile.evaluation }}</td>
-                                            <td>
-                                                <a href="{{ path('edit_account',{'id':c.id}) }}" class="btn btn-outline-warning"
-                                                   onclick="return confirm('Etes-vous sûr de modifier ce compte?');"
-                                                   title=" Modifier">Modifier</a>
-                                            </td>
-                                            <td><a href="{{ path('delete_user',{'id':c.id}) }}" class="btn btn-outline-danger"
-                                                   onclick="return confirm('Etes-vous sûr de supprimer ce compte?');"
-                                                   title=" Supprimer">Supprimer</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    <tr>
+                                        <td class="py-1">{{ c.id }}</td>
+                                        <td>{{ c.profile.utilisateur.nom }}</td>
+                                        <td>{{ c.profile.utilisateur.prenom }}</td>
+                                        <td>
+                                            <img src="{{ asset('back/images/upload/profile_image/' ~ c.profile.image) }}"
+                                                 alt="">
+                                        </td>
+                                        <td>{{ c.profile.description }}</td>
+                                        <td>{{ c.profile.evaluation }}</td>
+                                        <td>
+                                            <a href="{{ path('edit_account',{'id':c.id}) }}"
+                                               class="btn btn-outline-warning"
+                                               onclick="return confirm('Etes-vous sûr de modifier ce compte?');"
+                                               title=" Modifier">Modifier</a>
+                                        </td>
+                                        <td><a href="{{ path('delete_user',{'id':c.id}) }}"
+                                               class="btn btn-outline-danger"
+                                               onclick="return confirm('Etes-vous sûr de supprimer ce compte?');"
+                                               title=" Supprimer">Supprimer</a>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                             </table>
                         </div>
-                        {{ pagerfanta(profile) }}
+                        <div class="navigation">
+                            {{ knp_pagination_render(profile) }}
+                        </div>
                     </div>
                 </div>
             </div>
-                </div>
-            </div>
         </div>
-        </div>
-
+        {# <script>
+            $(document).ready(function(){
+                $("#sweet").click(function(){
+                    Swal.fire('Any fool can use a computer')
+                   alert('teset');
+                });
+            })
+        </script> #}
     {% endblock %}
 
 {% endblock %}

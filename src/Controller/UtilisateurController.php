@@ -5,14 +5,15 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\ProfileFormType;
 use App\Form\RegistrationFormType;
-use App\Repository\ProfileRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,7 +85,7 @@ class UtilisateurController extends AbstractController
                 ->add('old_password', PasswordType::class, [
                     'mapped' => false,
                     'label' => false,
-                    'required'=>false,
+                    'required' => false,
                 ])
                 ->add('new_password', RepeatedType::class, [
                     'type' => PasswordType::class,
@@ -97,7 +98,7 @@ class UtilisateurController extends AbstractController
                         'label' => false,
                     ]
                 ])
-                ->add('profile',ProfileFormType::class)
+                ->add('profile', ProfileFormType::class)
                 ->getForm();
             $form->handleRequest($req);
             $profilePicture = $form->get('profile')->get('image')->getData();
@@ -110,7 +111,8 @@ class UtilisateurController extends AbstractController
                             $this->getParameter('profile_image'),
                             $newFilename
                         );
-                    } catch (FileException $e) {}
+                    } catch (FileException $e) {
+                    }
                     $profile->setImage($newFilename);
                 }
 
@@ -172,7 +174,7 @@ class UtilisateurController extends AbstractController
                 ->add('old_password', PasswordType::class, [
                     'mapped' => false,
                     'label' => false,
-                    'required'=>false,
+                    'required' => false,
                     'attr' => [
                         'placeholder' => 'old password'
                     ]
@@ -188,7 +190,7 @@ class UtilisateurController extends AbstractController
                         'label' => false,
                     ]
                 ])
-                ->add('profile',ProfileFormType::class)
+                ->add('profile', ProfileFormType::class)
                 ->getForm();
             $form->handleRequest($req);
             $profilePicture = $form->get('profile')->get('image')->getData();
@@ -201,7 +203,8 @@ class UtilisateurController extends AbstractController
                             $this->getParameter('profile_image'),
                             $newFilename
                         );
-                    } catch (FileException $e) {}
+                    } catch (FileException $e) {
+                    }
                     $profile->setImage($newFilename);
                 }
 
@@ -221,35 +224,61 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin/delete/{id}", name="delete_user")
+     * @Route("/admin/delete", name="delete_user")
      */
-    public function deleteUser($id, UtilisateurRepository $repo)
+    public function deleteUser(UtilisateurRepository $repo)
     {
-        $user = $repo->find($id);
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($user);
-        $em->flush();
-        return $this->redirectToRoute('all_users');
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        } else {
+            $session = $this->get('session');
+            $session = new Session();
+            $session->invalidate();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+
+            return $this->redirectToRoute('app_logout');
+        }
     }
 
     /**
-     * @Route("/admin/allUsers/{page<\d+>}",name="all_users")
+     * @Route("/admin/allUsers",name="all_users")
      */
-    public function getAllUsers(UtilisateurRepository $repo,int $page = 1): Response
+    public function getAllUsers(UtilisateurRepository $repo, PaginatorInterface $paginator, Request $request): Response
     {
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
         if ($user->getRoles() == ["ADMIN"]) {
-            $qb = $repo->createQueryBuilder('utilisateur')->addSelect('utilisateur');
-            $pagerfanta = new Pagerfanta(new QueryAdapter($qb));
-            $pagerfanta->setMaxPerPage(2);
-            $pagerfanta->setCurrentPage($page);
+            $qbUser = $repo->createQueryBuilder('utilisateur')->addSelect('utilisateur');
+            $qbProfile = $repo->createQueryBuilder('utilisateur')->addSelect('utilisateur');
+            $userPagination = $paginator->paginate(
+                $qbUser, /* query NOT result */
+                $request->query->getInt('page1', 1), /*page number*/
+                3,
+                array(
+                    'pageParameterName' => 'page1',
+                    'sortFieldParameterName' => 'sort1',
+                    'sortDirectionParameterName' => 'direction1',
+                ) /*limit per page*/
+            );
+            $profilePagination = $paginator->paginate(
+                $qbProfile, /* query NOT result */
+                $request->query->getInt('page2', 1), /*page number*/
+                3,
+                array(
+                    'pageParameterName' => 'page2',
+                    'sortFieldParameterName' => 'sort2',
+                    'sortDirectionParameterName' => 'direction2',
+                )
+            );
 
-            return $this->render('utilisateur/allUsers.html.twig',[
-                'utilisateur'=>$pagerfanta,
-                 'profile'=>$pagerfanta
+            return $this->render('utilisateur/allUsers.html.twig', [
+                'utilisateur' => $userPagination,
+                'profile' => $profilePagination
             ]);
         } else {
             //TODO:GENERATE A 404 PAGE
@@ -263,7 +292,10 @@ class UtilisateurController extends AbstractController
     public function addAccount(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager)
     {
         $user = new Utilisateur();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user)
+        ->add('cin',NumberType::class)
+        ->add('numTel', NumberType::class)
+        ->add('adresse',TextType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -290,10 +322,13 @@ class UtilisateurController extends AbstractController
     /**
      * @Route("/admin/editUser/{id}", name="edit_account")
      */
-    public function editUserAccountByAdmin(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager, $id,UtilisateurRepository $repo)
+    public function editUserAccountByAdmin(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager, $id, UtilisateurRepository $repo)
     {
         $user = $repo->find($id);
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user)
+        ->add('cin',NumberType::class)
+        ->add('numTel', NumberType::class)
+        ->add('adresse',TextType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
