@@ -1,0 +1,177 @@
+{% extends 'basefront.html.twig'%}
+
+{% block body %}
+
+<form method="post" action="{{ path('ajouterPoste') }}" >
+
+
+<table border="1">
+
+
+    <div class="post-st">
+        <ul>
+
+            <li><a class="post-jb active" href="ajouterPoste" title="">Créer un post</a></li>
+        </ul>
+    </div>
+
+    <tr {% for c in poste %}
+           >
+
+
+        <td></td>
+        <td></td>
+        <td></td>
+         <td></td>
+
+        <div class="main-section">
+            <div class="container">
+                <div class="main-section-data">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-8 no-pd">
+                            <div class="main-ws-sec">
+
+                                    <div class="user-picy">
+                                        <img src="images/resources/user-pic.png" alt="">
+                                    </div>
+
+
+
+
+                                <div class="post-bar">
+
+                                    <div class="post_topbar">
+                                        <div class="usy-dt">
+                                            <img src="images/resources/us-pic.png" alt="">
+                                            <div class="usy-name">
+                                                <h3>ahmed kahri</h3>
+                                                <span><img src="images/clock.png" alt="">{{ c.date|date('Y-m-d') }}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="epi-sec">
+                                        <ul class="descp">
+
+                                        </ul>
+                                        <ul class="bk-links">
+                                            <li><a href="{{ path('supprimerPoste' ,{'id':c.id})}}" title="" onclick="return confirm('Etes-vous sûr de supprimer cette poste?');" title=" supprimer"><i class="la la-bookmark"></i></a></li>
+
+                                            <li><a href="{{ path('modifierPoste' ,{'id':c.id})}}" title=""><i class="la la-envelope"></i>  </a></li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="job_descp">
+                                        <ul class="job-dt">
+                                            <li><a href="#" title="">Posted  </a></li>
+
+                                        </ul>
+                                        <p>{{ c.contenu }}<a href="#" title=""> </a></p>
+                                        <img src="{{ asset('uploads/brochures/' ~ c.image)}}"  width="1120"
+                                             height="450"  align="middle" alt="photo">
+                                        <ul class="skill-tags">
+                                            <li><a href="#" title="">HTag</a></li>
+                                            <li><a href="#" title="">HTag</a></li>
+                                            <li><a href="#" title="">HTag</a></li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="job-status-bar">
+                                        <ul class="like-com">
+                                            <li>
+                                                <a href="#"><i class="fas fa-heart"></i> j'aime......:</a>
+                                                <span>{{ c.likes }}</span>
+                                                <img src="images/liked-img.png" alt="">
+
+
+                                            </li>
+                                            <li><a href="{{ path('ajouterCommentaire' ,{'id':c.id})}}  " class="com"><i class="fas fa-comment-alt"></i> Ajouter commentaire </a></li>
+                                        </ul>
+{% set cmtps= c.getCommentaire() %}
+                                        {% for cmtp in cmtps %}
+                                        <div class="comment-section">
+
+
+                                            </a>
+
+                                            <div class="comment-sec">
+
+                                                <ul>
+                                                    <li>
+                                                        <div class="comment-list">
+
+                                                            <div class="bg-img">
+                                                                <img src="images/resources/bg-img1.png" alt="">
+                                                            </div>
+
+                                                            <div class="comment">
+
+                                                                <h3>John Doe</h3>
+                                                                <span><img src="images/clock.png" alt=""> {{ cmtp.date|date('Y-m-d') }}</span>
+
+                                                                <p>{{ cmtp.contenu }} <li><a href="{{ path('supprimerCommentaire' ,{'id':cmtp.id})}}" title="" onclick="return confirm('Etes-vous sûr de supprimer cette commentaire?');" title=" supprimer"><i class="la la-bookmark"></i></a></li>
+                                                    <li><a href="{{ path('modifierCommentaire' ,{'id':cmtp.id})}}" title=""><i class="la la-envelope"></i>  </a></li> </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <ul>
+                                                            <li>
+                                                                <div class="comment-list">
+                                                                    <div class="bg-img">
+                                                                        <img src="images/resources/bg-img2.png" alt="">
+                                                                    </div>
+
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <div class="comment-list">
+                                                            <div class="bg-img">
+                                                                <img src="images/resources/bg-img3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                    </div>
+                                </div>{% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                                    </div>
+                                </div>
+            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+
+
+    </tr {% endfor %} >
+</table>
+
+
+
+
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

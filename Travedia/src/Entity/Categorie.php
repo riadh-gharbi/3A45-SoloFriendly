@@ -60,7 +60,12 @@ class Categorie
     {
         return $this->image;
     }
+    public function setPicture(string $image): self
+    {
+        $this->image = $image;
 
+        return $this;
+    }
     public function setImage(string $image): self
     {
         $this->image = $image;

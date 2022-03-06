@@ -52,6 +52,7 @@ class Evenement
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="evenements")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $categorie;
 
@@ -137,6 +138,12 @@ class Evenement
     }
 
     public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+    public function setPicture(string $image): self
     {
         $this->image = $image;
 
