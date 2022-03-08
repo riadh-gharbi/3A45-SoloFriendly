@@ -30,6 +30,25 @@ class DestinationRepository extends ServiceEntityRepository
 
         return $result->fetchAllAssociative();
     }
+      public function search($term){
+        return $this->createQueryBuilder('Destination')
+        ->andWhere('Destination.nom LIKE :nom')
+        ->setParameter('nom', '%'.$term.'%')
+        ->getQuery()
+        ->execute();
+    }
+    /** 
+     * 
+     * Requête QueryBuilder
+    */
+    
+    public function searchD(){
+        return $this->createQueryBuilder('d')
+        ->orderBy('d.nom', 'DESC')
+        ->getQuery()
+        ->getResult();
+
+    }
 
     // /**
     //  * @return Destination[] Returns an array of Destination objects

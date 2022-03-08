@@ -14,6 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\RatingType;
+
+
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\File;
@@ -46,7 +49,9 @@ class DestinationType extends AbstractType
                 ])
                 ->add('region',EntityType::class,['class'=>Region::class,'choice_label'=>'nom'])
                      
-         //   ->add('evaluation')
+        //    ->add('evaluation',RatingType::class, [
+        //     'label' => 'Rating'
+        // ])
          //   ->add('region')
             // ->add('region', ChoiceType::class, [
             //     'choices' => [
@@ -61,6 +66,8 @@ class DestinationType extends AbstractType
            // ->add('utilisateur')
           //  ->add('evenement')
            // ->add('planning')
+           ->add('longitude')
+           ->add('latitude')
             ->add('Create', SubmitType::class)
         ;
     }

@@ -1,43 +1,4 @@
-{# {% extends 'basefront.html.twig' %}
- {% block title %}Travedia{% endblock %}
 
-  {% block body %}
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
- 
- 
-
-	<div class="main-panel">
-		<div class="content-wrapper">
-	
-			
-										<div align="middle" class="table-responsive">
-
-									
-                    <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="820" height="312"  align="middle" alt="photo">
-
-</div>
-				<h1>	
-         welcome to {{ destinationfront.nom }}
-</h1>
-
-{{ destinationfront.region.nom }}
-<br>
-{{ destinationfront.description }}
-
-
-
-</div> 
-   </div>
-
- 
-  
-
-
-        {% endblock %} #}
         {% extends 'basefront.html.twig' %}
 {% block title %}afficher destination
 {% endblock %}
@@ -71,7 +32,11 @@
 
 </div>
 
-	
+	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/starrating/css/rating.css') }}" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="{{ asset('bundles/starrating/js/rating.js') }}"></script>
+	  {{ destinationfront.evaluation }}
 
 <p> Region : </p>{{ destinationfront.region.nom }}
 <br>
@@ -80,6 +45,14 @@
 <p> here's a map for you  so you don't get lost </p>
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+    type="text/css"
+  />
+  
 <script>
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A"
@@ -89,7 +62,12 @@ navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
 })
 
 function successLocation(position) {
-  setupMap([position.coords.longitude, position.coords.latitude])
+  setupMap([{{ destinationfront.longitude }}, {{ destinationfront.latitude }}])
+  
+}
+function errorLocation(position) {
+  setupMap([-2.24, 53.48])
+  
 }
 
 {# function errorLocation() {
@@ -103,11 +81,18 @@ function setupMap(center) {
     center: center,
     zoom: 10
   })
+  const nav = new mapboxgl.NavigationControl()
+  map.addControl(nav)
 
+  var directions = new MapboxDirections({
+    accessToken: mapboxgl.accessToken
+  })
+
+  map.addControl(directions, "top-left")
  
 }
 </script>
-<div id='map' style='width: 900px; height: 300px;'></div>
+<div id='map' style='width: 1000px; height: 800px;'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
 var map = new mapboxgl.Map({

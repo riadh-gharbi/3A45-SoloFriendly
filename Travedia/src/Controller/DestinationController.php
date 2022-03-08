@@ -75,6 +75,8 @@ class DestinationController extends AbstractController
           //  ->add('save', SubmitType::class, array( 'label' => 'Créer' ))->getForm();
 
             $entityManager->flush();
+            $flashy->success('ajout avec succès', 'http://your-awesome-link.com');
+
 
            // $this->addFlash('success', 'destination a été créé');
            //$this->flashy->success('destination created!', 'http://your-awesome-link.com');
@@ -86,7 +88,10 @@ class DestinationController extends AbstractController
 
         }
 
-        return $this->render('destination/add.html.twig',['form' => $form->createView()]);
+        return $this->render('destination/add.html.twig', [
+            'destination'=>$destination,
+              'form' => $form->createView(),
+          ]);
     }
 
  /**

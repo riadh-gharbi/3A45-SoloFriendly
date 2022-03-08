@@ -32,9 +32,15 @@
   {{ form_errors(form.region) }}
                       {{ form_label(form.region,"choisir region") }} 
            {{ form_widget(form.region, {label_attr: {class: 'checkbox-custom'} }) }}
-                      
+           <br> <hr>
+           <small> veuillez entrer les coordonnées de cette destination </small>
+           <br><br>
+                      {{ form_row(form.longitude) }}
+                      {{ form_row(form.latitude) }}
+
 
 <br><br>
+
 <center>
 {{ form_row(form.Create,{ 'label': 'Créer' }, { 'attr': {'class': "btn btn-primary btn-rounded btn-fw"} } ) }}
 </center>
