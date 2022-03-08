@@ -5,7 +5,7 @@
 
 {% block body %}
 	
-<div class="main-panel">
+{# <div class="main-panel">
 		<div class="content-wrapper">
 			<div class="page-header">
 				<h3 class="page-title"> </h3>
@@ -17,32 +17,52 @@
 				<main>
 					<div class="container-fluid">
 					 {# <div class="col-lg-12 grid-margin stretch-card"> #}
-                <div class="card">
+                {# <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Vos destinations</h4>
 				
 					<br><br>
           <center>
 
-                    <div class="table-responsive">
-                  					<h1>	
-         welcome to {{ destinationfront.nom }}
-                              </h1>
-                   <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="1120" height="412"  align="right" alt="photo">
+                    <div class="table-responsive"> #} 
+                    <section class="banner">
+<div class="bannerimage">
+<img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  alt="photo">
+</div>
+<div class="bennertext">
 
 </div>
 
-	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/starrating/css/rating.css') }}" />
+</section>
+<section class="Company-overview">
+<div class="container">
+<div class="row">
+<div class="col-md-6 col-sm-12">
+ <h2>	
+         welcome to {{ destinationfront.nom }}
+         </h2>
+         <p> Region : </p>{{ destinationfront.region.nom }}
+        <p> Region : </p>
+<p>
+{{ destinationfront.description }}
+</p>
+</div>
+<div class="col-md-6 col-sm-12">
+<img src="{{ asset('uploads/brochures/panneaux-routiers.png' )}}" height="250"  width="250" alt="image">
+</div>
+</div>
+</div>
+</section>
+<section>
+                  			
+                   {# <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="1120" height="412"  align="right" alt="photo"> #}
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="{{ asset('bundles/starrating/js/rating.js') }}"></script>
-	  {{ destinationfront.evaluation }}
 
-<p> Region : </p>{{ destinationfront.region.nom }}
+
+
+
 <br>
-<p> Description : </p>{{ destinationfront.description }}
-<br>
-<p> here's a map for you  so you don't get lost </p>
+{#------------------------- MAP CODE------------------------------ #}
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
@@ -70,9 +90,7 @@ function errorLocation(position) {
   
 }
 
-{# function errorLocation() {
-  setupMap([-2.24, 53.48])
-} #}
+
 
 function setupMap(center) {
   const map = new mapboxgl.Map({
@@ -92,7 +110,7 @@ function setupMap(center) {
  
 }
 </script>
-<div id='map' style='width: 1000px; height: 800px;'></div>
+<div id='map' style='width:  100%; height: 500px;'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
 var map = new mapboxgl.Map({
@@ -100,14 +118,8 @@ container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11'
 });
 </script>
-</center>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
+</section>
+
 			
 
  

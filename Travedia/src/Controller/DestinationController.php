@@ -72,15 +72,11 @@ class DestinationController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($destination);
-          //  ->add('save', SubmitType::class, array( 'label' => 'Créer' ))->getForm();
 
             $entityManager->flush();
-            $flashy->success('ajout avec succès', 'http://your-awesome-link.com');
 
 
-           // $this->addFlash('success', 'destination a été créé');
-           //$this->flashy->success('destination created!', 'http://your-awesome-link.com');
-
+         
            $this->addFlash('success', 'destination a été créé');
         //   $flashy->success('destination created!', 'http://your-awesome-link.com');
 

@@ -18,12 +18,7 @@
 			
 			</div>
 			<div id="layoutSidenav_content">
-			<div class="search-bar"> 
-<form>
-			<input  id="myInput2"  type="text" class="form-control" placeholder="search"> 
-<button type="submit"><i class="la la-search"></i></button>
-</form>
-</div>
+	
 			
 				<main>
 				
@@ -61,42 +56,7 @@
 
 
 </div>
-{% block javascripts %}
-  
-	
-    {# <script src="{{ asset('js/jquery-3.2.1.min.js')}}"></script> #}
-	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- <script>
-        $(document).ready(function(){
-            $("#myInput2").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#tab2 tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-    </script>
-    {# <script>
-        $(document).ready(function() {
-            $("#form_recherche").on("submit", function (event) {
-                event.preventDefault();
-                $.ajax({
-                    url: "{{ asset('ajax/Search.php') }}",
-                    type: 'POST',
-                    data: {
-                        action: 'recherche' ,
-                        $nom: $("#nom").val() ,
-                        $option: $("#option").val() ,
-                    },
-                    success: function (data) {
-                        $("#tab").html(data);
-                    }
-                });
-            });
-        });
-           
-    </script> #}
-		{% endblock %}
+
   {% endblock %}
 
 
