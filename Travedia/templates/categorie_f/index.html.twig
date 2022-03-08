@@ -1,7 +1,9 @@
 {% extends 'basefront.html.twig' %}
 
-{% block title %}Categories {% endblock %}
-
+{% block title %}Categories test{% endblock %}
+{% block css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+{% endblock %}
 {% block body %}
     <div class="top-profiles">
         <div class="pf-hd">
@@ -21,9 +23,16 @@
                         <li><a href="{{ path('categorief_delete',{'id':categorie.Id}) }}" title="" class="hire">Supprimer</a></li>
                     </ul>
                     <a href="{{ path('evenementf_show',{'id':categorie.id}) }}" title="">Voir Evenements</a>
+                    <div class="notif" dateGhada="{{ evenement.datefin|date}}"></div>
                 </div>
 
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>    var countdowns = $(".notif");
+
+    </script>
 {% endblock %}
