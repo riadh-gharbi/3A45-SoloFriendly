@@ -55,23 +55,7 @@
               </li>
 			
 			<small>         Vous pouvez chercher avec nom ou region</small>
-				{# <form id="form_recherche" method="POST">
-					<div class="input-group">
-						<br><br>
-						
-						 <select  id="option">
-            <option >nom</option>
-            <option >region</option>
-			</select> 
-						<input id="nom" name="nom" class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2"/>
-						<div class="input-group-append">
-    <button class="btn btn-light " id="recherche" type="submit"><i class="fas fa-search"></i></button>
-
-						</div> 
-
-					
-				</div>
-			</form>  #}
+			
 			<br><br>
 				<main>
 					<div class="container-fluid">
@@ -171,10 +155,11 @@
 					</div>
 				</div>
 		
+
+
 {% block javascripts %}
   
 	
-    {# <script src="{{ asset('js/jquery-3.2.1.min.js')}}"></script> #}
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script>
         $(document).ready(function(){
@@ -186,26 +171,7 @@
             });
         });
     </script>
-    {# <script>
-        $(document).ready(function() {
-            $("#form_recherche").on("submit", function (event) {
-                event.preventDefault();
-                $.ajax({
-                    url: "{{ asset('ajax/Search.php') }}",
-                    type: 'POST',
-                    data: {
-                        action: 'recherche' ,
-                        $nom: $("#nom").val() ,
-                        $option: $("#option").val() ,
-                    },
-                    success: function (data) {
-                        $("#tab").html(data);
-                    }
-                });
-            });
-        });
-           
-    </script> #}
+  
 		{% endblock %}
 
 				{% endblock %}

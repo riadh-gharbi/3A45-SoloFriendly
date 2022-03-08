@@ -20,7 +20,7 @@
 			<div id="layoutSidenav_content">
 			<div class="search-bar"> 
 <form>
-			<input  id="myInput"  type="text" class="form-control" placeholder="search"> 
+			<input  id="myInput2"  type="text" class="form-control" placeholder="search"> 
 <button type="submit"><i class="la la-search"></i></button>
 </form>
 </div>
@@ -40,7 +40,7 @@
 		{% for d in destination %}
 
 
-<div class="user-profy" id="tab">
+<div class="user-profy" id="tab2">
   <img src="{{ asset('uploads/brochures/' ~ d.image)}}"  width="250" 
      height="150"  align="middle" alt="photo">
      <h3>{{ d.nom }}</h3>
@@ -68,9 +68,9 @@
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script>
         $(document).ready(function(){
-            $("#myInput").on("keyup", function() {
+            $("#myInput2").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $("#tab tr").filter(function() {
+                $("#tab2 tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
