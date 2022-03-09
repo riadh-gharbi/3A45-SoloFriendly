@@ -35,7 +35,6 @@
                 </div>
                 <nav>
                     <ul>
-
                         <li></li>
                         <li></li>
                         <li></li>
@@ -50,12 +49,11 @@
     </div>
 
     <div style="margin-top: 40px; margin-left: 10px;">
-    {{ form_start(resetForm,) }}
-    {{ form_widget(resetForm.plainPassword, { 'attr': {'class': "form-control   col-sm-9"} }) }}
-    {{ form_row(resetForm.plainPassword,{'class': 'col-sm-3 col-form-label'}) }}
-
-    <button class="btn btn-primary" style="margin-top: 160px;margin-left: 10px;">Reset password</button>
-    {{ form_end(resetForm) }}
+        {{ form_start(resetForm,) }}
+        {{ form_widget(resetForm.plainPassword, { 'attr': {'class': 'col-sm-3 col-form-label'} }) }}
+        {{ form_row(resetForm.plainPassword,{'attr': {'class': 'form-control col-sm-9'}}) }}
+        <button class="btn btn-primary" style="margin-top: 10px;margin-left: 10px;">Reset password</button>
+        {{ form_end(resetForm) }}
     </div>
 
     <br><br> <br><br> <br><br>
@@ -66,18 +64,18 @@
     <br><br> <br><br> <br><br>
 
     <footer>
-    <div class="footy-sec mn no-margin">
-        <div class="container">
-            <ul>
-                <li><a href="about.html" title="">About</a></li>
-                <li><a href="#" title="">FAQ</a></li>
-                <li><a href="#" title="">Community Guidelines</a></li>
-            </ul>
-            <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
-            <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
+        <div class="footy-sec mn no-margin">
+            <div class="container">
+                <ul>
+                    <li><a href="about.html" title="">About</a></li>
+                    <li><a href="#" title="">FAQ</a></li>
+                    <li><a href="#" title="">Community Guidelines</a></li>
+                </ul>
+                <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
+                <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 </div>
 

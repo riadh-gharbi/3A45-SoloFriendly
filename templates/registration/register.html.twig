@@ -44,30 +44,30 @@
                             </ul>
                             <div class="sign_in_sec current">
                                 <div class="dff-tab current" id="tab-3">
-                                    {{ form_start(registrationForm) }}
+                                    {{ form_start(registrationForm,{'attr':{'id':'myForm'}}) }}
                                     <div class="row">
 
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                {{ form_row(registrationForm.nom) }}
+                                                {{ form_row(registrationForm.nom,{'attr':{'id':'nomForm'}}) }}
                                                 <i class="la la-user"></i>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                {{ form_row(registrationForm.prenom) }}
+                                                {{ form_row(registrationForm.prenom,{'attr':{'id':'prenomForm'}}) }}
                                                 <i class="la la-user"></i>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                {{ form_row(registrationForm.email) }}
+                                                {{ form_row(registrationForm.email,{'attr':{'id':'emailForm'}}) }}
                                                 <i class="la la-mail-forward"></i>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                {{ form_row(registrationForm.plainPassword) }}
+                                                {{ form_row(registrationForm.plainPassword,{'attr':{'id':'mdpForm'}}) }}
                                                 <i class="la la-lock"></i>
                                             </div>
                                         </div>
@@ -88,16 +88,15 @@
                                         {% block captcha_widget %}
                                             <div class="col-lg-12 no-pdd">
                                                 <div class="sn-field">
-                                                    {{ form_row(registrationForm.captcha) }}
+                                                    {{ form_row(registrationForm.captcha,{'attr':{'id':'captchaForm'}}) }}
                                                 </div>
                                             </div>
                                         {% endblock %}
                                         <div class="col-lg-12 no-pdd">
-                                            <button type="submit" value="submit">S'inscrire</button>
+                                            <a class="btn btn-primary" style="color: white;" onclick="registerUser()">S'inscrire</a>
                                         </div>
                                     </div>
                                     {{ form_row(registrationForm._token) }}
-
                                     {{ form_end(registrationForm) }}
                                 </div>
                             </div>
@@ -108,6 +107,42 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('/back/js/sweet-alert.js') }}"></script>
+<script type="text/javascript">
+    function registerUser() {
+        /*if($('#nomForm').empty() || $('#prenomForm').empty() || $('#emailForm').empty() || $('#mdpForm').empty() || $('#captchaForm').empty()){
+            Swal.fire({
+                Title : 'Erreur',
+                text: 'Vérifier vos données',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK!',
+            })
+        }
+        else{*/
+            Swal.fire({
+                title: 'Bienvenue à Travedia!',
+                text: 'Si vos données sont just, vous serez redirigé à la page Accueil',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mail',
+                        text: 'Vous allez reçevoir un mail de confirmation',
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK!',
+                    }).then(() => {
+                        $('#myForm').submit()
+                    })
+                }
+            })
+        /*}*/
+    }
+</script>
+
 <script type="text/javascript" src="{{ asset("front/js/jquery.min.js") }}"></script>
 <script type="text/javascript" src="{{ asset("front/js/popper.js") }}"></script>
 <script type="text/javascript" src="{{ asset("front/js/bootstrap.min.js") }}"></script>

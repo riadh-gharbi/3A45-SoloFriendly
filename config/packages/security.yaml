@@ -18,6 +18,7 @@ security:
             anonymous: lazy
             provider: users_in_memory
             guard:
+                entry_point: App\Security\UserAuthAuthenticator
                 authenticators:
                     - App\Security\UserAuthAuthenticator
             logout:

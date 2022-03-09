@@ -24,6 +24,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class UtilisateurController extends AbstractController
 {
     /**
+     * @Route("/error", name="error")
+     */
+    public function error()
+    {
+        return $this->render('utilisateur/error.html.twig');
+    }
+
+    /**
      * @Route("/user/profile", name="user_profile")
      */
     //TODO: complete function

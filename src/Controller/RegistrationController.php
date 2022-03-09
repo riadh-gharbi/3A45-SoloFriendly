@@ -74,10 +74,11 @@ class RegistrationController extends AbstractController
                 $user->getId(),
                 $user->getEmail()
             );
+            $email = $form->get('email')->getData();
 
-            $message = (new \Swift_Message('test'))
+            $message = (new \Swift_Message('Vérifier Votre compte'))
                 ->setFrom('travediacontact@gmail.com')
-                ->setTo($user->getEmail())
+                ->setTo($email)
                 ->setBody(
                     $this->renderView(
                     // templates/emails/registration.html.twig

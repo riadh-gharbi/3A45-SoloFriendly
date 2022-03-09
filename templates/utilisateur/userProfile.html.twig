@@ -37,7 +37,8 @@
                                        <div class="user_profile" style="margin-bottom: 90px; ">
                                            <div class="user-pro-img">
                                                {% if utilisateur.profile.image != null %}
-                                                   <img src="{{ asset('back/images/upload/profile_image/' ~ utilisateur.profile.image) }}" alt="">
+                                                   <img src="{{ asset('back/images/upload/profile_image/' ~ utilisateur.profile.image) }}"
+                                                        alt="">
                                                {% else %}
                                                    <img src="{{ asset("front/images/pdp.jpeg") }}" alt="">
                                                {% endif %}
@@ -47,8 +48,8 @@
                                                    <li><a href="{{ path('edit_user') }}" title="" class="flww">
                                                            Modifier</a></li>
                                                    <div class="message-btn">
-                                                       <a href="{{ path('user_delete') }}" title="">
-                                                           Supprimer</a>
+                                                       <a onclick="deleteConfirmation()"
+                                                          style="color: white;">Supprimer</a>
                                                    </div>
 
                                                </ul>
@@ -435,5 +436,38 @@
            </div>
        </div>
 
+       <script type="text/javascript">
+           function deleteConfirmation() {
+               Swal.fire({
+                   title: 'Vous êtes sûr ?',
+                   text: "Vous ne pouvez plus utiliser ce compte!",
+                   icon: 'warning',
+                   showCancelButton: true,
+                   cancelText: 'annuler',
+                   confirmButtonColor: '#3085d6',
+                   cancelButtonColor: '#d33',
+                   confirmButtonText: 'Oui!',
+               }).then((result) => {
+                   if (result.isConfirmed) {
+                       Swal.fire(
+                           {
+                               title: 'Fait!',
+                               text: 'Votre compte est supprimé.',
+                               type: 'success',
+                               timer: 3000
+                           }
+                       ).then(() => {
+                           window.location.href = "{{ path('user_delete') }}"
+                       })
+                   } else {
+                       Swal.fire({
+                           title: 'Annulé!',
+                           type: 'success',
+                           timer: 3000
+                       })
+                   }
+               })
+           }
+       </script>
 
    {% endblock %}
