@@ -1,0 +1,49 @@
+
+:root {
+    --gl-star-color: #fdd835;
+    --gl-star-size: 12px;
+    --gl-tooltip-color: #fff
+}
+
+@media screen and (min-width: 35em) {
+    .gl-star-rating .gl-star-rating--stars>span {
+        --gl-star-size: 24px
+    }
+    .gl-star-rating .gl-star-rating--stars[aria-label]::after {
+        --gl-tooltip-padding: 0.75em 1em
+    }
+}
+
+@media screen and (min-width: 42em) {
+    .gl-star-rating .gl-star-rating--stars>span {
+        --gl-star-size: 24px
+    }
+}
+
+@media screen and (min-width: 50em) {
+    .gl-star-rating .gl-star-rating--stars>span {
+        --gl-star-size: 24px
+    }
+}
+
+.gl-star-rating .gl-emote-bg {
+    transition: fill 0.15s ease-in-out
+}
+
+.gl-star-rating [data-value]:not(.gl-active) .gl-emote-bg {
+    fill: #DCDCE6
+}
+
+.gl-star-rating .gl-emote {
+    transform: scale(.9);
+    transition: transform 0.25s ease-in-out
+}
+
+.gl-star-rating .gl-selected .gl-emote {
+    transform: scale(1.1)
+}
+
+:root {
+    --gl-star-empty: url(/FRONT/img/star-empty.svg);
+    --gl-star-full: url(/FRONT/img/star-full.svg);
+}

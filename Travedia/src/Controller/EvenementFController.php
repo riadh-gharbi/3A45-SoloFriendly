@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\NotifierInterface;
+use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
+use Knp\Component\Pager\PaginatorInterface;
 
 class EvenementFController extends AbstractController
 {
@@ -27,7 +31,18 @@ class EvenementFController extends AbstractController
             'evenement' => $evenement,
         ]);
     }
+    /**
+     * @Route("/evenement_f/{id}/editRating/{rating}", name="evenement_rating")
+     */
+    public function editRating(Request $request, Evenement $evenement, int $rating): Response
+    {
+        $entityManager=$this->getDoctrine()->getManager();
+        $evenement->setRating($rating);
+        $entityManager->persist($evenement);
+        $entityManager->flush();
 
+        return new Response("1");
+    }
     /**
      * @param Request $request
      * @return \symfony\Component_HttpFoundation\RedirectResponse
