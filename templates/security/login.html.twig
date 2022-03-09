@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+{% block icon %}  <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
 <head>
     <meta charset="UTF-8">
     <title>Travedia</title>
@@ -74,9 +74,9 @@
                                                     <label for="c1">
                                                         <span></span>
                                                     </label>
-                                                    <small>Remember me</small>
+
                                                 </div>
-                                                <a href="{{ path('app_forgot_password_request') }}" title="">Forgot Password?</a>
+                                                <a href="{{ path('app_forgot_password_request') }}" title="">Mot de passe oublié?</a>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 no-pdd">
@@ -87,8 +87,7 @@
                                 <div class="login-resources">
                                     <h4>vous n'avez pas un compte?<a href="{{ path('user_register') }}">Créer Compte</a></h4>
                                     <ul>
-                                        <li><a href="#" title="" class="fb"><i class="fa fa-google"></i>Login Via Google</a></li>
-                                        <li><a href="#" title="" class="tw"><i class="fa fa-twitter"></i>Login Via Twitter</a></li>
+
                                     </ul>
                                 </div>
                             </div>

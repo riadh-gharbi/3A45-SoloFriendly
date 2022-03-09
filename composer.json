@@ -30,7 +30,6 @@
         "symfony/http-client": "4.4.*",
         "symfony/intl": "4.4.*",
         "symfony/mailer": "4.4.*",
-        "symfony/messenger": "4.4.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/process": "4.4.*",
         "symfony/property-access": "4.4.*",
@@ -48,7 +47,8 @@
         "symfonycasts/reset-password-bundle": "^1.13",
         "symfonycasts/verify-email-bundle": "^1.9",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+      "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

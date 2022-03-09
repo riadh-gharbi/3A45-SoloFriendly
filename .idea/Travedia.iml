@@ -157,9 +157,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/knpuniversity/oauth2-client-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/oauth2-google" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/oauth2-client" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/messenger" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Chart.js" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
   </component>
 </module>

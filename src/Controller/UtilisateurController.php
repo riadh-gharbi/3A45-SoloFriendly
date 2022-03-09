@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Entity\Profile;
 use App\Form\ProfileFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\UtilisateurRepository;
@@ -41,12 +42,17 @@ class UtilisateurController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-        if ($user->getRoles() == ["ADMIN"]) {
-            return $this->redirectToRoute('admin_profile');
+        if ($user->getIsBlocked() == true) {
+            return $this->redirectToRoute('error');
         } else {
-            return $this->render('utilisateur/userProfile.html.twig', [
-                'utilisateur' => $user,
-            ]);
+
+            if ($user->getRoles() == ["ADMIN"]) {
+                return $this->redirectToRoute('admin_profile');
+            } else {
+                return $this->render('utilisateur/userProfile.html.twig', [
+                    'utilisateur' => $user,
+                ]);
+            }
         }
     }
 
@@ -79,6 +85,9 @@ class UtilisateurController extends AbstractController
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
+        }
+        if ($user->getIsBlocked() == true) {
+            return $this->redirectToRoute('error');
         } else {
             $profile = $user->getProfile();
             $em = $this->getDoctrine()->getManager();
@@ -140,6 +149,48 @@ class UtilisateurController extends AbstractController
     }
 
     /**
+     * @Route("/admin/block/{id}",name="block_user")
+     */
+    public function blockUser($id): Response
+    {
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($currentUser->getRoles() == ["ADMIN"]) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getDoctrine()->getRepository(Utilisateur::class)->find($id);
+            $user->setIsBlocked(true);
+            $em->flush();
+
+            return $this->redirectToRoute('all_users');
+        } else {
+            return $this->redirectToRoute('error');
+        }
+    }
+
+    /**
+     * @Route("/admin/unblock/{id}",name="unblock_user")
+     */
+    public function unblockUser($id): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($user->getRoles() == ["ADMIN"]) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getDoctrine()->getRepository(Utilisateur::class)->find($id);
+            $user->setIsBlocked(false);
+            $em->flush();
+
+            return $this->redirectToRoute('all_users');
+        } else {
+            return $this->redirectToRoute('error');
+        }
+    }
+
+    /**
      * @Route("/admin/profile", name="admin_profile")
      */
     //TODO: complete function
@@ -179,6 +230,7 @@ class UtilisateurController extends AbstractController
                 ->add('numTel')
                 ->add('adresse')
                 ->add('email')
+                ->add('langue')
                 ->add('old_password', PasswordType::class, [
                     'mapped' => false,
                     'label' => false,
@@ -232,11 +284,11 @@ class UtilisateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin/delete", name="delete_user")
+     * @Route("/admin/delete/{id}", name="delete_user")
      */
-    public function deleteUser(UtilisateurRepository $repo)
+    public function deleteUser(UtilisateurRepository $repo, $id)
     {
-        $user = $this->getUser();
+        $user = $repo->find($id);
         if (!$user) {
             return $this->redirectToRoute('app_login');
         } else {
@@ -247,7 +299,7 @@ class UtilisateurController extends AbstractController
             $em->remove($user);
             $em->flush();
 
-            return $this->redirectToRoute('app_logout');
+            return $this->redirectToRoute('all_users');
         }
     }
 
@@ -300,10 +352,12 @@ class UtilisateurController extends AbstractController
     public function addAccount(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager)
     {
         $user = new Utilisateur();
+        $profile = new Profile();
         $form = $this->createForm(RegistrationFormType::class, $user)
-        ->add('cin',NumberType::class)
-        ->add('numTel', NumberType::class)
-        ->add('adresse',TextType::class);
+            ->add('cin', NumberType::class)
+            ->add('numTel', NumberType::class)
+            ->add('adresse', TextType::class);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -316,7 +370,9 @@ class UtilisateurController extends AbstractController
             );
             $user->setIsVerified(true);
 
+            $profile->setUtilisateur($user);
             $entityManager->persist($user);
+            $entityManager->persist($profile);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
@@ -335,9 +391,9 @@ class UtilisateurController extends AbstractController
     {
         $user = $repo->find($id);
         $form = $this->createForm(RegistrationFormType::class, $user)
-        ->add('cin',NumberType::class)
-        ->add('numTel', NumberType::class)
-        ->add('adresse',TextType::class);
+            ->add('cin', NumberType::class)
+            ->add('numTel', NumberType::class)
+            ->add('adresse', TextType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -360,4 +416,58 @@ class UtilisateurController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/admin/stats", name="admin_stats")
+     */
+    public function stats(UtilisateurRepository $userRepo)
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        } else if ($user->getRoles() == ["ADMIN"]) {
+            $data = $userRepo->findAll();
+            $arabe = 0;
+            $francais = 0;
+            $anglais = 0;
+            $admin = 0;
+            $guide = 0;
+            $voyageur = 0;
+            foreach ($data as $t) {
+                $type = $t->getRoles();
+                if ($type == ["ADMIN"]) {
+                    $admin++;
+                } elseif ($type == ["Guide"]) {
+                    $guide++;
+                } elseif ($type == ["Voyageur"]) {
+                    $voyageur++;
+                }
+
+                if ($t->getLangue() == "Arabe") {
+                    $arabe++;
+                } elseif ($t->getLangue() == "Français") {
+                    $francais++;
+                }
+                elseif($t->getLangue() == "Anglais")
+                {
+                    $anglais++;
+                }
+            }
+
+            $choice = ['Admin', 'Guide', 'Voyageur'];
+
+            return $this->render('utilisateur/stat.html.twig',
+                [
+                    'admin' => $admin,
+                    'guide' => $guide,
+                    'voyageur' => $voyageur,
+                    'choice' => json_encode($choice),
+                    'etat' => [$arabe, $francais,$anglais],
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('error');
+        }
+    }
+
 }

@@ -1,3 +1,4 @@
+
 <style>
 
     @charset "UTF-8";
@@ -508,6 +509,7 @@
             line-height: 2;
             padding-right: 20px;
             padding-left: 20px;
+            color: #89c4f2;
         }
         .lamp {
             zoom: .6;
@@ -532,6 +534,8 @@
     }
 </style>
 
+{% block icon %}  <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
+<title>404 Page Introuvable</title>
 <body>
 <a href="https://codepen.io/uiswarup/full/wvqNWOY" target="_blank">
     <header class="top-header">
@@ -562,8 +566,8 @@
         <!-- Content -->
         <div class="error__content">
             <div class="error__message message">
-                <h1 class="message__title">Page Not Found</h1>
-                <p class="message__text">We're sorry, the page you were looking for isn't found here. The link you followed may either be broken or no longer exists. Please try again, or take a look at our.</p>
+                <h1 class="message__title" >Page Introuvable</h1>
+                <p class="message__text" >We're sorry, the page you were looking for isn't found here. The link you followed may either be broken or no longer exists. Please try again, or take a look at our.</p>
             </div>
             <div class="error__nav e-nav">
                 <a href="{{ path('app_logout') }}" target="_blanck" class="e-nav__link"></a>

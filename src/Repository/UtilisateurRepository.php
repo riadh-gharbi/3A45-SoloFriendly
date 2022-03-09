@@ -22,6 +22,10 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         parent::__construct($registry, Utilisateur::class);
     }
 
+    public function search(){
+        return $this->createQueryBuilder('u')->getQuery()->getResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */

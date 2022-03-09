@@ -79,6 +79,11 @@ class Utilisateur implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isBlocked = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -265,6 +270,18 @@ class Utilisateur implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getIsBlocked(): ?bool
+    {
+        return $this->isBlocked;
+    }
+
+    public function setIsBlocked(bool $isBlocked): self
+    {
+        $this->isBlocked = $isBlocked;
 
         return $this;
     }
