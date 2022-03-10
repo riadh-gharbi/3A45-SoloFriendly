@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Form\PosteType;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 class PosteController extends AbstractController
 
 {
@@ -27,7 +29,7 @@ class PosteController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
@@ -52,6 +54,7 @@ class PosteController extends AbstractController
                 } catch (FileException $e) {}
                 $poste->setImage($newFilename);
             }
+            $this->addFlash('success', 'poste Created!' );
             $em=$this->getDoctrine()->getManager();
             $em->persist($poste);
             $em->flush();
@@ -79,23 +82,7 @@ class PosteController extends AbstractController
     }
 
 
-   // /**
-    // * @param PosteRepository $rep
-   //  * @return Response
-   //  * @Route("/Poste/affichertest/{id}", name="commentaire")
-    // */
-   // public function affcat(PosteRepository $rep, $id)
-   // {
 
-      //  $commentaire=$rep->findAll();
-     //   return $this->render('Poste/commentaire.html.twig', [
-      //      'commentaire' => $commentaire,
-        //    'commentaireid' => $rep->getCommentairebyid($id),
-
-
-        //]);
-
-   // }
 
 
 
@@ -150,5 +137,89 @@ class PosteController extends AbstractController
         return $this->redirectToRoute('afficherPoste');
 
     }
-  
+
+    /**
+     * @param PosteRepository $repository
+     * @param CommentaireRepository $repositoryC
+     * @return Response
+     * @Route("/Poste/afficherAct", name="afficherPoste")
+     */
+    public function recherchePoste(Request $request )
+    {
+        $em=$this->getDoctrine()->getManager();
+        $poste = $em->getRepository(Poste::class)->findAll();
+        if($request->isMethod("POST"))
+        {
+            $search = $request->get('search');
+            $poste = $em->getRepository(Poste::class)->findBy(array('contenu'=>$search));
+
+        }
+
+        return $this->render    ("poste/afficherPoste.html.twig",
+            ["poste"=>$poste ]);
+
+    }
+    /**
+     * @param poste $poste
+     * @Route("/print/{id}", name="print")
+     */
+    public function print($id)
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+//        $pdfOptions->set('isRemoteEnabled', true);
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        $repository = $this->getDoctrine()->getRepository(Poste::class);
+        $poste = $repository->findOneByid($id);
+
+
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('poste/pdf.html.twig', [
+            "poste"=>$poste ,
+
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("poste.pdf", [
+            "Attachment" => false
+        ]);
+    }
+    /**
+     * @Route("/triLike_poste", name="tri_nbr_like")
+     */
+    public function TriIDPOSTE()
+    {
+        $poste= $this->getDoctrine()->getRepository(Poste::class)->TriParLike();
+        return $this->render("poste/afficherPoste.html.twig",array('poste'=>$poste));
+        return $this->render    ("poste/afficherPoste.html.twig",
+            ["poste"=>$poste ]);
+    }
+    /**
+     * @Route("/triLike_posteD", name="tri_nbr_likeD")
+     */
+    public function TriIDPOSTED()
+    {
+        $poste= $this->getDoctrine()->getRepository(Poste::class)->TriParLikeD();
+        return $this->render("poste/afficherPoste.html.twig",array('poste'=>$poste));
+        return $this->render    ("poste/afficherPoste.html.twig",
+            ["poste"=>$poste ]);
+    }
+
+
+
 }

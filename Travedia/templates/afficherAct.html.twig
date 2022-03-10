@@ -1,5 +1,34 @@
 {%extands 'basefront.html.twig'%}
 {% block body %}
+    {% block javascripts %}
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#myInput").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#tab tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+
+    {% endblock %}
+    <li class="nav-item nav-search border-0 ml-1 ml-md-3 ml-lg-5 d-none d-md-flex">
+
+        <form class="nav-link form-inline mt-2 mt-md-0">
+            <div class="input-group" >
+                <input  id="myInput"  type="text" class="form-control" placeholder="search">
+                <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i class="mdi mdi-magnify"></i>
+                      </span>
+                </div>
+            </div>
+        </form>
+    </li>
     <body>
     <main>
         <div class="main-section">
@@ -26,7 +55,7 @@
                                             <div class="usy-dt">
                                                 <img src="images/resources/us-pic.png" alt="">
                                                 <div class="usy-name">
-                                                    <h3>waaa</h3>
+                                                    <h3>search</h3>
                                                     <span><img src="images/clock.png" alt="">aaaaaaaaaaaaaaaaaaa</span>
                                                 </div>
                                             </div>

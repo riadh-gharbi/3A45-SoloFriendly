@@ -58,4 +58,16 @@ class PosteRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function TriParLike()
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.likes','ASC ')
+            ->getQuery()->getResult();
+    }
+    public function TriParLikeD()
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.likes','DESC ')
+            ->getQuery()->getResult();
+    }
 }

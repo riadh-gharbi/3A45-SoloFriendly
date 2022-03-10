@@ -2,9 +2,10 @@
 
 {% block body %}
 
+<form <li><a href="{{ path('tri_nbr_like')}}" title="trier"><i class="btn btn-primary">tri </i></a></li>
+<form <li><a href="{{ path('tri_nbr_likeD')}}" title="trier"><i class="btn btn-danger">tri down </i></a></li>
+
 <form method="post" action="{{ path('ajouterPoste') }}" >
-
-
 <table border="1">
 
 
@@ -14,9 +15,18 @@
             <li><a class="post-jb active" href="ajouterPoste" title="">Créer un post</a></li>
         </ul>
     </div>
+    <body>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
+
+
+    </body>
     <tr {% for c in poste %}
-           >
+
 
 
         <td></td>
@@ -58,12 +68,19 @@
                                             <li><a href="{{ path('supprimerPoste' ,{'id':c.id})}}" title="" onclick="return confirm('Etes-vous sûr de supprimer cette poste?');" title=" supprimer"><i class="la la-bookmark"></i></a></li>
 
                                             <li><a href="{{ path('modifierPoste' ,{'id':c.id})}}" title=""><i class="la la-envelope"></i>  </a></li>
+                                            <li><a href="{{ path('calendar_index')}}" title=""><i class="la la-envelope"></i>  </a></li>
+                                            <li><a href="{{ path('main')}}" title=""><i class="la la-envelope"></i>  </a></li>
+                                            <li> <a href="{{ path('print',{ 'id': c.id })}}" class="btn btn-default btn-sm">imprimer </a></li>
+
+
+
+
 
                                         </ul>
                                     </div>
                                     <div class="job_descp">
                                         <ul class="job-dt">
-                                            <li><a href="#" title="">Posted  </a></li>
+                                            <li><a href="#" title="">{{ c.id }} </a></li>
 
                                         </ul>
                                         <p>{{ c.contenu }}<a href="#" title=""> </a></p>
