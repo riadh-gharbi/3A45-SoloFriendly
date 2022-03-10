@@ -4,7 +4,7 @@
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:32 GMT -->
 <head>
     <meta charset="UTF-8">
-    <title>Réinitialisation du mot de passe</title>
+    <title>Reset pass </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content=""/>
     <meta name="keywords" content=""/>
@@ -45,14 +45,14 @@
     </header>
 
     <div style="margin-top: 30px;">
-        <center><h1 style="font-weight: bold;font-size: 32px;margin-top: 30px;">Réinitialisation du mot de passe</h1></center>
+        <center><h1 style="font-weight: bold;font-size: 32px;margin-top: 30px;">Reset your password</h1></center>
     </div>
 
     <div style="margin-top: 40px; margin-left: 10px;">
         {{ form_start(resetForm,) }}
         {{ form_widget(resetForm.plainPassword, { 'attr': {'class': 'col-sm-3 col-form-label'} }) }}
         {{ form_row(resetForm.plainPassword,{'attr': {'class': 'form-control col-sm-9'}}) }}
-        <button class="btn btn-primary" style="margin-top: 10px;margin-left: 10px;">Réinitialisation </button>
+        <button class="btn btn-primary" style="margin-top: 10px;margin-left: 10px;">Reset password</button>
         {{ form_end(resetForm) }}
     </div>
 
@@ -67,9 +67,9 @@
         <div class="footy-sec mn no-margin">
             <div class="container">
                 <ul>
-                    <li><a href="about.html" title="">A propos</a></li>
+                    <li><a href="about.html" title="">About</a></li>
                     <li><a href="#" title="">FAQ</a></li>
-
+                    <li><a href="#" title="">Community Guidelines</a></li>
                 </ul>
                 <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
                 <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
