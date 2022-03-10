@@ -123,7 +123,7 @@ class RegistrationController extends AbstractController
         // Mark your user as verified. e.g. switch a User::verified property to true
         $user->setIsVerified(true);
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('user_profile');
     }
 
     /**
