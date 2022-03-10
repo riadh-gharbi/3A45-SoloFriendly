@@ -1,0 +1,59 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Categories {% endblock %}
+
+{% block body %}
+    <div class="top-profiles">
+        <div class="pf-hd">
+            <h3>Top Event</h3>
+            <i class="la la-ellipsis-v"></i>
+        </div>
+        <div class="profiles-slider">
+            {% for evenement in event %}
+                <div class="user-profy company-up-info">
+                    <img src="images/resources/user1.png" alt="">
+                    <h3>{{ evenement.nom }}</h3>
+                    <img src="{{ asset('front/images/uploads/event_picture/' ~ evenement.image)}}" alt="">
+                    <span>{{ evenement.description }}</span>
+                    <span>de {{ evenement.datedeb|date('d-m-y')}}</span>
+                    <span>au {{ evenement.datefin|date('d-m-y')}}</span>
+                    <div class="countdownGhada" dateGhada="{{ evenement.datefin|date}}"></div>
+                    {# <span>{{ evenement.categorie.nom }}</span> #}
+                    <ul>
+                       {# <li><a href="{{ path('evenementf_edit', {'id': evenement.id}) }}" title="" class="followw">Modifier</a></li>
+                        <li><a href="{{ path('evenementf_delete',{'id': evenement.id}) }}" title="" class="hire">Supprimer</a></li> #}
+                    </ul>
+
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+        var countdowns = $(".countdownGhada");
+        countdowns.each(function()
+        {
+            var countDownDate = new Date($(this).attr("dateGhada")).getTime();
+            var countdownObj = $(this);
+            var myfunc = setInterval(function() {
+                var now = new Date().getTime();
+                var timeleft = countDownDate - now;
+
+                var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                console.log(countdownObj);
+                console.log("updating " + days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+                countdownObj.text(days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+                if (timeleft < 0) {
+                    clearInterval(myfunc);
+                    countdownObj.text("EVENT HAS ENDED!!");
+                }
+            }, 1000);
+        });
+    </script>
+{%endblock%}

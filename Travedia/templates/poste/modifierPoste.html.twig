@@ -1,0 +1,28 @@
+{% extends 'basefront.html.twig' %}
+
+
+{% block body %}
+
+    {{ form_start(f ,  {'attr' : {'novalidate': 'novalidate'}}) }}
+    <tr>
+        <th class="m-0 font-weight-bold text-dark">{{ form_label(f.contenu, "contenu") }}</th>
+        <th>{{ form_widget(f.contenu) }}</th>
+
+    </tr>
+    <tr>
+        <img  src="{{ asset('uploads/brochures/' ~ poste.image) }}"  width="420"
+              height="250" alt="">
+        <th class="m-0 font-weight-bold text-dark">{{ form_label(f.image, "image") }}
+        </th>
+        <th>{{ form_widget(f.image) }}</th>
+
+    </tr>
+
+    <tr>
+        <th class="m-0 font-weight-bold text-dark">{{ form_label(f.likes, "likes") }}</th>
+        <th>{{ form_widget(f.likes) }}</th>
+
+    </tr>
+    {{ form_end(f) }}
+
+{% endblock %}

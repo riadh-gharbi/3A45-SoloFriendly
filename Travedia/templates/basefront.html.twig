@@ -1,29 +1,34 @@
-
 <!DOCTYPE html>
 <html>
 
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:32 GMT -->
 <head>
     <meta charset="UTF-8">
-    <title> {%block title%} Travedia {%endblock%}</title>
+    <title> {% block title %} Travedia {% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
 
-    {%block css%}
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/animate.css")}}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/bootstrap.min.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/line-awesome.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/line-awesome-font-awesome.min.css") }}">
-    <link href="{{asset("front/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/font-awesome.min.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/jquery.mCustomScrollbar.min.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/lib/slick/slick.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/lib/slick/slick-theme.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/style.css") }}">
-    <link rel="stylesheet" type="text/css" href="{{asset("front/css/responsive.css") }}">
-    {%endblock%}
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/animate.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/bootstrap.min.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/line-awesome.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/line-awesome-font-awesome.min.css") }}">
+        <link href="{{ asset("front/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/font-awesome.min.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/jquery.mCustomScrollbar.min.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/lib/slick/slick.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/lib/slick/slick-theme.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/style.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset("front/css/responsive.css") }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+    {% endblock %}
+    {% block extracss %}
+
+    {% endblock %}
+    {% block icon %}
+        <link rel="shortcut icon" href="{{ asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
 </head>
 <body>
 <div class="wrapper">
@@ -31,7 +36,7 @@
         <div class="container">
             <div class="header-data">
                 <div class="logo">
-                    <a href="index.html" title=""><img src="{{asset("front/images/logo2-sansbg.png") }}" alt=""></a>
+                    <a href="{{path('planningFront')}}" title=""><img src="{{asset("front/images/logo2-sansbg.png") }}" alt=""></a>
                 </div>
                 <div class="search-bar">
                     <form>
@@ -42,30 +47,39 @@
                 <nav>
                     <ul>
                         <li>
-                            <a href="index.html" title="">
-                                <span><img src="{{asset("front/images/icon1.png")}}" alt=""></span>
+                            <a href="{{ path('afficherPoste') }}" title="">
+                                <span><img src="{{ asset("front/images/icon1.png") }}" alt=""></span>
                                 Acceuil
                             </a>
                         </li>
                         <li>
-                            <a href="companies.html" title="">
+                            <a href="{{path('PlanningFront_add')}}" title="">
+                                <span><img src="{{asset("front/images/icon1.png")}}" alt=""></span>
+                                Planning
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/regionlistefront" title="">
                                 <span><img src="{{asset("front/images/icon2.png")}}" alt=""></span>
                                 Destinations
                             </a>
                             <ul>
-                                <li><a href="companies.html" title="">Companies</a></li>
-                                <li><a href="company-profile.html" title="">Company Profile</a></li>
+                                <li><a href="/regionlistefront" title="">PAR REGION</a></li>
+
+                                <li><a href="/destinationlistefront" title=""> tous</a></li>
+
+
                             </ul>
                         </li>
                         <li>
-                            <a href="projects.html" title="">
+                            <a href="{{ path("categorief") }}" title="">
                                 <span><img src="{{asset("front/images/icon3.png")}}" alt=""></span>
                                 Evénements
                             </a>
                         </li>
                         <li>
                             <a href="profiles.html" title="">
-                                <span><img src="{{asset("front/images/icon4.png")}}" alt=""></span>
+                                <span><img src="{{ asset("front/images/icon4.png") }}" alt=""></span>
                                 Profiles
                             </a>
                             <ul>
@@ -74,53 +88,6 @@
                             </ul>
                         </li>
 
-                        <li>
-                            <a href="#" title="" class="not-box-openm">
-                                <span><img src="{{asset("front/images/icon6.png")}}" alt=""></span>
-                                Messages
-                            </a>
-                            <div class="notification-box msg" id="message">
-                                <div class="nt-title">
-                                    <h4>Setting</h4>
-                                    <a href="#" title="">Clear all</a>
-                                </div>
-                                <div class="nott-list">
-                                    <div class="notfication-details">
-                                        <div class="noty-user-img">
-                                            <img src="{{asset("front/images/resources/ny-img1.png")}}" alt="">
-                                        </div>
-                                        <div class="notification-info">
-                                            <h3><a href="messages.html" title="">Jassica William</a> </h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
-                                            <span>2 min ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="notfication-details">
-                                        <div class="noty-user-img">
-                                            <img src="{{asset("front/images/resources/ny-img2.png")}}" alt="">
-                                        </div>
-                                        <div class="notification-info">
-                                            <h3><a href="messages.html" title="">Jassica William</a></h3>
-                                            <p>Lorem ipsum dolor sit amet.</p>
-                                            <span>2 min ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="notfication-details">
-                                        <div class="noty-user-img">
-                                            <img src="{{asset("front/images/resources/ny-img3.png")}}" alt="">
-                                        </div>
-                                        <div class="notification-info">
-                                            <h3><a href="messages.html" title="">Jassica William</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo incididunt ut labore et dolore magna aliqua.</p>
-                                            <span>2 min ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="view-all-nots">
-                                        <a href="messages.html" title="">View All Messsages</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
 
                     </ul>
                 </nav>
@@ -129,54 +96,57 @@
                 </div>
                 <div class="user-account">
                     <div class="user-info">
-                        <img src="{{asset("front/images/resources/user.png")}}" alt="">
-                        <a href="#" title="">John</a>
-                        <i class="la la-sort-down"></i>
+                        {% if app.user != null %}
+                            <img src="{{ asset("front/images/resources/user.png") }}" alt="">
+                            <a href="#" title="">{{ app.user.nom }}</a>
+                            <i class="la la-sort-down"></i>
+                        {% else %}
+                            <img src="{{ asset("front/images/resources/user.png") }}" alt="">
+                            <a href="#" title="">User</a>
+                            <i class="la la-sort-down"></i>
+                        {% endif %}
                     </div>
                     <div class="user-account-settingss" id="users">
-                        <h3>Online Status</h3>
-                        <ul class="on-off-status">
-                            <li>
-                                <div class="fgt-sec">
-                                    <input type="radio" name="cc" id="c5">
-                                    <label for="c5">
-                                        <span></span>
-                                    </label>
-                                    <small>Online</small>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="fgt-sec">
-                                    <input type="radio" name="cc" id="c6">
-                                    <label for="c6">
-                                        <span></span>
-                                    </label>
-                                    <small>Offline</small>
-                                </div>
-                            </li>
-                        </ul>
-                        <h3>Custom Status</h3>
-                        <div class="search_form">
-                            <form>
-                                <input type="text" name="search">
-                                <button type="submit">Ok</button>
-                            </form>
-                        </div>
+                        {% if app.user != null %}
+                            {% if app.user.roles|join(', ') != ["ROLE_ADMIN"] %}
+                                <h3><a href="{{ path('admin_profile') }}">My profile</a></h3>
+                            {% else %}
+                                <h3><a href="{{ path('user_profile') }}">My profile</a></h3>
+                            {% endif %}
+
+                        {% endif %}
+
+                        {% if app.user.roles|join(', ') == "ROLE_ADMIN" %}
+                            <h3><a href="{{ path('adminHome') }}">Dashboard</a></h3>
+                        {% else %}
+
+                        {% endif %}
+                        <br> <br> <br> <br>
                         <h3>Setting</h3>
-                        <ul class="us-links">
-                            <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-                            <li><a href="#" title="">Privacy</a></li>
-                            <li><a href="#" title="">Faqs</a></li>
-                            <li><a href="#" title="">Terms & Conditions</a></li>
+                        <ul class="user-account-settingss">
+                            <h3 class="tc"><a href="{{ path('afficherFactureListe') }}" title="">Paiements</a></h3>
+                            <h3 class="tc"><a href="{{ path('reclamation_Liste') }}" title="">Reclamations</a></h3>
+
+                            {% if app.user != null %}
+                                {% if app.user.roles|join(', ') != ["ROLE_ADMIN"] %}
+                                    <h3><a href="{{ path('edit_user') }}">Modifier Compte</a></h3>
+                                    <h3><a href="{{ path('user_delete') }}">Supprimer Compte</a></h3>
+                                {% else %}
+                                    <h3><a href="{{ path('edit_admin') }}">Modifier Compte</a></h3>
+                                    <h3><a href="{{ path('user_delete') }}">Supprimer Compte</a></h3>
+                                {% endif %}
+
+                            {% endif %}
+                            <h3 class="tc"><a href="{{ path('app_logout') }}" title="">Logout</a></h3>
                         </ul>
-                        <h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
+                        <h3 class="tc"><a href="{{ path('app_logout') }}" title="">Logout</a></h3>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    {%block body%} {%endblock%}
+    {% block body %} {% endblock %}
 
     <footer>
         <div class="footy-sec mn no-margin">
@@ -186,14 +156,15 @@
                     <li><a href="#" title="">FAQ</a></li>
                     <li><a href="#" title="">Community Guidelines</a></li>
                 </ul>
-                <p><img src="front/images/copy-icon2.png" alt="">Copyright 2022</p>
-                <img class="fl-rgt" src="front/images/logo-titre11.png" alt="">
+                <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
+                <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
             </div>
         </div>
     </footer>
 
 </div>
 
+<<<<<<< Updated upstream
 {%block js%}
 <script type="text/javascript" src="front/js/jquery.min.js"></script>
 <script type="text/javascript" src="front/js/popper.js"></script>
@@ -203,7 +174,23 @@
 <script type="text/javascript" src="front/js/scrollbar.js"></script>
 <script type="text/javascript" src="front/js/script.js"></script>
 {%endblock%}
+=======
+{% block js %}
+    <script type="text/javascript" src="{{ asset("front/js/jquery.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/js/popper.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/js/bootstrap.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/js/jquery.mCustomScrollbar.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/lib/slick/slick.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/js/scrollbar.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("front/js/script.js") }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+>>>>>>> Stashed changes
 
+    <script src="{{ asset("sweetalert2.min.js") }}"></script>
+{% endblock %}
+{% block javascripts %}
+{%endblock%}
 </body>
 
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:53 GMT -->

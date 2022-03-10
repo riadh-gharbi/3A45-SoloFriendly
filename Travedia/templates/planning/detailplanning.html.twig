@@ -1,0 +1,19 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Edit Planning{% endblock %}
+
+{% block body %}
+
+
+    <h1>{{ planningg.id }} </h1>
+    <h1>{{ planningg.dateDepart|date('d-m-y') }} </h1>
+    <h1>{{ planningg.dateFin|date('d-m-y') }} </h1>
+    <h1>{{ planningg.Description }} </h1>
+    <h1>{{ planningg.hotels.first.Nom }} </h1>
+    <h1>{{ planningg.destinations.first.nom }} </h1>
+    <h1>{{ planningg.evenements.first.nom }} </h1>
+    <h1>{{ planningg.prix }}</h1>
+
+
+
+{% endblock %}

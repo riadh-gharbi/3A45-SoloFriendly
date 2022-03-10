@@ -59,6 +59,11 @@ class Facture
      */
     private $planning;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $sessionID;
+
 
 
     public function getId(): ?int
@@ -158,6 +163,18 @@ class Facture
     public function setPlanning(?Planning $planning): self
     {
         $this->planning = $planning;
+
+        return $this;
+    }
+
+    public function getSessionID(): ?string
+    {
+        return $this->sessionID;
+    }
+
+    public function setSessionID(?string $sessionID): self
+    {
+        $this->sessionID = $sessionID;
 
         return $this;
     }

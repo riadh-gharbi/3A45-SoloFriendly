@@ -1,0 +1,82 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Full Calendar{% endblock %}
+
+    {% block extracss %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+        <style>
+            body {
+                --fc-button-text-color: grey;
+            }
+        </style>
+    {% endblock %}
+
+{% block stylesheets %}
+    <style>
+        #calendrier{
+            width: 1100px;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="col-lg-12 stretch-card">
+                <div class="card">
+                    <div id='calendrier'></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
+
+    <script>
+        var data = {{ data|raw }};
+        function getDate(date)
+        {
+            if(date == null)return null;
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = date.getFullYear();
+
+            return mm + '/' + dd + '/' + yyyy;
+
+        }
+        window.onload = () => {
+            let calendarElt = document.querySelector("#calendrier")
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+
+                timeZone: 'Europe/Paris',
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth,timeGridWeek'
+                },
+                events: data,
+                editable: true,
+                eventResizableFromStart: true
+            })
+            calendar.on('eventChange', (e)=> {let url= `/fullcalendar/${e.event.id}/edit`
+                var theEnd = getDate(e.event.end);
+                let donnees = {"Title":e.event.title,
+                    "Start":getDate(e.event.start), "End":(theEnd==null?getDate(e.event.start):theEnd)
+                }
+                console.log(donnees);
+                let xhr = new XMLHttpRequest
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+            } )
+
+            calendar.render()
+        }
+
+    </script>
+
+{% endblock %}

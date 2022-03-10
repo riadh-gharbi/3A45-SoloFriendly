@@ -1,0 +1,66 @@
+{# cette template affiche des slides de chaque region #}
+
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Travedia{% endblock %}
+
+  {% block body %}
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>  <br>
+  <br>
+  <br>
+
+	<div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title"></h3>
+			
+			</div>
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid">
+						<div class="card-body">
+							<div class="table-responsive">
+
+
+
+								</div>
+								<div class="col-lg-12 stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h4 class="card-title">REGIONS</h4>
+
+										
+<div class="profiles-slider">
+		{% for r in regionfront %}
+
+
+<div class="user-profy">
+  <img src="{{ asset('uploads/brochures/' ~ r.image)}}"  width="250" 
+     height="150"  align="middle" alt="photo">
+     <h3>{{ r.nom }}</h3>
+     <a href="{{ path('listeDPRfront',{'id':r.id}) }}" title="">Voir destinatons</a>
+     {# <a href="/destinationparRegion/{{r.id}}" title="">Voir Destinations</a> #}
+</div>
+{% endfor %}
+
+ 
+
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+
+
+</div>
+  {% endblock %}
+
+   

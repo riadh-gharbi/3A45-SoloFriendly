@@ -1,0 +1,98 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}New Planning{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+    <div class="card">
+        <div class="card-body">
+            <li class="breadcrumb-item" style="margin-bottom:-22px;margin-left:800px;">
+                <a href="{{ path('Planning_show') }}" class="mdi">
+                    Voir tout les plannings</a>
+            </li>
+            <h4 class="card-title">Formulaire Créer Planning</h4>
+
+            <p class="card-description">Informations Planning</p>
+            <div>
+                {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.date_depart) }}
+                    {{ form_label(form.date_depart,"Date Depart",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                    {{ form_widget(form.date_depart, { 'attr': {'class': "form-control col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.date_fin) }}
+                    {{ form_label(form.date_fin,"Date Fin",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                    {{ form_widget(form.date_fin, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.prix) }}
+                    {{ form_label(form.prix,"Prix",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.prix, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.type_plan) }}
+                    {{ form_label(form.type_plan,"Type Plan",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.type_plan, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.description) }}
+                    {{ form_label(form.description,"Description",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.description, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.utilisateur) }}
+                    {{ form_label(form.utilisateur,"Voyageur",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.utilisateur, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.evenements) }}
+                    {{ form_label(form.evenements,"Evenements",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.evenements, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.destinations) }}
+                    {{ form_label(form.destinations,"Destinations",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.destinations, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    {{ form_errors(form.hotels) }}
+                    {{ form_label(form.hotels,"Hotel",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                    {{ form_widget(form.hotels, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                </div>
+            </div>
+            <div style="margin-top:60px ;margin-left:400px;">
+
+            {{ form_row(form.Ajouter, { 'attr': {'class': "btn btn-primary mr-2 float-right"} }) }}
+            </div>
+            {{ form_end(form) }}
+
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

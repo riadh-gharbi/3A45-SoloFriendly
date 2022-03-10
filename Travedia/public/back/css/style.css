@@ -14600,7 +14600,12 @@ dl {
     padding-right: 15px;
     width: calc(100% - 260px);
     height: 70px;
+<<<<<<< Updated upstream
     background: #000; }
+=======
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    background: #ffffff; }
+>>>>>>> Stashed changes
     @media (max-width: 991px) {
       .navbar .navbar-menu-wrapper {
         width: 100%;

@@ -19,6 +19,26 @@ class PosteRepository extends ServiceEntityRepository
         parent::__construct($registry, Poste::class);
     }
 
+    public function countbydate()
+    {
+        $query = $this->createQueryBuilder('a')
+            ->select('SUBSTRING(a.date,1,7)as date_poste , count(a) as count')
+            ->groupBy('date_poste');
+        return $query->getQuery()->getResult();
+
+    }
+    //public function getCommentairebyid($id)
+    //{
+       // $conn = $this->getEntityManager()->getConnection();
+
+       // $sql = 'SELECT * FROM poste INNER JOIN commentaire ON poste.commentaire_id = '.$id.' AND commentaire.id = '.$id.'';
+        // $sql = 'SELECT * FROM destination INNER JOIN region ON destination.region_id = region.id ';
+
+       // $stmt = $conn->prepare($sql);
+       // $result =  $stmt->executeQuery(['id'=> $id]);
+
+       // return $result->fetchAllAssociative();
+   // }
     // /**
     //  * @return Poste[] Returns an array of Poste objects
     //  */
@@ -47,4 +67,16 @@ class PosteRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function TriParLike()
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.likes','ASC ')
+            ->getQuery()->getResult();
+    }
+    public function TriParLikeD()
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.likes','DESC ')
+            ->getQuery()->getResult();
+    }
 }

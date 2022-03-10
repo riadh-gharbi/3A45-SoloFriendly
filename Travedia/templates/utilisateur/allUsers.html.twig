@@ -1,0 +1,271 @@
+{% extends 'baseback.html.twig' %}
+
+
+   {% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+
+    {% block table %}
+        <div class="col-lg-12 grid-margin stretch-card" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+            <h1 style="text-align: center;">Utilisateurs</h1>
+            {# <button name="sweet" id="sweet">test</button> #}
+
+            <div class="card" style=" margin-top: 20px;">
+                <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des utilisateurs</p>
+                <div class="card-body">
+
+                    <div class="table-responsive" style="display: block; overflow-x: auto; white-space: nowrap;">
+                        <div class="row">
+                            <a href="{{ path('add_account') }}">
+                                <button type="button" class="btn btn-success btn-rounded btn-fw"> + Ajouter un compte
+                                </button>
+                            </a>
+                            <li class="nav-item nav-search border-0 ml-1 ml-md-3 ml-lg-5 d-none d-md-flex">
+                                <form class="nav-link form-inline mt-2 mt-md-0">
+                                    <div class="input-group">
+                                        <input id="searchArea" type="text" class="form-control" placeholder="search">
+                                        <div class="input-group-append">
+                                        <span class="input-group-text">
+                                        <i class="mdi mdi-magnify"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </div>
+                        <br>
+                        <br>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Cin</th>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Adresse</th>
+                                <th>NumTel</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Langue</th>
+                                <th>Modifier</th>
+                                <th>supprimer</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+                            {% for c in utilisateur %}
+                                <tr>
+                                    <td class="py-1">{{ c.id }}</td>
+                                    <td>{{ c.cin }}</td>
+                                    <td>{{ c.nom }}</td>
+                                    <td>{{ c.prenom }}</td>
+                                    <td>{{ c.adresse }}</td>
+                                    <td>{{ c.numTel }}</td>
+                                    <td>{{ c.email }}</td>
+                                    <td>{{ c.roles|join(', ') }}</td>
+                                    <td>{{ c.langue }}</td>
+                                    <td>
+                                        <a onclick="AdmineditConfirmation()"
+                                           class="btn btn-outline-warning"
+                                           href="{{ path('edit_account',{'id':c.id}) }}"
+                                           title=" Modifier">Modifier</a>
+                                    </td>
+                                    <td><a onclick="AdminsuppConfirmation()"
+                                           href="{{ path('delete_user',{'id':c.id}) }}" class="btn btn-outline-danger"
+                                           title=" Supprimer">Supprimer</a>
+                                    </td>
+                                    {% if c.isBlocked == 0 %}
+                                        <td class="text-center">
+                                            <script type="text/javascript">
+                                                function AdminblockConfirmation() {
+                                                    Swal.fire({
+                                                        title: 'Vous êtes sûr de bloquer ce compte ?',
+                                                        text: "Merci de vérifier avant de confirmer!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        cancelText: 'Annuler',
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Oui!',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.href = "{{ path('block_user',{'id':c.id}) }}"
+                                                        }
+                                                    })
+                                                }
+                                            </script>
+                                            <a onclick="AdminblockConfirmation()"
+                                               type="button"
+                                               class="btn btn-danger btn-icon-text" style="color: white">
+                                                <i class="mdi mdi-lock-outline btn-icon-prepend"
+                                                   style="color: white"></i> Bloque</a>
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <script type="text/javascript">
+                                                function AdmindeblockConfirmation() {
+                                                    Swal.fire({
+                                                        title: 'Vous êtes sûr de débloquer ce compte ?',
+                                                        text: "Merci de vérifier avant de confirmer!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        cancelText: 'Annuler',
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Oui!',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.href = "{{ path('unblock_user',{'id':c.id}) }}"
+                                                        }
+                                                    })
+                                                }
+                                            </script>
+
+                                            <a onclick="AdmindeblockConfirmation()"
+                                               type="button"
+                                               class="btn btn-warning btn-icon-text" style="color: white">
+                                                <i class="mdi mdi-lock-open-outline btn-icon-prepend"
+                                                   style="color: white"></i> Unbloque</a>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="navigation">
+                        {{ knp_pagination_render(utilisateur) }}
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 60px;">
+                <h1 style="text-align: center;">Profiles</h1>
+
+
+                <div class="card" style="margin-top: 20px;">
+
+
+                    <p class="card-description" style="text-align: center; margin-top: 30px;"> liste des profiles</p>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nom</th>
+                                    <th>Prenom</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Evaluation</th>
+                                    <th>Modifier</th>
+                                    <th>supprimer</th>
+                                </tr>
+                                </thead>
+                                {% for c in profile %}
+                                    <tr>
+                                        <td class="py-1">{{ c.id }}</td>
+                                        <td>{{ c.nom }}</td>
+                                        <td>{{ c.prenom }}</td>
+                                        <td>
+                                            <img src="{{ asset('back/images/upload/profile_image/' ~ c.profile.image) }}"
+                                                 alt="">
+                                        </td>
+                                        <td>{{ c.profile.description }}</td>
+                                        <td>{{ c.profile.evaluation }}</td>
+                                        <td>
+                                            <a onclick="AdmineditConfirmation()"
+                                               href="{{ path('edit_account',{'id':c.id}) }}"
+                                               class="btn btn-outline-warning"
+                                               title=" Modifier">Modifier</a>
+                                        </td>
+                                        <td><a onclick="AdminsuppConfirmation()"
+                                               href="{{ path('delete_user',{'id':c.id}) }}"
+                                               class="btn btn-outline-danger"
+                                               title=" Supprimer">Supprimer</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="navigation">
+                            {{ knp_pagination_render(profile) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# <script>
+            $(document).ready(function(){
+                $("#sweet").click(function(){
+                    Swal.fire('Any fool can use a computer')
+                   alert('teset');
+                });
+            })
+        </script> #}
+
+        <script src="{{ asset('/back/js/sweet-alert.js') }}"></script>
+
+        <script type="text/javascript">
+            function AdmineditConfirmation(e) {
+                e = e || window.event;
+                let target = e.target || e.srcElement;
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Vous êtes sûr ?',
+                    text: "Merci de vérifier les données avant de confirmer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelText: 'Annuler',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = target.href;
+                    }
+                })
+            }
+        </script>
+
+        <script type="text/javascript">
+            function AdminsuppConfirmation(e) {
+                e = e || window.event;
+                let target = e.target || e.srcElement;
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Vous êtes sûr de supprimer ce compte ?',
+                    text: "Merci de vérifier avant de confirmer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelText: 'Annuler',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = target.href;
+                    }
+                })
+
+
+            }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#searchArea").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tab tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+    {% endblock %}
+
+{% endblock %}
+
+

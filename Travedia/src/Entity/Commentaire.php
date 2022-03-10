@@ -28,7 +28,7 @@ class Commentaire
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Poste::class, inversedBy="commentaire")
+     * @ORM\ManyToOne(targetEntity=Poste::class, inversedBy="commentaire" ,fetch="EAGER")
      */
     private $poste;
 

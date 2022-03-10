@@ -6,6 +6,9 @@ use App\Repository\DestinationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert ; 
+
+
 
 /**
  * @ORM\Entity(repositoryClass=DestinationRepository::class)
@@ -21,16 +24,20 @@ class Destination
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le nom ne peut pas etre vide ")
+     * @Assert\Length(max=100)
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="la description ne peut pas etre vide ")
+     * @Assert\Length(max=250)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
 
@@ -39,10 +46,10 @@ class Destination
      */
     private $evaluation;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $region;
+    // /**
+    //  * @ORM\Column(type="string", length=255)
+    //  */
+    // private $region;
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="destination")
@@ -59,11 +66,30 @@ class Destination
      */
     private $planning;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="destination")
+     * @ORM\JoinColumn(onDelete="CASCADE")    
+     */
+    private $region;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $longitude;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $latitude;
+
+   
     public function __construct()
     {
         $this->planning = new ArrayCollection();
-    }
+       // $this->region = new ArrayCollection();
 
+    }
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -74,7 +100,7 @@ class Destination
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -86,19 +112,19 @@ class Destination
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage( $image): self
     {
         $this->image = $image;
 
@@ -117,18 +143,7 @@ class Destination
         return $this;
     }
 
-    public function getRegion(): ?string
-    {
-        return $this->region;
-    }
-
-    public function setRegion(string $region): self
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
+  
     public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
@@ -173,6 +188,42 @@ class Destination
     public function removePlanning(Planning $planning): self
     {
         $this->planning->removeElement($planning);
+
+        return $this;
+    }
+
+    public function getRegion(): ?Region
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?Region $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?string $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?string $latitude): self
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

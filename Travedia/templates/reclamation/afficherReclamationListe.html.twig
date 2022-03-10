@@ -1,0 +1,50 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}
+    Reclamations
+{% endblock %}
+
+
+{% block body %}
+    <div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Liste Des Réclamations</h4>
+    <table class="table-bordered table-condensed" >
+
+        <tr  >
+
+            <td class="col-lg" >Etat</td>
+            <td class="col-md-6">Sujet</td>
+            <td class="col-md-6">Contenu</td>
+
+        </tr>
+        {% for reclamation in reclamations %}
+            <tr class="form-group-lg">
+                <td class="col-md-6">{{ reclamation.etatReclamation }}</td>
+                <td class="col-md-6">{{ reclamation.sujet }}</td>
+                <td class="col-md-6">{{ reclamation.contenu }}</td>
+
+                <td class="list-group-item" >
+                    <a class="btn btn-success"  href="{{ path('reclamation_supprimer',{'id':reclamation.id}) }}">Supprimer</a>
+                    <br>
+
+                    <br>
+
+                    <a class="btn btn-success" href="{{ path('reclamation_modifier',{'id':reclamation.id}) }}">Modifier</a>
+                    <br>
+                    <br>
+
+                    <a class="btn btn-success" href="{{ path('reclamation_afficher',{'id':reclamation.id}) }}">Afficher</a>
+                </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+        <a class="btn btn-success" style="margin-bottom: auto" href="{{ path('reclamation_ajout') }}" >Créer Reclamation</a>
+        </div>
+    </div>
+    </div>
+{% endblock %}

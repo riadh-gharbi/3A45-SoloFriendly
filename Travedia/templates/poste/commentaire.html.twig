@@ -1,0 +1,159 @@
+
+{% extends 'basefront.html.twig'%}
+
+{% block body %}
+
+    <form method="post" action="{{ path('ajouterPoste') }}" >
+
+    </form>
+    <form method="commentaire" action="{{ path('ajouterCommentaire') }}" >
+
+    </form>
+    <table border="1">
+
+        <tr {% for d in commentaireid %}>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <div class="main-section">
+                <div class="container">
+                    <div class="main-section-data">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 no-pd">
+                                <div class="main-ws-sec">
+                                    <div class="post-topbar">
+                                        <div class="user-picy">
+                                            <img src="images/resources/user-pic.png" alt="">
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="post-bar">
+                                        <div class="post_topbar">
+                                            <div class="usy-dt">
+                                                <img src="images/resources/us-pic.png" alt="">
+                                                <div class="usy-name">
+                                                    <h3>John Doe</h3>
+                                                    <span><img src="images/clock.png" alt="">{{ d.date|date('Y-m-d') }}</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="epi-sec">
+                                            <ul class="descp">
+
+                                            </ul>
+                                            <ul class="bk-links">
+                                                <li><a href="{{ path('supprimerPoste' ,{'id':d.id})}}" title=""><i class="la la-bookmark"></i></a></li>
+                                                <li><a href="{{ path('modifierPoste' ,{'id':d.id})}}" title=""><i class="la la-envelope"></i>  </a></li>
+                                                <li><a href="#" title="" class="bid_now">Visiter profile</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="job_descp">
+                                            <ul class="job-dt">
+                                                <li><a href="#" title="">ID post : {{ d.id }} </a></li>
+
+                                            </ul>
+                                            <p>{{ d.contenu }}<a href="#" title=""></a></p>
+                                            <ul class="skill-tags">
+                                                <li><a href="#" title="">HTag</a></li>
+                                                <li><a href="#" title="">HTag</a></li>
+                                                <li><a href="#" title="">HTag</a></li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="job-status-bar">
+                                            <ul class="like-com">
+                                                <li>
+                                                    <a href="#"><i class="fas fa-heart"></i> j'aime......:</a>
+                                                    <span>{{ c.likes }}</span>
+                                                    <img src="images/liked-img.png" alt="">
+
+
+                                                </li>
+                                                <li><a href="{{ path('ajouterCommentaire')}}" class="com"><i class="fas fa-comment-alt"></i> Ajouter commentaire </a></li>
+                                            </ul>
+
+                                            <div class="comment-section">
+
+                                                </a>
+                                                <div class="comment-sec">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="comment-list">
+                                                                <div class="bg-img">
+                                                                    <img src="images/resources/bg-img1.png" alt="">
+                                                                </div>
+
+                                                                <div class="comment">
+                                                                    <h3>John Doe</h3>
+                                                                    <span><img src="images/clock.png" alt=""> {{ c.date|date('Y-m-d') }}</span>
+                                                                    <p>{{ c.contenu }}< </p>
+
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li>
+                                                                    <div class="comment-list">
+                                                                        <div class="bg-img">
+                                                                            <img src="images/resources/bg-img2.png" alt="">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <div class="comment-list">
+                                                                <div class="bg-img">
+                                                                    <img src="images/resources/bg-img3.png" alt="">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>              </div>
+            </div>
+            </div>
+            </div>
+
+            </div>
+            </div>
+            </div>
+
+
+
+        </tr {% endfor %}>
+    </table>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

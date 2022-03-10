@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+{% block icon %}  <link rel="shortcut icon" href="{{asset("back/images/logo2-sansbg.png" ) }}"/>{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>Travedia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/animate.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/bootstrap.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/line-awesome.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/line-awesome-font-awesome.min.css") }}">
+    <link href="{{asset("front/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/font-awesome.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/jquery.mCustomScrollbar.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/lib/slick/slick.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/lib/slick/slick-theme.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/style.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{asset("front/css/responsive.css") }}">
+
+</head>
+<body class="sign-in">
+<div class="wrapper">
+    <div class="sign-in-page">
+        <div class="signin-popup">
+            <div class="signin-pop">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="cmp-info">
+                            <div class="cm-logo">
+                                <img src="{{ asset('/back/images/logo-titre11.png') }}" alt="">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <p>Salut!</p>
+                                <br>
+                                <br><br><br>
+                                <p>Voyager, C'est vivre</p>
+                            </div>
+                            <img src="{{ asset('/front/images/travel.jpg') }}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="login-sec">
+                            <ul class="sign-control">
+                                <li data-tab="tab-1" class="current">
+
+                                </li>
+                            </ul>
+                            <div class="sign_in_sec current" id="tab-1">
+                                <h3>Sign in</h3>
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                                                <i class="la la-user"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="sn-field">
+                                                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                                <i class="la la-lock"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <div class="checky-sec">
+                                                <div class="fgt-sec">
+                                                    <input type="checkbox" name="cc" id="c1">
+                                                    <label for="c1">
+                                                        <span></span>
+                                                    </label>
+
+                                                </div>
+                                                <a href="{{ path('app_forgot_password_request') }}" title="">Mot de passe oublié?</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 no-pdd">
+                                            <button type="submit" value="submit">Se Connecter</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="login-resources">
+                                    <h4>vous n'avez pas un compte?<a href="{{ path('user_register') }}">Créer Compte</a></h4>
+                                    <ul>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{asset("front/js/jquery.min.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/js/popper.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/js/bootstrap.min.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/js/jquery.mCustomScrollbar.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/lib/slick/slick.min.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/js/scrollbar.js") }}"></script>
+<script type="text/javascript" src="{{asset("front/js/script.js") }}"></script>
+</body>
+
+</html>
+
+
+
+{#
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail">Email</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Sign in
+    </button>
+</form>
+#}

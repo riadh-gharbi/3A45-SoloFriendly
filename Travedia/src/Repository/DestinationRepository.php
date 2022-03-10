@@ -18,6 +18,36 @@ class DestinationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Destination::class);
     }
+    public function getDestinationsByRegionID($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT * FROM region INNER JOIN destination ON destination.region_id = '.$id.' AND region.id = '.$id.'';
+       // $sql = 'SELECT * FROM destination INNER JOIN region ON destination.region_id = region.id ';
+
+        $stmt = $conn->prepare($sql);
+        $result =  $stmt->executeQuery(['id'=> $id]);
+
+        return $result->fetchAllAssociative();
+    }
+      public function search($term){
+        return $this->createQueryBuilder('Destination')
+        ->andWhere('Destination.nom LIKE :nom')
+        ->setParameter('nom', '%'.$term.'%')
+        ->getQuery()
+        ->execute();
+    }
+    /** 
+     * 
+     * Requête QueryBuilder
+    */
+    public function searchD(){
+        return $this->createQueryBuilder('d')
+        ->orderBy('d.nom', 'DESC')
+        ->getQuery()
+        ->getResult();
+
+    }
 
     // /**
     //  * @return Destination[] Returns an array of Destination objects

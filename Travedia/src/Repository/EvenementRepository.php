@@ -19,6 +19,24 @@ class EvenementRepository extends ServiceEntityRepository
         parent::__construct($registry, Evenement::class);
     }
 
+    public function getEventsByCategoryID($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT *  FROM evenement WHERE categorie_id='.$id.'';
+
+        $stmt = $conn->prepare($sql);
+        $result =  $stmt->executeQuery(['id'=> $id]);
+
+        return $result->fetchAllAssociative();
+    }
+
+    public function rechercheAjax()
+    {
+        return $this->createQueryBuilder('c')
+        ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return Evenement[] Returns an array of Evenement objects
     //  */

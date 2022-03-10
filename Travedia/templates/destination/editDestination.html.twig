@@ -1,0 +1,45 @@
+{% extends 'baseback.html.twig' %}
+ {% block title %}Modifier destination{% endblock %}
+
+  {% block body %}
+<div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Modifier " {{destination.nom}} "</h3>
+              <nav aria-label="breadcrumb">
+              
+              </nav>
+            </div>
+
+
+                      {{ form_start(form ,  {'attr' : {'novalidate': 'novalidate'}} )}}
+                      {{ form_label(form.nom,"nom de destionation") }} 
+                       {{ form_widget(form.nom, { 'attr': {'class': "form-control"} }) }}
+<hr>
+                      {{ form_label(form.description,"desc de destionation") }} 
+                       {{ form_widget(form.description, { 'attr': {'class': "form-control"} }) }}
+<hr>
+
+ <img  src="{{ asset('uploads/brochures/' ~ destination.image) }}"  width="420" 
+     height="250" alt="">
+                        <br>
+                      
+                       {{ form_widget(form.image, { 'attr': {'class': "form-control"} }) }}
+<hr>
+
+                        {{ form_errors(form.region) }}
+                      {{ form_label(form.region,"choisir region") }} 
+           {{ form_widget(form.region, {label_attr: {class: 'checkbox-custom'} }) }}
+ <br> <hr>
+           <small> veuillez entrer les coordonnées de cette destination </small>
+           <br><br>
+                      {{ form_row(form.longitude) }}
+                      {{ form_row(form.latitude) }}
+
+<br><br>
+
+{{ form_row(form.Create,{ 'label': 'modifier' },  { 'attr': {'class': "btn btn-primary mr-2"} }) }}
+
+                       {{ form_end(form) }} 
+            </div>
+        {% endblock %}

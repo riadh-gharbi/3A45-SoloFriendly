@@ -1,0 +1,89 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Plannings{% endblock %}
+
+{% block body %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"></h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+
+                    <li class="breadcrumb-item">
+                        <h4>Plannings</h4>
+
+                    </li>
+
+
+                </ol>
+            </nav>
+        </div>
+        <table class="table">
+    <tbody>
+    <p>
+
+    </p>
+    {% for planning in planning %}
+        <tr>
+            <th>Id</th>
+            <td>{{ planning.id }}</td>
+        </tr>
+        <tr>
+            <th>Date Depart</th>
+            <td>{{ planning.dateDepart|date('d-m-y') }}</td>
+        </tr>
+        <tr>
+            <th>Date Fin</th>
+            <td>{{ planning.dateFin|date('d-m-y') }}</td>
+        </tr>
+        <tr>
+            <th>Prix</th>
+            <td>{{ planning.prix }}</td>
+        </tr>
+        <tr>
+            <th>Type Plan</th>
+            <td>{{ planning.typePlan }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ planning.description  }}</td>
+        </tr>
+        <tr>
+            <th>Voyageur</th>
+            <td>{{ planning.utilisateur.nom }}</td>
+        </tr>
+        <tr>
+            <th>Evenement</th>
+            {% for evenement in planning.evenements %}
+                <td>{{ evenement.nom }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Destination</th>
+            {% for destination in planning.destinations %}
+                <td>{{ destination.nom }}</td>
+            {% endfor %}
+        </tr>
+    <tr>
+        <th>Hotels</th>
+        {% for hotel in planning.hotels %}
+            <td>{{ hotel.nom }}</td>
+        {% endfor %}
+    </tr>
+
+        </tbody>
+
+        </table>
+        <a href="{{ path('PlanningFront_show') }}" class="btn btn-primary mr-2",style="height:40px; width:40px;">back to list</a>
+
+        <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}" class="btn btn-warning mr-2",style="width:80px;">Editer</a>
+        <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}"class="btn btn-danger mr-2" onclick="return confirm('Etes-vous sûr de supprimer ce planning?');">Supprimer</a>
+        <a href="{{ path('pdfD', {'id':planning.id}) }}" class="btn btn-light mr-2",style="width:80px;">Telecharger PDF</a>
+
+    {% endfor %}
+    {{ knp_pagination_render(planning) }}
+    </div>
+</div>
+
+{% endblock %}

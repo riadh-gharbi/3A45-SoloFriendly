@@ -6,6 +6,8 @@ use App\Repository\PlanningRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=PlanningRepository::class)
@@ -20,17 +22,24 @@ class Planning
     private $id;
 
     /**
+     * @var \Date
      * @ORM\Column(type="date")
+     * @Assert\Date
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $date_depart;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Date
+     * @Assert\GreaterThanOrEqual(propertyPath="date_depart",
+    message="La date du fin doit être supérieure à la date début")
      */
     private $date_fin;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Positive(message="La Prix doit etre positive")
      */
     private $prix;
 
@@ -41,6 +50,7 @@ class Planning
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="La description est necessaire")
      */
     private $description;
 
@@ -50,12 +60,13 @@ class Planning
     private $utilisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Evenement::class, mappedBy="planning")
+     * @ORM\ManyToMany(targetEntity=Evenement::class, inversedBy="plannings")
      */
     private $evenements;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Destination::class, mappedBy="planning")
+     * @ORM\ManyToMany(targetEntity=Destination::class, inversedBy="plannings")
+     * @Assert\NotBlank(message="La destination est necessaire")
      */
     private $destinations;
 
@@ -67,13 +78,19 @@ class Planning
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="planning")
      */
-    private $factures;
+    private $paiement;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Hotel::class, inversedBy="plannings")
+     */
+    private $hotels;
 
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
         $this->destinations = new ArrayCollection();
         $this->factures = new ArrayCollection();
+        $this->hotels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,12 +98,12 @@ class Planning
         return $this->id;
     }
 
-    public function getDateDepart(): ?\DateTimeInterface
+    public function getDateDepart(): \DateTimeInterface
     {
         return $this->date_depart;
     }
 
-    public function setDateDepart(\DateTimeInterface $date_depart): self
+    public function setDateDepart(?\DateTimeInterface $date_depart): self
     {
         $this->date_depart = $date_depart;
 
@@ -98,7 +115,7 @@ class Planning
         return $this->date_fin;
     }
 
-    public function setDateFin(\DateTimeInterface $date_fin): self
+    public function setDateFin(?\DateTimeInterface $date_fin): self
     {
         $this->date_fin = $date_fin;
 
@@ -134,7 +151,7 @@ class Planning
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -227,25 +244,62 @@ class Planning
         return $this->factures;
     }
 
+<<<<<<< Updated upstream
     public function addFacture(Facture $facture): self
+=======
+    public function addFacture(Paiement $paiement): self
+>>>>>>> Stashed changes
     {
-        if (!$this->factures->contains($facture)) {
-            $this->factures[] = $facture;
-            $facture->setPlanning($this);
+        if (!$this->factures->contains($paiement)) {
+            $this->factures[] = $paiement;
+            $paiement->setPlanning($this);
         }
 
         return $this;
     }
 
+<<<<<<< Updated upstream
     public function removeFacture(Facture $facture): self
+=======
+    public function removeFacture(Paiement $paiement): self
+>>>>>>> Stashed changes
     {
-        if ($this->factures->removeElement($facture)) {
+        if ($this->factures->removeElement($paiement)) {
             // set the owning side to null (unless already changed)
-            if ($facture->getPlanning() === $this) {
-                $facture->setPlanning(null);
+            if ($paiement->getPlanning() === $this) {
+                $paiement->setPlanning(null);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Hotel[]
+     */
+    public function getHotels(): Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(Hotel $hotel): self
+    {
+        if (!$this->hotels->contains($hotel)) {
+            $this->hotels[] = $hotel;
+        }
+
+        return $this;
+    }
+
+    public function removeHotel(Hotel $hotel): self
+    {
+        $this->hotels->removeElement($hotel);
+
+        return $this;
+    }
+    public function __toString()
+    {
+    return(string) $this->prix;
+
     }
 }

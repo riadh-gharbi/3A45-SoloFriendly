@@ -1,0 +1,29 @@
+{% extends 'baseback.html.twig' %}
+{% block body %}
+
+    <body class="embed-responsive-item" style="height: auto " >
+    <div class="container-fluid page-body-wrapper">
+
+        {{ form_start(form ,  {'attr' : {'novalidate': 'novalidate'}}) }}
+
+
+        <div>
+            {{ form_row(form.etatReclamation ,{'attr':{ 'class': 'form-control' }}) }}
+        </div>
+        <div>
+            {{ form_row(form.sujet, {'attr':{ 'class': 'form-control'}}) }}
+        </div>
+        <div>
+            {{ form_row(form.contenu, {'attr':{ 'class': 'form-control'}}) }}
+        </div>
+        <div>
+            {{ form_row(form.utilisateur,{'attr':{ 'class': 'form-control'}}) }}
+        </div>
+        <div >
+            {{ form_row(form.Modifier,{'attr' : {'class':'form-control'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    </body>
+{% endblock %}

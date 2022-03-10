@@ -1,0 +1,126 @@
+
+        {% extends 'basefront.html.twig' %}
+{% block title %}afficher destination
+{% endblock %}
+
+{% block body %}
+	
+{# <div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title"> </h3>
+				<nav aria-label="breadcrumb">
+					
+				</nav>
+			</div>
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid">
+					 {# <div class="col-lg-12 grid-margin stretch-card"> #}
+                {# <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Vos destinations</h4>
+				
+					<br><br>
+          <center>
+
+                    <div class="table-responsive"> #} 
+                    <section class="banner">
+<div class="bannerimage">
+<img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  alt="photo">
+</div>
+<div class="bennertext">
+
+</div>
+
+</section>
+<section class="Company-overview">
+<div class="container">
+<div class="row">
+<div class="col-md-6 col-sm-12">
+ <h2>	
+         welcome to {{ destinationfront.nom }}
+         </h2>
+         <p> Region : </p>{{ destinationfront.region.nom }}
+        <p> Region : </p>
+<p>
+{{ destinationfront.description }}
+</p>
+</div>
+<div class="col-md-6 col-sm-12">
+<img src="{{ asset('uploads/brochures/panneaux-routiers.png' )}}" height="250"  width="250" alt="image">
+</div>
+</div>
+</div>
+</section>
+<section>
+                  			
+                   {# <img src="{{ asset('uploads/brochures/' ~ destinationfront.image)}}"  width="1120" height="412"  align="right" alt="photo"> #}
+
+
+
+
+
+<br>
+{#------------------------- MAP CODE------------------------------ #}
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+    type="text/css"
+  />
+  
+<script>
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A"
+
+navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+  enableHighAccuracy: true
+})
+
+function successLocation(position) {
+  setupMap([  {{ destinationfront.longitude }},{{ destinationfront.latitude }}])
+}
+
+function errorLocation(position) {
+  setupMap([-2.24, 53.48])
+  
+}
+
+
+
+function setupMap(center) {
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: center,
+    zoom: 10
+  })
+  const nav = new mapboxgl.NavigationControl()
+  map.addControl(nav)
+
+  var directions = new MapboxDirections({
+    accessToken: mapboxgl.accessToken
+  })
+
+  map.addControl(directions, "top-left")
+ 
+}
+</script>
+<div id='map' style='width:  100%; height: 500px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11'
+});
+</script>
+</section>
+
+			
+
+ 
+{% endblock %}

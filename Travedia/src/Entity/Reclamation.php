@@ -32,6 +32,21 @@ class Reclamation
      */
     private $utilisateur;
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * @ORM\OneToOne(targetEntity=ReclamationReponse::class, mappedBy="reclamation")
+     * @JoinColumn(name="reclamation_Rep_id", referencedColumnName="id",onDelete="CASCADE")
+     * @Groups("reclamations")
+     */
+    private $reclamationRep;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $sujet;
+
+>>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
@@ -72,4 +87,36 @@ class Reclamation
 
         return $this;
     }
+<<<<<<< Updated upstream
+=======
+
+    public function getReclamationRep(): ?ReclamationReponse
+    {
+        return $this->reclamationRep;
+    }
+
+    public function setReclamationRep(?ReclamationReponse $reclamationRep): self
+    {
+        // set the owning side of the relation if necessary
+        if ($reclamationRep->getReclamation() !== $this) {
+            $reclamationRep->setReclamation($this);
+        }
+
+        $this->reclamationRep = $reclamationRep;
+
+        return $this;
+    }
+
+    public function getSujet(): ?string
+    {
+        return $this->sujet;
+    }
+
+    public function setSujet(string $sujet): self
+    {
+        $this->sujet = $sujet;
+
+        return $this;
+    }
+>>>>>>> Stashed changes
 }

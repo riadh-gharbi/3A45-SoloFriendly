@@ -1,0 +1,25 @@
+{% extends 'basefront.html.twig' %}
+{% block body %}
+
+    <body style="height: auto">
+     <div class="form-group">
+
+      {{ form_start(form ,  {'attr' : {'novalidate': 'novalidate'}}) }}
+
+         <div class="form-control-plaintext">
+             {{ form_row(form.sujet ,{'attr':{ 'class': 'form-control'}}) }}
+         </div>
+
+<div class="form-control-plaintext">
+{{ form_row(form.contenu ,{'attr':{ 'class': 'form-control'}}) }}
+</div>
+
+         <div >
+             {{ form_row(form.Modifier,{'attr' : {'class':'form-control'}}) }}
+         </div>
+         {{ form_end(form) }}
+     </div>
+
+    </body>
+
+{% endblock %}

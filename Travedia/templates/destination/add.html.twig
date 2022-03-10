@@ -1,0 +1,52 @@
+{% extends 'baseback.html.twig' %}
+ {% block title %}Ajouter destination{% endblock %}
+
+  {% block body %}
+
+ <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Créer une nouvelle destination</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/destinationliste">liste des destinations</a></li>
+                  {# <li class="breadcrumb-item active" aria-current="page"> Form elements </li> #}
+                </ol>
+              </nav>
+            </div>
+        
+                      {{ form_start(form ,  {'attr' : {'novalidate': 'novalidate'}}) }} 
+                      {{ form_label(form.nom,"nom de destionation") }} 
+                       {{ form_widget(form.nom, { 'attr': {'class': "form-control"} }) }}
+                      {# {{ form_errors(form.nom) }} #}
+
+<hr>
+                      {{ form_label(form.description,"desc de destionation") }} 
+                       {{ form_widget(form.description, { 'attr': {'class': "form-control"} }) }}
+                        {# {{ form_errors(form.description) }} #}
+
+<hr>
+{{ form_row(form.image) }}
+                
+<hr>
+  {{ form_errors(form.region) }}
+                      {{ form_label(form.region,"choisir region") }} 
+           {{ form_widget(form.region, {label_attr: {class: 'checkbox-custom'} }) }}
+           <br> <hr>
+           <small> veuillez entrer les coordonnées de cette destination </small>
+           <br><br>
+                      {{ form_row(form.longitude) }}
+                      {{ form_row(form.latitude) }}
+
+
+<br><br>
+
+<center>
+{{ form_row(form.Create,{ 'label': 'Créer' }, { 'attr': {'class': "btn btn-primary btn-rounded btn-fw"} } ) }}
+</center>
+                      {{ form_end(form) }}
+                    
+</div>
+        {% endblock %}
+
+

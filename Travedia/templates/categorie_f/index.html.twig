@@ -1,0 +1,35 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Categories test{% endblock %}
+{% block css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+{% endblock %}
+{% block body %}
+    <div class="top-profiles">
+        <div class="pf-hd">
+            <h3>Top Categorie</h3>
+            <i class="la la-ellipsis-v"></i>
+        </div>
+        <div class="profiles-slider">
+            {% for categorie in categorie %}
+                <div class="user-profy company-up-info">
+                    <img src="images/resources/user1.png" alt="">
+                    <h3>{{ categorie.nom }}</h3>
+                    <img src="{{ asset('front/images/uploads/event_picture/' ~ categorie.image)}}" alt="">
+                    <span>{{ categorie.image }}</span>
+
+
+                    <a href="{{ path('evenementf_show',{'id':categorie.id}) }}" title="">Voir Evenements</a>
+                    <div class="notif" dateGhada="{{ evenement.datefin|date}}"></div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>    var countdowns = $(".notif");
+
+    </script>
+{% endblock %}

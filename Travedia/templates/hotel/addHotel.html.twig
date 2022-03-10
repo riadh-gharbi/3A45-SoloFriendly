@@ -1,0 +1,61 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}New Hotel{% endblock %}
+
+{% block body %}
+    <div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+        <div class="card">
+            <div class="card-body">
+                <li class="breadcrumb-item" style="margin-bottom:-22px;margin-left:800px;">
+                    <a href="{{ path('hotel_show') }}" class="mdi">
+                        Voir tout les hotels</a>
+                </li>
+                <h4 class="card-title">Formulaire Créer Hotel</h4>
+
+                <p class="card-description">Informations Hotel</p>
+                <div>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                {{ form_errors(form.Nom) }}
+                                {{ form_label(form.Nom,"Nom",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                                {{ form_widget(form.Nom, { 'attr': {'class': "form-control col-sm-9"} }) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                {{ form_errors(form.adresse) }}
+                                {{ form_label(form.adresse,"Adresse",{ 'label_attr': {'class': 'col-sm-3 col-form-label'} }) }}
+                                {{ form_widget(form.adresse, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                {{ form_errors(form.Email) }}
+                                {{ form_label(form.Email,"Email",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                {{ form_widget(form.Email, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                {{ form_errors(form.NumTel) }}
+                                {{ form_label(form.NumTel,"Num Tel",{ 'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+                                {{ form_widget(form.NumTel, { 'attr': {'class': "form-control  col-sm-9"} }) }}
+                            </div>
+                        </div>
+
+                        {{ form_row(form.Ajouter, { 'attr': {'class': "btn btn-primary mr-2"} }) }}
+                        {{ form_end(form) }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

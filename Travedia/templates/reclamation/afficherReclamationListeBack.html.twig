@@ -1,0 +1,36 @@
+{% extends 'baseback.html.twig' %}
+{% block title %}
+    Reclamations Admin
+{% endblock %}
+{% block body %}
+    <body style="position: absolute">
+    <div class="table-responsive">
+<table class="table" style="margin-top: 100px">
+    <tr>
+        <td>Etat</td>
+        <td>Utilisateur</td>
+        <td>Contenu</td>
+    </tr>
+    {% for reclamation in reclamations %}
+        <tr>
+            <td>{{ reclamation.etatReclamation }}</td>
+            <td>{{ reclamation.utilisateur.nom }}</td>
+            <td>{{ reclamation.sujet }}</td>
+            <td>{{ reclamation.contenu }}</td>
+
+            <td> <a class="btn btn-success" href="{{ path('reclamationSupprimerBack',{'id':reclamation.id}) }}">Supprimer</a>
+                <a class="btn btn-success" href="{{ path('reclamation_modifier_back',{'id':reclamation.id}) }}">Modifier</a>
+                <a class="btn btn-success" href="{{ path('reclamation_afficher_back',{'id':reclamation.id}) }}">Afficher</a>
+                <a class="btn btn-google" href=""> Répondre</a>
+            </td>
+
+            </td>
+
+        </tr>
+    {% endfor %}
+</table>
+    </div>
+<a class="btn btn-success" href="{{ path('reclamation_ajout_back') }}" style="display:block;text-align: center;margin: auto">Créer Reclamation</a>
+    </body>
+{% endblock %}
+

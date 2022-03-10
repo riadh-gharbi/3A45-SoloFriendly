@@ -1,0 +1,46 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Edit Categorie{% endblock %}
+
+{% block body %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">Modifier une Categorie</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{path("categorie_show")}}">liste des categories</a></li>
+                    {# <li class="breadcrumb-item active" aria-current="page"> Form elements </li> #}
+                </ol>
+            </nav>
+        </div>
+
+        {{ form_start(form) }}
+        {{ form_errors(form.nom) }}
+        {{ form_label(form.nom,"nom de categorie") }}
+        {{ form_widget(form.nom, { 'attr': {'class': "form-control"} }) }}
+
+        <hr>
+        <div class="form-group">
+            {{ form_errors(form.picture) }}
+            {{ form_label(form.picture,"upload image") }}
+            <input type="file" name="img[]" class="file-upload-default" />
+            <div class="input-group col-xs-12">
+                <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image" />
+                {{ form_widget(form.picture, { 'attr': {'class': "form-control file-upload-info"} }) }}
+                <span class="input-group-append">
+                    <button class="file-upload-browse btn btn-primary" type="button"> Upload </button>
+                </span>
+            </div>
+        </div>
+        <hr>
+
+        {# {{ form_widget(form.region, { 'attr': {'class': "form-control"} }) }} #}
+        <br><br>
+
+        {{ form_row(form.Ajouter, { 'attr': {'class': "btn btn-primary mr-2"} }) }}
+
+        {{ form_end(form) }}
+
+    </div>
+    {% endblock %}

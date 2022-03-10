@@ -1,0 +1,53 @@
+{% extends 'baseback.html.twig' %}
+ {% block title %}Travedia{% endblock %}
+
+  {% block body %}
+  
+<div class="main-panel">
+          <div class="content-wrapper">
+        
+					<div align="middle" class="table-responsive">
+                    {# <img src="{{ asset('/public/uploads/brochures/{{ destination.image }}')}}"/> #}
+                    <img src="{{ asset('uploads/brochures/' ~ destination.image)}}"  width="1120" 
+     height="450"  align="middle" alt="photo">
+
+<hr>
+
+				<h1>	
+ welcome to {{ destination.nom }}
+</h1>
+
+{{ destination.region.nom }}
+<br>
+<p align="left" >  <strong> description : </strong>
+{{ destination.description }}
+</p>
+<hr>
+<div class="container">
+<div id="map">
+
+</div>
+</div>
+
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+
+<div id='map' style='width: 400px; height: 300px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW1hbmlzYWxlbSIsImEiOiJjbDA5amNpMHkwZHh1M2txdTVnaTIyb2FhIn0.sCZ28wAZJ8HSTuUqx-vt6A';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11'
+});
+</script>
+  {# </div>  </div>
+
+  </div>  #}
+   </div>
+  </div>
+
+
+        {% endblock %}

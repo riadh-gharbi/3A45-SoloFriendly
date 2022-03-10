@@ -1,0 +1,132 @@
+{% extends 'basefront.html.twig' %}
+{% block title %}afficher destination
+{% endblock %}
+
+{% block body %}
+	
+<main class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title"> </h3>
+				<nav aria-label="breadcrumb">
+					
+				</nav>
+			</div>
+			<div id="layoutSidenav_content">
+			<br><br><br><br><br><br>
+
+					<div class="search-bar">
+<form>
+			<input  id="myInput2"  type="text" class="form-control" placeholder="search..">
+<button type="submit"><i class="la la-search"></i></button>
+</form>
+</div>
+
+
+				<main>
+					<div class="container-fluid">
+					 <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Vos destinations</h4>
+
+					<br><br>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+
+								{% if destinationfront %}
+
+
+
+													<thead>
+
+
+														<tr class="table-info">
+
+
+
+															<th>
+																nom de destination
+															</th>
+
+															<th> region
+                                                            </th>
+															<th>
+															image
+															</th>
+                                                            <th>
+                                                            </th>
+														</tr>
+													</thead>
+
+													<tbody id="tab2">
+														{% for dest in destinationfront %}
+
+															<tr>
+
+
+																<td>
+
+																	{{ dest.nom }}
+																</td>
+																<td>
+
+																	{{ dest.region.nom }}
+
+																</td>
+<td class="py-1">
+<img  width="80"
+     height="60" src="{{ asset('uploads/brochures/' ~ dest.image) }}" alt="" />
+</td>
+																<td>
+																	<div align="right">
+																		<a href="/destinationshowfront/{{ dest.id }}" class="mdi mdi-cursor-default" title="details">
+																			<i class="fas fa-book-open"></i>
+																		</a>
+																	</div>
+                                                                        </td>
+															</tr>
+
+
+														{% endfor %}
+													</tbody>
+
+												</table>
+											{% endif %}
+											<p align="right">
+											<div class="navigation">
+												{{ knp_pagination_render(destinationfront,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig',{'rounded': true,'size': 'small' }) }}
+
+												</div>
+												</p>
+
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+		</main>			</div>
+				</div>
+</main>
+						
+			{% block javascripts %}
+  
+	
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script>
+        $(document).ready(function(){
+            $("#myInput2").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tab2 tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+  
+		{% endblock %}
+
+
+		{% endblock %}

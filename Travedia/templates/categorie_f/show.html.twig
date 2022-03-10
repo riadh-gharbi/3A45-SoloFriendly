@@ -1,0 +1,88 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Categories {% endblock %}
+{% block extracss %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+{% endblock %}
+{% set nearEventsTotal = 0 %}
+{% for categorie in categorie %}
+{%  for event in categorie.evenements %}
+    {% set datePost = event.datedeb|date('d-m-Y') %}
+    {% set today = "now"|date('d-m-Y') %}
+    {% set difference = date(today).diff(date(datePost))%}
+    {% set leftDays = difference.days %}
+    {% if leftDays < 7 and leftDays >-1 %}
+        {% set nearEventsTotal = nearEventsTotal + 1 %}
+    {% endif %}
+
+{% endfor %}
+{% endfor %}
+{% block body %}
+    <div class="top-profiles">
+        <div class="pf-hd">
+            <h3>Top Categorie</h3>
+            <i class="la la-ellipsis-v"></i>
+        </div>
+        <div class="profiles-slider">
+
+
+            {% for categorie in categorie %}
+                <div class="user-profy company-up-info">
+
+                    {% set nearEvents = 0 %}
+                    {%  for event in categorie.evenements %}
+                        {% set datePost = event.datedeb|date('d-m-Y') %}
+                        {% set today = "now"|date('d-m-Y') %}
+                        {% set difference = date(today).diff(date(datePost))%}
+                        {% set leftDays = difference.days %}
+                        {% if leftDays < 7 and leftDays >-1 %}
+                            {% set nearEvents = nearEvents + 1 %}
+                        {% endif %}
+
+                    {% endfor %}
+                    {% if nearEvents > 0 %}
+                        <div class="alert alert-danger notif" role="alert">
+                            Contains
+                            {{ nearEvents }} events are happening soon!
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            No events happening soon.
+                        </div>
+                    {% endif %}
+
+                    <div class="alert alert-primary" role="alert">
+                        Contains
+                        {{ categorie.evenements|length }} events!
+                    </div>
+                    <h3>{{ categorie.nom }}</h3>
+                    <img src="{{ asset('front/images/uploads/event_picture/' ~ categorie.image)}}" alt="">
+                    <span>{{ categorie.image }}</span>
+
+                    <ul>
+                        <li><a href="{{ path('categorief_edit', {'id': categorie.id}) }}" title="" class="followw">Modifier</a></li>
+                        <li><a href="{{ path('categorief_delete',{'id':categorie.Id}) }}" title="" class="hire">Supprimer</a></li>
+                    </ul>
+                    <a href="{{ path('evenementf_show',{'id':categorie.id}) }}" title="">Voir Evenements</a>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "positionClass": "toast-bottom-right",
+        }
+
+        setTimeout(function(){
+
+            toastr.info('There is a total of {{nearEventsTotal}} events happening this week!');
+
+        }, 5000);//alert after 5000 ms
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'baseback.html.twig' %}
+{% block body %}
+    <div class="col-12 grid-margin" style="
+                     flex-direction: column;
+                      margin-top: 90px;">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Reclamation </h4>
+
+                <li class="text-info" style="display: inline-block">
+
+                    Etat Reclamation : {{ reclamation.etatReclamation }}
+                </li>
+
+                <li class="h4" style="horiz-align: center">
+
+                    Sujet Reclamation : {{ reclamation.utilisateur.nom }}
+
+
+                </li>
+                <div class="text-black">
+                    {{ reclamation.contenu }}
+                </div>
+
+
+
+                <li class="h4" style="horiz-align: center">
+
+                    Réponse
+                </li>
+                <div class="text-black">
+                    {{ reclamation.reclamationRep.contenu }}
+
+                </div>
+
+                <br>
+                {% if reclamationExiste %}
+                <div class="h4"> Répondre</div>
+                <div class="form-group-lg">
+                    {{ form_start(form) }}
+                    {{ form_row(form.contenu, { 'attr':{'disabled':'disabled'} }) }}
+                    {{ form_row(form.Envoyer, { 'attr':{'disabled':'disabled'} }) }}
+                    {{ form_end(form) }}
+
+                </div>
+                {% else %}
+                    <div class="h4"> Répondre</div>
+                    <div class="form-group-lg">
+                        {{ form(form) }}
+                    </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}
