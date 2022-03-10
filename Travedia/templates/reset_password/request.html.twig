@@ -4,7 +4,7 @@
 <!-- Mirrored from gambolthemes.net/workwise-new/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Feb 2022 21:09:32 GMT -->
 <head>
     <meta charset="UTF-8">
-    <title> Password Req </title>
+    <title>Demande de réinitialisation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content=""/>
     <meta name="keywords" content=""/>
@@ -50,7 +50,7 @@
     {% endfor %}
 
     <div style="margin-top: 30px;">
-        <center><h1 style="font-weight: bold;font-size: 32px;">Reset your password</h1></center>
+        <center><h1 style="font-weight: bold;font-size: 32px;">Réinitialisation votre mot de passe</h1></center>
     </div>
     {{ form_start(requestForm,) }}
     {{ form_widget(requestForm.email, { 'attr': {'class': "form-control   col-sm-9"} }) }}
@@ -58,21 +58,21 @@
     <div class="form-group row">
         <small>
             <div style="font-weight: bold;font-size: 18px;">
-            Enter your email address and we will send you a link to reset your password.
+                Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.
             </div>
         </small>
     </div>
 
-    <button class="btn btn-primary">Send password reset email</button>
+    <button class="btn btn-primary">Envoyer</button>
     {{ form_end(requestForm) }}
 </div>
 <footer>
     <div class="footy-sec mn no-margin">
         <div class="container">
             <ul>
-                <li><a href="about.html" title="">About</a></li>
+                <li><a href="about.html" title="">A propos</a></li>
                 <li><a href="#" title="">FAQ</a></li>
-                <li><a href="#" title="">Community Guidelines</a></li>
+
             </ul>
             <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
             <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
