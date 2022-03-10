@@ -22,37 +22,82 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom',TextType::class)
-            ->add('prenom',TextType::class)
+            ->add('nom', TextType::class,[
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(
+                        [
+                            'min'=> 5,
+                            'max'=>30,
+                            'minMessage'=>'Le Nom doit contenir au moins 5 carcatères',
+                            'maxMessage'=>'Le Nom doit contenir au plus 30 carcatères'
+                        ]
+                    )
+                ]
+            ])
+            ->add('prenom', TextType::class,[
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(
+                        [
+                            'min'=> 5,
+                            'max'=>30,
+                            'minMessage'=>'Le Prenom doit contenir au moins 5 carcatères',
+                            'maxMessage'=>'Le Prenom doit contenir au plus 30 carcatères'
+                        ]
+                    )
+                ]
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'constraints'=>[
-                    new Email(),
-                    new NotBlank()
+                'constraints' => [
+                    new Email([
+                        'message' => 'Vous devez entrer une adresse mail valide'
+                    ]),
+                    new NotBlank(),
+                    new Length(
+                        [
+                            'min'=> 5,
+                            'max'=>30,
+                            'minMessage'=>'Le mot de passe doit contenir au moins 5 carcatères',
+                            'maxMessage'=>'Le mot de passe doit contenir au plus 30 carcatères'
+                        ]
+                    )
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'label'=>'Mot de passe',
+                'label' => 'Mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(
+                        [
+                            'min'=> 5,
+                            'max'=>30,
+                            'minMessage'=>'Le mot de passe doit contenir au moins 5 carcatères',
+                            'maxMessage'=>'Le mot de passe doit contenir au plus 30 carcatères'
+                        ]
+                    )
+                ]
 
             ])
-            ->add('langue',ChoiceType::class,[
-                'multiple'=>false,
-                'expanded'=>false,
-                'choices'=>[
-                    'Arabe'=>'Arabe',
-                    'Français'=>'Français',
-                    'Anglais'=>'Anglais',
+            ->add('langue', ChoiceType::class, [
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => [
+                    'Arabe' => 'Arabe',
+                    'Français' => 'Français',
+                    'Anglais' => 'Anglais',
                 ]
-            ])->add('roles',ChoiceType::class,[
-                'multiple'=>false,
-                'expanded'=>false,
-                'choices'=>[
-                    'Guide'=>'ROLE_Guide',
-                    'Voyageur'=>'ROLE_Voyageur',
+            ])->add('roles', ChoiceType::class, [
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => [
+                    'Guide' => 'Guide',
+                    'Voyageur' => 'Voyageur',
                 ]
             ])
             ->get('roles')
@@ -63,8 +108,7 @@ class RegistrationFormType extends AbstractType
                 function ($rolesAsString) {
                     return [$rolesAsString];
                 }
-            ))
-        ;
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void
