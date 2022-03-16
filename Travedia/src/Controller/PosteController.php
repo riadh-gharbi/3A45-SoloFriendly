@@ -3,11 +3,16 @@
 namespace App\Controller;
 
 
-use App\Repository\CommentaireRepositoryRepository;
+use App\Entity\Profile;
+use App\Entity\Utilisateur;
+use App\Repository\CommentaireRepository;
 use App\Entity\Commentaire;
 use App\Entity\Poste;
 use App\Repository\PosteRepository;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,6 +59,11 @@ class PosteController extends AbstractController
                 $poste->setImage($newFilename);
             }
             $this->addFlash('success', 'poste Created!' );
+            $repU=$this->getDoctrine()->getRepository(Utilisateur::class);
+            $repP=$this->getDoctrine()->getRepository(Profile::class);
+            $user=$repU->findOneBy(['email'=>$this->getUser()->getUsername()]);
+            $profile=$repP->findOneBy(['utilisateur'=>$user->getId()]);
+            $poste->setProfile($profile);
             $em=$this->getDoctrine()->getManager();
             $em->persist($poste);
             $em->flush();
@@ -174,6 +184,48 @@ class PosteController extends AbstractController
             ["poste"=>$poste ]);
 
     }
+
+
+    /**
+     * @param poste $poste
+     * @Route("/print/{id}", name="print")
+     */
+    public function print($id)
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+//        $pdfOptions->set('isRemoteEnabled', true);
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        $repository = $this->getDoctrine()->getRepository(Poste::class);
+        $poste = $repository->findOneByid($id);
+
+
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('poste/pdf.html.twig', [
+            "poste"=>$poste ,
+
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("poste.pdf", [
+            "Attachment" => false
+        ]);
+    }
     /**
      * @Route("/triLike_poste", name="tri_nbr_like")
      */
@@ -181,7 +233,8 @@ class PosteController extends AbstractController
     {
         $poste= $this->getDoctrine()->getRepository(Poste::class)->TriParLike();
         return $this->render("poste/afficherPoste.html.twig",array('poste'=>$poste));
-
+        return $this->render    ("poste/afficherPoste.html.twig",
+            ["poste"=>$poste ]);
     }
     /**
      * @Route("/triLike_posteD", name="tri_nbr_likeD")
@@ -190,9 +243,8 @@ class PosteController extends AbstractController
     {
         $poste= $this->getDoctrine()->getRepository(Poste::class)->TriParLikeD();
         return $this->render("poste/afficherPoste.html.twig",array('poste'=>$poste));
-
+        return $this->render    ("poste/afficherPoste.html.twig",
+            ["poste"=>$poste ]);
     }
-
-
 
 }

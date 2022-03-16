@@ -15,8 +15,7 @@
 
     <div class="h4" style="horiz-align: center">
 
-        Sujet: {{ reclamation.sujet }}
-
+        Sujet Reclamation
 
     </div>
         <div class="text-black">
@@ -27,20 +26,12 @@
 
         <li class="h4" style="horiz-align: center">
 
-            Réponse:
+            Réponse
         </li>
-        {% if reclamationRep %}
         <div class="text-black">
             {{ reclamationRep.contenu }}
 
         </div>
-
-        {% else %}
-        <div class="text-black">
-            Pas encore de réponse..
-
-        </div>
-        {% endif %}
     </div>
     </div>
     </div>

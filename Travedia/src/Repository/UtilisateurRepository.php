@@ -22,8 +22,12 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         parent::__construct($registry, Utilisateur::class);
     }
 
-    public function search(){
-        return $this->createQueryBuilder('u')->getQuery()->getResult();
+    public function searchU($term){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.nom LIKE :nom')
+            ->setParameter('nom', '%'.$term.'%')
+            ->getQuery()
+            ->execute();
     }
 
     /**

@@ -81,6 +81,9 @@ class PaiementController extends AbstractController
         {
             $planning =$form->get('planning')->getData();
             $paiement->setPrix($planning->getPrix());
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($paiement);
+            $entityManager->flush();
             switch($form->get('typePaiement')){
                 case 'En Ligne':
                     $session = Session::create([
@@ -112,9 +115,7 @@ class PaiementController extends AbstractController
                     $mailer->send($email);
                     break;
             }
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($paiement);
-            $entityManager->flush();
+
 
             if($session){
             return $this->redirect($session->url,303);}else{
@@ -232,6 +233,9 @@ class PaiementController extends AbstractController
                     'cancel_url' => $this->generateUrl('cancel_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 ]);
             $paiement->setSessionID($session->id);
+                    $entityManager=$this->getDoctrine()->getManager();
+                    $entityManager->persist($paiement);
+                    $entityManager->flush();
                     return $this->redirect($session->url,303);
             break;
                 case 'Cash':
@@ -247,15 +251,15 @@ class PaiementController extends AbstractController
                         ->subject('Vous devez payez votre guide')
                         ->text('Votre paiement de  '.strval($paiement->getPrix()).'Dinar doit être payée dans les plus courts délais pour votre guide'.strval($paiement->getClient()->getNom()).'. Sinon vous pouvez passer chez nous et nous lui passeront le paiement');
                     $mailer->send($email);
-
+                    $entityManager=$this->getDoctrine()->getManager();
+                    $entityManager->persist($paiement);
+                    $entityManager->flush();
                     return $this->redirectToRoute('success_url');
                     break;
                 case '':
                     return $this->redirectToRoute('cancel_url');
                 }
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($paiement);
-            $entityManager->flush();
+
 
 
 

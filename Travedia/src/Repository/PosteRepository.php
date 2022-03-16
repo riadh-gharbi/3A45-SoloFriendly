@@ -56,17 +56,17 @@ class PosteRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Poste
+
+    public function findOneById($value): ?Poste
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+            ->andWhere('p.id = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
     public function TriParLike()
     {
         return $this->createQueryBuilder('c')

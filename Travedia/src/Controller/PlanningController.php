@@ -274,13 +274,12 @@ class PlanningController extends AbstractController
 
     /**
      * @param Planning|null $planning
-     * @param Dompdf $pdf
+     * @param pdf $pdf
      * @return void
      * @Route("/pdfD/{id}",name="pdfD")
      */
 
-
-    public function pdf (Planning $planning=null,Dompdf $pdf)
+    public function pdf (Planning $planning=null,pdf $pdf)
     { $html=$this->renderView("planning/detailplanning.html.twig",[
         "planningg"=>$planning]);
         $pdf->show($html);

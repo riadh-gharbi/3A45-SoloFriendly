@@ -98,7 +98,7 @@ class Planning
         return $this->id;
     }
 
-    public function getDateDepart(): \DateTimeInterface
+    public function getDateDepart(): ?\DateTimeInterface
     {
         return $this->date_depart;
     }
@@ -244,11 +244,7 @@ class Planning
         return $this->factures;
     }
 
-<<<<<<< Updated upstream
-    public function addFacture(Facture $facture): self
-=======
     public function addFacture(Paiement $paiement): self
->>>>>>> Stashed changes
     {
         if (!$this->factures->contains($paiement)) {
             $this->factures[] = $paiement;
@@ -258,11 +254,7 @@ class Planning
         return $this;
     }
 
-<<<<<<< Updated upstream
-    public function removeFacture(Facture $facture): self
-=======
     public function removeFacture(Paiement $paiement): self
->>>>>>> Stashed changes
     {
         if ($this->factures->removeElement($paiement)) {
             // set the owning side to null (unless already changed)

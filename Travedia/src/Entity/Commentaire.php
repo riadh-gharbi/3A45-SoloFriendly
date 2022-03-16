@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentaireRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass=CommentaireRepository::class)
@@ -29,6 +30,8 @@ class Commentaire
 
     /**
      * @ORM\ManyToOne(targetEntity=Poste::class, inversedBy="commentaire" ,fetch="EAGER")
+     * @JoinColumn(name="poste_id", referencedColumnName="id",onDelete="CASCADE")
+
      */
     private $poste;
 

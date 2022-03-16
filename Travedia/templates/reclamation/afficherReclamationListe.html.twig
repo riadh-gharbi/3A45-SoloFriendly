@@ -12,19 +12,16 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Liste Des Réclamations</h4>
-    <table class="table-bordered table-condensed" >
+    <table class="table-bordered" >
+        <tr class="col-md-6">
 
-        <tr  >
-
-            <td class="col-lg" >Etat</td>
-            <td class="col-md-6">Sujet</td>
+            <td class="col-md-6">Etat</td>
             <td class="col-md-6">Contenu</td>
 
         </tr>
         {% for reclamation in reclamations %}
             <tr class="form-group-lg">
                 <td class="col-md-6">{{ reclamation.etatReclamation }}</td>
-                <td class="col-md-6">{{ reclamation.sujet }}</td>
                 <td class="col-md-6">{{ reclamation.contenu }}</td>
 
                 <td class="list-group-item" >

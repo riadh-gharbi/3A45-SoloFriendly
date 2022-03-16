@@ -50,7 +50,7 @@ class Poste
 
     /**
      * @ORM\ManyToOne(targetEntity=Profile::class, inversedBy="postes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $profile;
 

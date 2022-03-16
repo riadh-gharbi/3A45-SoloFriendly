@@ -15,9 +15,6 @@ class ReclamationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('sujet',TextareaType::class, [
-                'label'=>'Sujet de la Reclamation'
-            ])
             ->add('contenu', TextareaType::class ,[
                 'label'=>'Contenu Reclamation'
             ])

@@ -8,11 +8,11 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Liste Des Paiements</h4>
-
                 <div class=" table-responsive" >
                     <table class="table table-striped table-hover " style="margin-top: 100px; overflow-x: auto">
                         <thead>
                         <tr>
+                            <td style="word-break:break-all">Id</td>
                             <td style="word-break:break-all">Prix</td>
                             <td style="word-break:break-all">Statut</td>
                             <td style="word-break:break-all">Date Création</td>
@@ -26,23 +26,22 @@
 
                         </thead>
                         <tbody>
-                        {% for paiement in factures %}
+                        {% for facture in factures %}
                         <tr  style="vertical-align: middle" >
-                            <td style="word-break:break-all">{{ paiement.prix }} </td>
-                            <td style="word-break:break-all">{{ paiement.statut }} </td>
-                            <td style="word-break:break-all">{{ paiement.dateCreation|date('Y-m-d') }} </td>
-                            <td style="word-break:break-all">{{ paiement.datePaiement|date('Y-m-d') }} </td>
-                            <td style="word-break:break-all">{{ paiement.typePaiement }} </td>
-                            <td style="word-break:break-all">{{ paiement.owner.prenom }} {{ paiement.owner.nom }} </td>
-                            <td style="word-break:break-all">{{ paiement.client.prenom }} {{ paiement.client.nom }} </td>
-                            <td style="word-break:break-all">{{ paiement.planning.id }} </td>
+                            <td style="word-break:break-all">{{ facture.id }}</td>
+                            <td style="word-break:break-all">{{ facture.prix }} </td>
+                            <td style="word-break:break-all">{{ facture.statut }} </td>
+                            <td style="word-break:break-all">{{ facture.dateCreation|date('Y-m-d') }} </td>
+                            <td style="word-break:break-all">{{ facture.datePaiement|date('Y-m-d') }} </td>
+                            <td style="word-break:break-all">{{ facture.typePaiement }} </td>
+                            <td style="word-break:break-all">{{ facture.owner.id }} </td>
+                            <td style="word-break:break-all">{{ facture.client.id }} </td>
+                            <td style="word-break:break-all">{{ facture.planning.id }} </td>
 
                             <td>
                                 <div class="list-group-item btn-group-vertical" role="group">
-                                    {% if is_granted('ROLE_Guide') or is_granted('ROLE_ADMIN') %}
-                                    <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureFront',{'id':paiement.id}) }}">Modifier</a>
-                                    {% endif %}
-                                    <a class="btn-sm btn-success btn-block" href="{{ path('afficherFacture',{'id':paiement.id}) }}">Afficher</a>
+                                    <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureFront',{'id':facture.id}) }}">Modifier</a>
+                                    <a class="btn-sm btn-success btn-block" href="{{ path('afficherFacture',{'id':facture.id}) }}">Afficher</a>
                                 </div>
                             </td>
 
@@ -52,15 +51,10 @@
                         </tbody>
                         {% endfor %}
                     </table>
-
+                    <a class="btn btn-success" href="{{ path('createFactureFront') }}" style="display:block;text-align: center;margin: auto">Créer Facture</a>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
 
 {% endblock %}

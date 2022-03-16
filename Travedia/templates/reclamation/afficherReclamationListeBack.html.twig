@@ -14,8 +14,7 @@
     {% for reclamation in reclamations %}
         <tr>
             <td>{{ reclamation.etatReclamation }}</td>
-            <td>{{ reclamation.utilisateur.nom }}</td>
-            <td>{{ reclamation.sujet }}</td>
+            <td>{{ reclamation.utilisateur.nom }}
             <td>{{ reclamation.contenu }}</td>
 
             <td> <a class="btn btn-success" href="{{ path('reclamationSupprimerBack',{'id':reclamation.id}) }}">Supprimer</a>

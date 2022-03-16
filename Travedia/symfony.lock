@@ -270,15 +270,12 @@
             "./config/packages/sensio_framework_extra.yaml"
         ]
     },
-<<<<<<< Updated upstream
-=======
     "stripe/stripe-php": {
         "version": "v7.114.0"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.3.0"
     },
->>>>>>> Stashed changes
     "symfony/asset": {
         "version": "v4.4.37"
     },

@@ -5,34 +5,34 @@
 <form <li><a href="{{ path('tri_nbr_like')}}" title="trier"><i class="btn btn-primary">tri </i></a></li>
 <form <li><a href="{{ path('tri_nbr_likeD')}}" title="trier"><i class="btn btn-danger">tri down </i></a></li>
 
-<form method="post" action="{{ path('ajouterPoste') }}" >
-<table border="1">
+
+    <table border="1">
 
 
-    <div class="post-st">
-        <ul>
+        <div class="post-st">
+            <ul>
 
-            <li><a class="post-jb active" href="ajouterPoste" title="">Créer un post</a></li>
-        </ul>
-    </div>
-    <body>
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+                <li><a class="post-jb active" href="{{ path('ajouterPoste') }}" title="">Créer un post</a></li>
+            </ul>
         </div>
-    {% endfor %}
+        <body>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 
 
 
-    </body>
-    <tr {% for c in poste %}
+        </body>
+        <tr {% for c in poste %}
 
 
 
         <td></td>
         <td></td>
         <td></td>
-         <td></td>
+        <td></td>
 
         <div class="main-section">
             <div class="container">
@@ -41,9 +41,9 @@
                         <div class="col-lg-6 col-md-8 no-pd">
                             <div class="main-ws-sec">
 
-                                    <div class="user-picy">
-                                        <img src="images/resources/user-pic.png" alt="">
-                                    </div>
+                                <div class="user-picy">
+                                    <img src="images/resources/user-pic.png" alt="">
+                                </div>
 
 
 
@@ -68,6 +68,9 @@
                                             <li><a href="{{ path('supprimerPoste' ,{'id':c.id})}}" title="" onclick="return confirm('Etes-vous sûr de supprimer cette poste?');" title=" supprimer"><i class="la la-bookmark"></i></a></li>
 
                                             <li><a href="{{ path('modifierPoste' ,{'id':c.id})}}" title=""><i class="la la-envelope"></i>  </a></li>
+                                            <li> <a href="{{ path('print',{ 'id': c.id })}}" class="btn btn-default btn-sm">imprimer </a></li>
+
+
 
 
 
@@ -99,7 +102,7 @@
                                             </li>
                                             <li><a href="{{ path('ajouterCommentaire' ,{'id':c.id})}}  " class="com"><i class="fas fa-comment-alt"></i> Ajouter commentaire </a></li>
                                         </ul>
-{% set cmtps= c.getCommentaire() %}
+                                        {% set cmtps= c.getCommentaire() %}
                                         {% for cmtp in cmtps %}
                                         <div class="comment-section">
 
@@ -123,28 +126,28 @@
 
                                                                 <p>{{ cmtp.contenu }} <li><a href="{{ path('supprimerCommentaire' ,{'id':cmtp.id})}}" title="" onclick="return confirm('Etes-vous sûr de supprimer cette commentaire?');" title=" supprimer"><i class="la la-bookmark"></i></a></li>
                                                     <li><a href="{{ path('modifierCommentaire' ,{'id':cmtp.id})}}" title=""><i class="la la-envelope"></i>  </a></li> </p>
-                                                            </div>
-                                                        </div>
+                                            </div>
+                                        </div>
 
-                                                        <ul>
-                                                            <li>
-                                                                <div class="comment-list">
-                                                                    <div class="bg-img">
-                                                                        <img src="images/resources/bg-img2.png" alt="">
-                                                                    </div>
+                                        <ul>
+                                            <li>
+                                                <div class="comment-list">
+                                                    <div class="bg-img">
+                                                        <img src="images/resources/bg-img2.png" alt="">
+                                                    </div>
 
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <div class="comment-list">
-                                                            <div class="bg-img">
-                                                                <img src="images/resources/bg-img3.png" alt="">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                        <li>
+                                            <div class="comment-list">
+                                                <div class="bg-img">
+                                                    <img src="images/resources/bg-img3.png" alt="">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        </ul>
                                     </div>
                                 </div>{% endfor %}
                             </div>
@@ -153,37 +156,23 @@
                     </div>
                 </div>
 
-                                    </div>
-                                </div>
-            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
         </div>
+        </div>
+        </div>
+        </div>
+
+        </div>
+        </div>
+        </div>
 
 
 
-    </tr {% endfor %} >
-</table>
-
-
-
-
-            {% endblock %}
-
-
-
-
-
-
+        </tr {% endfor %} >
+    </table>
 
 
 
 
-
-
-
-
+    {% endblock %}

@@ -111,7 +111,7 @@ class DestinationController extends AbstractController
             $destination = $paginator->paginate(
               $destination,
               $request->query->getInt('page', 1)/*page number*/,
-              $request->query->getInt('limit', 4)/*limit per page*/
+              $request->query->getInt('limit', 3)/*limit per page*/
 
             );
             return $this->render('destination/index.html.twig',['destination'=> $destination]);
@@ -203,7 +203,7 @@ class DestinationController extends AbstractController
       $destinationfront = $paginator->paginate(
         $destinationfront,  
         $request->query->getInt('page', 1)/*page number*/,
-        $request->query->getInt('limit', 5)/*limit per page*/   
+        $request->query->getInt('limit', 3)/*limit per page*/
    );
 
       return $this->render('destinationFront/showDestinationFront.html.twig',['destinationfront'=> $destinationfront]);

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReclamationRepository::class)
@@ -29,11 +31,10 @@ class Reclamation
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="reclamation")
+     * @JoinColumn(name="utilisateur_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $utilisateur;
 
-<<<<<<< Updated upstream
-=======
     /**
      * @ORM\OneToOne(targetEntity=ReclamationReponse::class, mappedBy="reclamation")
      * @JoinColumn(name="reclamation_Rep_id", referencedColumnName="id",onDelete="CASCADE")
@@ -46,7 +47,6 @@ class Reclamation
      */
     private $sujet;
 
->>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
@@ -87,8 +87,6 @@ class Reclamation
 
         return $this;
     }
-<<<<<<< Updated upstream
-=======
 
     public function getReclamationRep(): ?ReclamationReponse
     {
@@ -118,5 +116,4 @@ class Reclamation
 
         return $this;
     }
->>>>>>> Stashed changes
 }

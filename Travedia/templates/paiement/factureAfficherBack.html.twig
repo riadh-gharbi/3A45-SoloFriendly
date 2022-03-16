@@ -32,20 +32,21 @@
                                 <tbody>
 
                                 <tr  style="vertical-align: middle" >
-                                    <td style="word-break:break-all">{{ paiement.id }}</td>
-                                    <td style="word-break:break-all">{{ paiement.prix }} </td>
-                                    <td style="word-break:break-all">{{ paiement.statut }} </td>
-                                    <td style="word-break:break-all">{{ paiement.dateCreation|date('Y-m-d') }} </td>
-                                    <td style="word-break:break-all">{{ paiement.datePaiement|date('Y-m-d') }} </td>
-                                    <td style="word-break:break-all">{{ paiement.typePaiement }} </td>
-                                    <td style="word-break:break-all">{{ paiement.owner.id }} </td>
-                                    <td style="word-break:break-all">{{ paiement.client.id }} </td>
-                                    <td style="word-break:break-all">{{ paiement.planning.id }} </td>
+                                    <td style="word-break:break-all">{{ facture.id }}</td>
+                                    <td style="word-break:break-all">{{ facture.prix }} </td>
+                                    <td style="word-break:break-all">{{ facture.statut }} </td>
+                                    <td style="word-break:break-all">{{ facture.dateCreation|date('Y-m-d') }} </td>
+                                    <td style="word-break:break-all">{{ facture.datePaiement|date('Y-m-d') }} </td>
+                                    <td style="word-break:break-all">{{ facture.typePaiement }} </td>
+                                    <td style="word-break:break-all">{{ facture.owner.id }} </td>
+                                    <td style="word-break:break-all">{{ facture.client.id }} </td>
+                                    <td style="word-break:break-all">{{ facture.planning.id }} </td>
 
                                     <td>
                                         <div class="list-group-item btn-group-vertical" role="group">
-                                            <a class="btn-sm btn-success btn-block " href="{{ path('supprimerFacture',{'id':paiement.id}) }}">Supprimer</a>
-                                            <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureBack',{'id':paiement.id}) }}">Modifier</a>
+                                            <a class="btn-sm btn-success btn-block " href="{{ path('supprimerFacture',{'id':facture.id}) }}">Supprimer</a>
+                                            <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureBack',{'id':facture.id}) }}">Modifier</a>
+                                            <a class="btn-sm btn-success btn-block" href="{{ path('afficherFactureBack',{'id':facture.id}) }}">Afficher</a>
                                         </div>
                                     </td>
 

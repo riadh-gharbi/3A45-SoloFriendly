@@ -461,21 +461,6 @@ public function removeNewsletter(Newsletter $newsletter): self
         }
     }
 
-<<<<<<< Updated upstream
-    /**
-     * @return Collection|Facture[]
-     */
-    public function getFacturesProposee(): Collection
-    {
-        return $this->factures_proposee;
-    }
-
-    public function addFacturesProposee(Facture $facturesProposee): self
-    {
-        if (!$this->factures_proposee->contains($facturesProposee)) {
-            $this->factures_proposee[] = $facturesProposee;
-            $facturesProposee->setOwner($this);
-=======
     return $this;
 }
 
@@ -503,7 +488,6 @@ public function removeFacturesProposee(Paiement $facturesProposee): self
         // set the owning side to null (unless already changed)
         if ($facturesProposee->getOwner() === $this) {
             $facturesProposee->setOwner(null);
->>>>>>> Stashed changes
         }
     }
 
@@ -525,19 +509,8 @@ public function addFacturesRecu(Paiement $facturesRecu): self
         $facturesRecu->setClient($this);
     }
 
-<<<<<<< Updated upstream
-    public function removeFacturesProposee(Facture $facturesProposee): self
-    {
-        if ($this->factures_proposee->removeElement($facturesProposee)) {
-            // set the owning side to null (unless already changed)
-            if ($facturesProposee->getOwner() === $this) {
-                $facturesProposee->setOwner(null);
-            }
-        }
-=======
     return $this;
 }
->>>>>>> Stashed changes
 
 public function removeFacturesRecu(Paiement $facturesRecu): self
 {
@@ -548,36 +521,21 @@ public function removeFacturesRecu(Paiement $facturesRecu): self
         }
     }
 
-<<<<<<< Updated upstream
-    /**
-     * @return Collection|Facture[]
-     */
-    public function getFacturesRecu(): Collection
-=======
     return $this;
 }
     public function getIsVerified(): ?bool
->>>>>>> Stashed changes
     {
         return $this->isVerified;
     }
 
-<<<<<<< Updated upstream
-    public function addFacturesRecu(Facture $facturesRecu): self
-=======
     public function setIsVerified(bool $isVerified): self
->>>>>>> Stashed changes
     {
         $this->isVerified = $isVerified;
 
         return $this;
     }
 
-<<<<<<< Updated upstream
-    public function removeFacturesRecu(Facture $facturesRecu): self
-=======
     public function getIsBlocked(): ?bool
->>>>>>> Stashed changes
     {
         return $this->isBlocked;
     }

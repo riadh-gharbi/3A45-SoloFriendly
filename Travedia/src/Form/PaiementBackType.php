@@ -21,7 +21,7 @@ class PaiementBackType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-
+            ->add('prix')
             ->add('statut', ChoiceType::class,
                 [
                     'choices'=>['En Cours'=>'En Cours',
@@ -55,7 +55,6 @@ class PaiementBackType extends AbstractType
                     'class'=>Planning::class,
                     'choice_label'=> 'id'
                 ])
-
         ;
     }
 
