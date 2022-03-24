@@ -9,6 +9,7 @@ use App\Form\PaiementType;
 use App\Form\PaiementBackType;
 use App\Repository\PaiementRepository;
 use App\Repository\PlanningRepository;
+use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\Criteria;
 //use http\Env\Url;
 use Knp\Component\Pager\PaginatorInterface;
@@ -29,6 +30,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Symfony\Component\Serializer\Serializer;
 
 
 class PaiementController extends AbstractController
@@ -475,5 +487,110 @@ class PaiementController extends AbstractController
         return $this->redirectToRoute("afficherFactureListeBack");
 
     }
+    /**
+     * @Route("/afficherPaiements" , name="afficherPaiementJson")
+     */
+    public function afficherPaiementJson(PaiementRepository $rep, SerializerInterface $serializer): Response
+    {
+        $paiements=$rep->findAll();
+        //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
+        //dump($json);
+        //die;
+        //return new Response(json_encode($json));
 
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(),new ObjectNormalizer() ];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($paiements, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json;charset=UTF-8');
+        //dd($response);
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @param UtilisateurRepository $repU
+     * @param PlanningRepository $repPlan
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/ajouterPaiement",name="ajouterPaiementJson")
+     */
+    public function AjouterPaiementJson(Request $request,NormalizerInterface $normalizer, UtilisateurRepository $repU, PlanningRepository $repPlan):Response
+    {
+        $paiement = new Paiement();
+
+        $paiement->setDatePaiement($request->get('datePaiement'));
+        $owner = $repU->find($request->get('ownerID'));
+        $client = $repU->find($request->get('clientID'));
+        $paiement->setOwner($owner);
+        $paiement->setClient($client);
+        $paiement->setDateCreation($request->get('dateCreation'));
+        $planning = $repPlan->find($request->get('planningID'));
+        $paiement->setPlanning($planning);
+        $paiement->setPrix((float)$request->get('prix'));
+        $paiement->setStatut($request->get('statut'));
+        $paiement->setTypePaiement($request->get('typePaiement'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($paiement);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($paiement,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param PaiementRepository $repPay
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @param UtilisateurRepository $repU
+     * @param PlanningRepository $repPlan
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierPaiement",name="modifierPaiementJson")
+     */
+    public function ModifierPaiementJson(PaiementRepository $repPay,Request $request,NormalizerInterface $normalizer,UtilisateurRepository $repU,PlanningRepository $repPlan):Response
+    {
+        $paiement =$repPay->find($request->get('id'));
+        $paiement->setDatePaiement(\DateTime::createFromFormat( 'Y-m-d',$request->get('datePaiement')));
+        $owner = $repU->find($request->get('ownerID'));
+        $client = $repU->find($request->get('clientID'));
+        $paiement->setOwner($owner);
+        $paiement->setClient($client);
+        //$paiement->setDateCreation($request->get('dateCreation'));
+        $planning = $repPlan->find($request->get('planningID'));
+        $paiement->setPlanning($planning);
+        $paiement->setPrix((float)$request->get('prix'));
+        $paiement->setStatut($request->get('statut'));
+        $paiement->setTypePaiement($request->get('typePaiement'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($paiement,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param PaiementRepository $repPay
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deletePaiement",name="deletePaiementJson")
+     */
+    public function SupprimerPaiementJson(PaiementRepository $repPay,Request $request,NormalizerInterface $normalizer):Response
+    {
+        $paiement=$repPay->find($request->get('id'));
+        //$response = $resRep->findBy(['reclamation'=>$reclamation]);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($paiement);
+        $em->flush();
+        $json=$normalizer->normalize($paiement,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
 }

@@ -7,6 +7,7 @@ use App\Entity\Utilisateur;
 use App\Entity\ReclamationReponse;
 use App\Form\ReclamationReponseType;
 use App\Form\ReclamationType;
+use App\Repository\ReclamationReponseRepository;
 use App\Repository\ReclamationRepository;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -269,6 +270,7 @@ class ReclamationController extends AbstractController
 
         $response=new Response($json);
         $response->headers->set('Content-Type','application/json');
+
         return $response;
     }
 
@@ -280,9 +282,12 @@ class ReclamationController extends AbstractController
     public function ajouterReclamationJson(Request $request, ReclamationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer,UtilisateurRepository $repU):Response
     {
         $reclamation= new Reclamation();
+        $reclamation->setSujet($request->get('sujet'));
         $reclamation->setContenu($request->get('contenu'));
         //$reclamation->setUtilisateur($request->get('utilisateurID'));
+        if ($repU->find($request->get('utilisateurID'))!=null)
         $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+        else $reclamation->setUtilisateur(null);
         $reclamation->setEtatReclamation($request->get('etatReclamation'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($reclamation);
@@ -294,6 +299,31 @@ class ReclamationController extends AbstractController
         return new Response(json_encode($json));
 
     }
+
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @Route("/ajouterReclamationReponse" , name="ajouterReclamationReponse")
+     */
+    public function AjouterReclamationReponseJson(Request $request,NormalizerInterface $normalizer,ReclamationRepository $recRep,ReclamationReponseRepository $repRep):Response
+    {
+        $reclamationReponse = new ReclamationReponse();
+        $reclamationReponse->setContenu($request->get('contenu'));
+        $reclamation = $recRep->find($request->get('reclamationId'));
+        $reclamationReponse->setReclamation($reclamation);
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($reclamationReponse);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($encoders);
+        $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+
+
+
 
     /**
      * @param Request $request
@@ -320,6 +350,22 @@ class ReclamationController extends AbstractController
 
     /**
      * @param Request $request
+     * @param ReclamationReponseRepository $repRep
+     * @param NormalizerInterface $normalizer
+     * @Route("/modifierReclamationReponse",name="modifierReclamationReponse")
+     */
+    public function ModifierReclamationReponse(Request $request,ReclamationReponseRepository $repRep, NormalizerInterface $normalizer)
+    {
+        $reclamationReponse= $repRep->find($request->get('id'));
+        $reclamationReponse->setContenu($request->get('contenu'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($reclamationReponse,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
      * @param ReclamationRepository $rep
      * @param SerializerInterface $serializer
      * @param NormalizerInterface $normalizer
@@ -327,13 +373,32 @@ class ReclamationController extends AbstractController
      * @throws ExceptionInterface
      * @Route("/deleteReclamation",name="deleteReclamationJson")
      */
-    public function deleteReclamationJson(Request $request,ReclamationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    public function deleteReclamationJson(Request $request,ReclamationRepository $rep,ReclamationReponseRepository $resRep,SerializerInterface $serializer,NormalizerInterface $normalizer)
     {
         $reclamation = $rep->find($request->get('id'));
+        //$response = $resRep->findBy(['reclamation'=>$reclamation]);
         $em = $this->getDoctrine()->getManager();
         $em->remove($reclamation);
         $em->flush();
         $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param ReclamationReponseRepository $repRep
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteReclamationRep", name="deleteReclamationRep")
+     */
+    public function deleteReclamationReponseJson(Request $request,ReclamationReponseRepository $repRep,NormalizerInterface $normalizer)
+    {
+        $reclamationReponse = $repRep-find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($reclamationReponse);
+        $em->flush();
+        $json=$normalizer->normalize($reclamationReponse,'json',['groups'=>'post:read']);
         return new Response(json_encode($json));
     }
 }

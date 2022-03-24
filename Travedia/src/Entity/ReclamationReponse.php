@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReclamationReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReclamationReponseRepository::class)
@@ -14,17 +15,20 @@ class ReclamationReponse
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("reclamationReponse")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("reclamationReponse")
      */
     private $contenu;
 
     /**
      * @ORM\OneToOne(targetEntity=Reclamation::class, inversedBy="reclamationRep", orphanRemoval=true)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups ("reclamationReponse")
      */
     private $reclamation;
 

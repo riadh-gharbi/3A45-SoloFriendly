@@ -16,27 +16,31 @@ class Reclamation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("reclamations")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("reclamations")
      */
     private $contenu;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("reclamations")
      */
     private $etat_reclamation;
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="reclamation")
      * @JoinColumn(name="utilisateur_id", referencedColumnName="id",onDelete="CASCADE")
+     * @Groups("reclamations")
      */
     private $utilisateur;
 
     /**
-     * @ORM\OneToOne(targetEntity=ReclamationReponse::class, mappedBy="reclamation")
+     * @ORM\OneToOne(targetEntity=ReclamationReponse::class, mappedBy="reclamation", cascade={"remove"})
      * @JoinColumn(name="reclamation_Rep_id", referencedColumnName="id",onDelete="CASCADE")
      * @Groups("reclamations")
      */
@@ -44,6 +48,7 @@ class Reclamation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("reclamations")
      */
     private $sujet;
 

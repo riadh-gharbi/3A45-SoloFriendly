@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=PaiementRepository::class)
@@ -16,17 +18,20 @@ class Paiement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("paiements")
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups ("paiements")
      */
     private $prix;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Choice("En Cours","Effectué","Annulé")
+     * @Groups ("paiements")
      */
     private $statut;
 
@@ -34,42 +39,49 @@ class Paiement
      * @ORM\Column(type="date")
      * @Assert\Date
      * @Assert\GreaterThanOrEqual("today")
+     * @Groups ("paiements")
      */
     private $date_creation;
 
     /**
      *
      * @ORM\Column(type="date", nullable=true)
-     *  @Assert\Date
+     * @Assert\Date
      * @Assert\GreaterThanOrEqual(propertyPath="dateCreation",
     message="La date de paiement doit être supérieur ou égale à la date de creation")
+     * @Groups ("paiements")
      */
     private $date_paiement;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("paiements")
      */
     private $type_paiement;
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="factures_proposee")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups ("paiements")
      */
     private $owner;
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="factures_recu")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups ("paiements")
      */
     private $client;
 
     /**
      * @ORM\ManyToOne(targetEntity=Planning::class, inversedBy="factures")
+     * @Groups ("paiements")
      */
     private $planning;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups ("paiements")
      */
     private $sessionID;
 
