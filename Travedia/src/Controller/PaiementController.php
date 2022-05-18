@@ -12,6 +12,7 @@ use App\Repository\PlanningRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\Criteria;
 //use http\Env\Url;
+use Doctrine\ORM\EntityNotFoundException;
 use Knp\Component\Pager\PaginatorInterface;
 use phpDocumentor\Reflection\Types\Collection;
 use Stripe\Checkout\Session;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -45,6 +47,8 @@ use Symfony\Component\Serializer\Serializer;
 
 class PaiementController extends AbstractController
 {
+
+
     //Creation d'une paiement
     //En principe cette étape doit être automatique.
     //Cette fonction peut être utilisé par l'admin
@@ -55,7 +59,7 @@ class PaiementController extends AbstractController
      */
     public function createFacture(Request $request,MailerInterface $mailer)
     {
-        $this->checkUpdatePaiement($mailer);
+       // $this->checkUpdatePaiement($mailer);
 
         //PLACE HOLDER UNTIL MERGE WITH KARIM
         //Integration done, just add choice of plannings
@@ -87,18 +91,39 @@ class PaiementController extends AbstractController
         $form->add('Checkout',SubmitType::class);
         $form->handleRequest($request);
         Stripe::setApiKey('sk_test_51KT8ejAISKORykYshnnbQcDPyMdeStYUi7Xtp05Lh1or86C6AHB8K3NsvA6CmiFXv4obHCq1p3gxp8oV8YHNizZ000pllSDFVs');
-
-
+        $enLigne= null;
         if($form->isSubmitted() && $form->isValid())
         {
+
             $planning =$form->get('planning')->getData();
             $paiement->setPrix($planning->getPrix());
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($paiement);
             $entityManager->flush();
-            switch($form->get('typePaiement')){
+            $stripe = new \Stripe\StripeClient('sk_test_51KT8ejAISKORykYshnnbQcDPyMdeStYUi7Xtp05Lh1or86C6AHB8K3NsvA6CmiFXv4obHCq1p3gxp8oV8YHNizZ000pllSDFVs');
+            //Create Product
+            $product =$stripe->products->create([
+                'name' => 'Planning '.strval($planning->getId()),
+            ]);
+            //Create Price based on product
+            $price =$stripe->prices->create([
+                'unit_amount' => $planning->getPrix(),
+                'currency' => 'usd',
+                'product' =>$product->id,
+            ]);
+            $paiementLink=$stripe->paymentLinks->create([
+                ['line_items' => [['price' => $price->id, 'quantity' => 1]]],
+                'metadata' => ['id' =>$paiement->getId()]
+                ]
+            );
+            switch($form->get('typePaiement')->getData()){
                 case 'En Ligne':
-                    $session = Session::create([
+                    //Create Producrt
+
+
+
+                    //Session OLD To Delete
+                    /* $session = Session::create([
                         'line_items' => [[
                             'price_data' => [
                                 'currency' => 'eur',
@@ -113,7 +138,10 @@ class PaiementController extends AbstractController
                         'success_url' => $this->generateUrl('success_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
                         'cancel_url' => $this->generateUrl('cancel_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
                     ]);
-                    $paiement->setSessionID($session->id);
+                    */
+                    //$paiement->setSessionID($paiementLink->)
+                return ($this->redirect($paiementLink->url));
+
                     break;
                 case 'Cash':
                     //Send SMS
@@ -125,14 +153,13 @@ class PaiementController extends AbstractController
                         ->subject('Vous devez payez votre guide')
                         ->text('Votre paiement de  '.strval($paiement->getPrix()).'Dinar doit être payée dans les plus courts délais pour votre guide'.strval($paiement->getGuide()->getNom()).'. Sinon vous pouvez passer chez nous et nous lui passeront le paiement');
                     $mailer->send($email);
+                    return ($this->redirectToRoute('success_url'));
                     break;
             }
 
 
-            if($session){
-            return $this->redirect($session->url,303);}else{
-                return $this->redirectToRoute('success_url');
-            }
+
+
 
         }
 
@@ -186,7 +213,7 @@ class PaiementController extends AbstractController
      */
     public function createFactureFront(Request $request,$id,MailerInterface $mailer):Response
     {
-        $this->checkUpdatePaiement($mailer);
+        //$this->checkUpdatePaiement($mailer);
         Stripe::setApiKey('sk_test_51KT8ejAISKORykYshnnbQcDPyMdeStYUi7Xtp05Lh1or86C6AHB8K3NsvA6CmiFXv4obHCq1p3gxp8oV8YHNizZ000pllSDFVs');
         $session=null;
         //PLACE HOLDER UNTIL MERGE WITH KARIM
@@ -229,7 +256,7 @@ class PaiementController extends AbstractController
             //Faire la redirection Stripe si paiement en ligne
             switch($form->get('typePaiement')->getData()){
                 case 'En Ligne':
-                $session = Session::create([
+                /* $session = Session::create([
                     'line_items' => [[
                         'price_data' => [
                             'currency' => 'eur',
@@ -243,12 +270,28 @@ class PaiementController extends AbstractController
                     'mode' => 'payment',
                     'success_url' => $this->generateUrl('success_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
                     'cancel_url' => $this->generateUrl('cancel_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                ]);
-            $paiement->setSessionID($session->id);
+                ]); */
+
+                    $stripe = new \Stripe\StripeClient('sk_test_51KT8ejAISKORykYshnnbQcDPyMdeStYUi7Xtp05Lh1or86C6AHB8K3NsvA6CmiFXv4obHCq1p3gxp8oV8YHNizZ000pllSDFVs');
+                    //Create Product
+                    $product =$stripe->products->create([
+                        'name' => 'Planning '.strval($planning->getId()),
+                    ]);
+                    //Create Price based on product
+                    $price =$stripe->prices->create([
+                        'unit_amount' => $planning->getPrix(),
+                        'currency' => 'usd',
+                        'product' =>$product->id,
+                    ]);
+                    $paiementLink=$stripe->paymentLinks->create([
+                            ['line_items' => [['price' => $price->id, 'quantity' => 1]]],
+                            'metadata' => ['id' =>$paiement->getId()]
+                        ]
+                    );
                     $entityManager=$this->getDoctrine()->getManager();
                     $entityManager->persist($paiement);
                     $entityManager->flush();
-                    return $this->redirect($session->url,303);
+                    return $this->redirect($paiementLink->url,303);
             break;
                 case 'Cash':
                     //Send SMS
@@ -291,55 +334,105 @@ class PaiementController extends AbstractController
     }
 
     /**
+     * @Route("webhook/stripe" , name="webhook")
+     */
+    public function webhook(Request $request,MailerInterface $mailer):Response
+    {
+        $response = new Response('aaaa',200);
+        $event = \Stripe\Event::constructFrom(
+            json_decode($request->getContent(), true)
+        );
+        switch ($event->type) {
+            case 'checkout.session.completed':
+                //$paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+                // Then define and call a method to handle the successful payment intent.
+                // handlePaymentIntentSucceeded($paymentIntent);
+                $accessor = PropertyAccess::createPropertyAccessor();
+                //$id = (int) $accessor->getValue($event,'[data][metadata][id]');
+                $id = $event->data->object->metadata->id;
+                $rep = $this->getDoctrine()->getRepository(Paiement::class);
+                $paiement =$rep->find($id);
+                if ($event->data->object->payment_status == "paid"){
+
+                    $em =$this->getDoctrine()->getManager();
+                    $paiement->setStatut("Effectué");
+                    $email = ((new TemplatedEmail()))
+                        ->from(new Address('Paiement@Travedia.com', 'Travedia Confirmation Paiement'))
+                        ->to($paiement->getOwner()->getEmail())
+                        ->subject('Reçu de paiement de la part de ' . strval($paiement->getClient()->getNom()))
+                        ->text('Voici le votre reçu de paiement de la somme de  ' . strval($paiement->getPrix()) . '. Veuillez passer chez nous pour récupérer votre argent');
+                    $mailer->send($email);
+                }else
+                {
+                    $paiement->setStatut("En Cours");
+                }
+
+                $em =$this->getDoctrine()->getManager();
+                $em->flush();
+                return $response;
+                break;
+            case 'payment_method.attached':
+                $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
+                // Then define and call a method to handle the successful attachment of a PaymentMethod.
+                // handlePaymentMethodAttached($paymentMethod);
+                break;
+        }
+        return $response;
+
+    }
+    /**
      * @throws ApiErrorException
      */
     public function checkUpdatePaiement(MailerInterface $mailer)
     {
+
         $rep = $this->getDoctrine()->getRepository(Paiement::class);
         $paiements=$rep->findAll();
         $stripe= new  \Stripe\StripeClient('sk_test_51KT8ejAISKORykYshnnbQcDPyMdeStYUi7Xtp05Lh1or86C6AHB8K3NsvA6CmiFXv4obHCq1p3gxp8oV8YHNizZ000pllSDFVs');
-        foreach($paiements as $p)
-        {
-            $session =$stripe->checkout->sessions->retrieve($p->getSessionID());
-            $em=$this->getDoctrine()->getManager();
-            switch ($session->status)
-            {
-                case 'unpaid':
-                    //no update
-                    //send sms
-                    $email = ((new TemplatedEmail()))
-                        ->from(new Address('Paiement@Travedia.com', 'Travedia Demande Paiement'))
-                        ->to($p->getClient()->getEmail())
-                        ->subject('Vous devez payez votre guide')
-                        ->text('Votre paiement de  '.strval($p->getPrix()).'Dinar doit être payée dans les plus courts délais pour votre guide'.strval($p->getClient()->getNom()).'. Sinon vous pouvez passer chez nous et nous lui passeront le paiement');
-                    $mailer->send($email);
-                    break;
-                case 'paid':
-                    //update db
-                    $p->setStatut('Effectué');
-                    $em->flush();
-                    $email = ((new TemplatedEmail()))
-                        ->from(new Address('Paiement@Travedia.com', 'Travedia Confirmation Paiement'))
-                        ->to($p->getOwner()->getEmail())
-                        ->subject('Reçu de paiement de la part de '.strval($p->getClient()->getNom()))
-                        ->text('Voici le votre reçu de paiement de la somme de '.strval($p->getPrix()).'. Veuillez passer chez nous pour récupérer votre argent');
-                    $mailer->send($email);
-                    break;
-                case 'no_payment_required':
-                    //send sms
+        foreach($paiements as $p) {
+            if ($p->getSessionID() != null) {
+                $paymentLink = $stripe->paymentLinks->retrieve($p->getSessionID());
+                $em = $this->getDoctrine()->getManager();
+                switch ($stripe) {
+                    case 'unpaid':
+                        //no update
+                        //send sms
+                        $email = ((new TemplatedEmail()))
+                            ->from(new Address('Paiement@Travedia.com', 'Travedia Demande Paiement'))
+                            ->to($p->getClient()->getEmail())
+                            ->subject('Vous devez payez votre guide')
+                            ->text('Votre paiement de  ' . strval($p->getPrix()) . 'Dinar doit être payée dans les plus courts délais pour votre guide' . strval($p->getClient()->getNom()) . '. Sinon vous pouvez passer chez nous et nous lui passeront le paiement');
+                        $mailer->send($email);
+                        break;
+                    case 'paid':
+                        //update db
+                        $p->setStatut('Effectué');
+                        $em->flush();
+                        $email = ((new TemplatedEmail()))
+                            ->from(new Address('Paiement@Travedia.com', 'Travedia Confirmation Paiement'))
+                            ->to($p->getOwner()->getEmail())
+                            ->subject('Reçu de paiement de la part de ' . strval($p->getClient()->getNom()))
+                            ->text('Voici le votre reçu de paiement de la somme de ' . strval($p->getPrix()) . '. Veuillez passer chez nous pour récupérer votre argent');
+                        $mailer->send($email);
+                        break;
+                    case 'no_payment_required':
+                        //send sms
 
 
-                    break;
+                        break;
+                }
             }
         }
     }
+
+
 
     /**
      * @Route("/admin/paiement/afficherListe" ,name="afficherFactureListeBack")
      */
     public function afficherFactureListeBack(Request $request,PaginatorInterface $paginator,MailerInterface $mailer)
     {
-        $this->checkUpdatePaiement($mailer);
+        //$this->checkUpdatePaiement($mailer);
 
         $factures=$this->getDoctrine()->getRepository(Paiement::class)->findAll();
         $factures=$paginator->paginate(
@@ -355,7 +448,7 @@ class PaiementController extends AbstractController
      */
     public function afficherFactureListe(Request $request,MailerInterface $mailer)
     {
-        $this->checkUpdatePaiement($mailer);
+        //$this->checkUpdatePaiement($mailer);
 
         //$user=$this->getDoctrine()->getManager()->getRepository(Utilisateur::class)->find(1);
         //GET CURRENT USER
@@ -389,7 +482,7 @@ class PaiementController extends AbstractController
      */
     public function afficherFacture($id,MailerInterface $mailer)
     {
-        $this->checkUpdatePaiement($mailer);
+        //$this->checkUpdatePaiement($mailer);
 
         $factureId= $this->getDoctrine()->getRepository(Paiement::class)->find($id);
         return $this->render('paiement/factureAfficher.html.twig', [
@@ -493,6 +586,29 @@ class PaiementController extends AbstractController
     public function afficherPaiementJson(PaiementRepository $rep, SerializerInterface $serializer): Response
     {
         $paiements=$rep->findAll();
+        $repU = $this->getDoctrine()->getRepository(Utilisateur::class);
+
+        $paiementsList = [];
+        foreach ($paiements as $p)
+        {
+           // try{
+            $client =$repU->find($p->getClient());//;}catch(EntityNotFoundException $ex){}finally{$client = null;}
+            //try{
+            $owner = $repU->find($p->getOwner());//} catch (EntityNotFoundException $ex){}finally{$owner = null;}
+            $paiementsList[] = [
+                'id' => strval($p->getId()),
+                'client' => ['id'=>$client!=null?strval($p->getClient()->getId()) : 0, 'nom'=>$client!=null?$client->getNom():"Unknown",'prenom'=>$client!=null?$client->getPrenom():"Unknown"],
+                'owner' =>['id'=>$owner!=null?strval($p->getOwner()->getId()):0, 'nom'=>$owner!=null?$owner->getNom():"Unknown",'prenom'=>$owner!=null?$owner->getPrenom():"Unknown"],
+                'dateCreation'=>$p->getDateCreation(),
+                'datePaiement' =>$p->getDatePaiement(),
+                'planning' => ['id'=>strval($p->getPlanning()->getId())  ],
+                'prix'=>$p->getPrix(),
+                'sessionID'=>$p->getSessionID(),
+                'typePaiement'=>$p->getTypePaiement(),
+                'statut'=>$p->getStatut()
+            ];
+
+        }
         //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
         //dump($json);
         //die;
@@ -501,14 +617,16 @@ class PaiementController extends AbstractController
         $encoders = [ new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(),new ObjectNormalizer() ];
         $serializer = new Serializer($normalizers, $encoders);
-        $json=$serializer->serialize($paiements, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        $json=$serializer->serialize($paiementsList, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
         }
         ]);
+        $jsonN =$serializer->serialize($json,'json',['circular_reference_handler']);
 
         $response=new Response($json);
         $response->headers->set('Content-Type','application/json;charset=UTF-8');
         //dd($response);
-        return $response;
+        return new JsonResponse($paiementsList,200,['Content-Type'=>'application/json;charset=UTF-8']);
+        //return $response;
     }
 
     /**
@@ -524,12 +642,12 @@ class PaiementController extends AbstractController
     {
         $paiement = new Paiement();
 
-        $paiement->setDatePaiement($request->get('datePaiement'));
+        //$paiement->setDatePaiement($request->get('datePaiement'));
         $owner = $repU->find($request->get('ownerID'));
         $client = $repU->find($request->get('clientID'));
         $paiement->setOwner($owner);
         $paiement->setClient($client);
-        $paiement->setDateCreation($request->get('dateCreation'));
+        $paiement->setDateCreation(\DateTime::createFromFormat( 'Y-m-d',$request->get('dateCreation')));
         $planning = $repPlan->find($request->get('planningID'));
         $paiement->setPlanning($planning);
         $paiement->setPrix((float)$request->get('prix'));

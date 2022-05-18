@@ -13,6 +13,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Form\PosteType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 class PosteController extends AbstractController
 
 {
@@ -247,4 +253,126 @@ class PosteController extends AbstractController
             ["poste"=>$poste ]);
     }
 
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @Route("/Poste/ajouterPosteJSON", name="ajoutPosteJson")
+     */
+    public function ajoutPosteJSON(Request $request, NormalizerInterface $normalizer):Response {
+
+        //$id = $request->query->get("id");
+        $profile_id = $request->query->get("userId");
+        $contenu = $request->query->get("contenu");
+        //$image = $request->query->get("image");
+        $date = $request->query->get("date");
+        $likes = $request->query->get("react");
+
+        $poste=new Poste();
+        $poste->setContenu($contenu);
+        $poste->setLikes($likes);
+        $poste->setDate(new \DateTime());
+        //$poste->setImage($image);
+        //$poste->setProfile($profile_id);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($poste);
+            $em->flush();
+
+            $encoders= [new JsonEncoder()];
+            $normalizers=[new ObjectNormalizer()];
+            $serializer =new Serializer($normalizers,$encoders);
+            $json=$normalizer->normalize($poste,'json',['groups'=>'post:read']);
+            return new Response(json_encode($json));
+
+
+    }
+
+    /**
+     * @Route("/Poste/afficherPosteJSON", name="aff_json")
+     */
+    public function afficherposteJson(PosteRepository $rep): Response
+    {
+        $poste=$rep->findAll();
+        $categorieList =[];
+        foreach ($poste as $poste ){
+            $categorieList[] = [
+                'id' => $poste->getId(),
+                'contenu' => $poste->getContenu(),
+                'image' => $poste->getImage(),
+                'likes' => $poste->getLikes(),
+                'date' => $poste->getDate()->format('Y-m-d'),
+                'profile'=>$poste->getProfile()->getId()
+            ];
+
+        }
+        return new Response(json_encode($categorieList));
+
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($poste, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/Poste/modifierPosteJSON", name="edit_json")
+     */
+
+    public function  modifierPosteJSON(Request $request) {
+        $id= $request->get("id");
+        $profile_id = $request->query->get("profile_id");
+        $contenu = $request->query->get("contenu");
+        $image = $request->query->get("image");
+        $date = $request->query->get("date");
+        $likes = $request->query->get("likes");
+        $em=$this->getDoctrine()->getManager();
+        $poste = $em->getRepository(Poste::class)->find($id);
+        if($request->files->get("image")!=null){
+
+            $file = $request->files->get("image");
+            $fileName = $file->getClientOriginalName();
+            $file->move(
+                $fileName
+            );
+            $poste->setPhoto($fileName);
+
+
+        }
+        $poste->setContenu($contenu);
+        $poste->setlikes($likes);
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($poste);
+            $em->flush();
+
+            return new JsonResponse("sucess", 200);
+        }catch (\Exception $ex) {
+            return new Response("failed".$ex->getMessage());
+        }
+    }
+
+
+    /**
+     * @Route("/Poste/supprimerPosteJSON",name="suppPosteJson")
+     */
+    public function deleteEvenementesJson(Request $request, PosteRepository $rep)
+    {
+        $poste = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($poste);
+        $em->flush();
+        try {
+            return new JsonResponse("Poste deleted", 200);
+        }catch (\Exception $ex) {
+            return new Response("exception".$ex->getMessage());
+        }
+    }
 }

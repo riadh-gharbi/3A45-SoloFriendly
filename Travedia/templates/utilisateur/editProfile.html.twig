@@ -112,7 +112,7 @@
                                     <div class="col-md-4">
 
 
-                                            <button type="submit" value="submit" class="btn btn-outline-success">Modifier</button>
+                                        <a onclick="editConfirmation()" class="btn btn-outline-warning">Modifier</a>
 
 
                                     </div>
@@ -126,4 +126,22 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        function editConfirmation() {
+            Swal.fire({
+                title: 'Vous êtes sûr ?',
+                text: "Merci de vérifier vos données avant de confirmer!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelText: 'annuler',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(`#Form`).submit()
+                }
+            })
+        }
+    </script>
 {% endblock %}

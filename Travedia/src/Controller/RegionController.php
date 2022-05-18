@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Region;
 use App\Form\RegionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
@@ -164,5 +171,113 @@ class RegionController extends AbstractController
 
         return $this->redirectToRoute('listegion');
     }
+    //jason
+    /**
+     * @Route("/afficherRegion" , name="afficherregionjson")
+     */
+    public function afficherRegionJson(RegionRepository $rep, SerializerInterface $serializer): Response
+    {
+        $Regions=$rep->findAll();
+        //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
+        //dump($json);
+        //die;
+        //return new Response(json_encode($json));
 
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($Regions, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+
+    /**
+     * @param RegionRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/ajouterRegionn" , name="ajouterRegionJSON")
+     */
+    public function ajouterregionJson(Request $request, RegionRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $region= new Region();
+        $region->setNom($request->get('nom'));
+        $image = $request->files->get('image');
+        if ($image) {
+            $newFilename = uniqid().'.'.$image->guessExtension();
+
+            try {
+                $image->move(
+                    $this->getParameter('brochures_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {}
+            $region->setImage($newFilename);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($region);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($region,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+
+    }
+
+    /**
+     * @param Request $request
+     * @param RegionRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalize
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierregionn", name="modifierregionJson")
+     */
+    public function modifierregionJson(Request $request,RegionRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $region = $rep->find($request->get('id'));
+        $region->setNom($request->get('nom'));
+        // $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+
+        //   $region->setDescription($request->get('description'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($region,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param RegionRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteRegions",name="deleteregionJson")
+     */
+    public function deleteregionJson(Request $request,RegionRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $region = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($region);
+        $em->flush();
+        $json=$normalizer->normalize($region,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+    /**
+     * @Route("/regionid/{id}",name="regionid")
+     */
+    public function regionid($id)
+    {
+        $reclamation=$this->getDoctrine()->getRepository(Region::class)->affregionn($id);
+        //$regions=$repository->findAll();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($reclamation);
+
+        return new JsonResponse($formatted);
+
+    }
 }

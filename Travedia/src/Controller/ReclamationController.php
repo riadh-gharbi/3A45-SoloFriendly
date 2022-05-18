@@ -12,6 +12,7 @@ use App\Repository\ReclamationRepository;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -275,12 +276,38 @@ class ReclamationController extends AbstractController
     }
 
     /**
+     * @Route("/getReclamationByID" , name="afficherReclamationByIDJson")
+     */
+    public function afficherReclamationByIDJson(Request $req,ReclamationRepository $rep, SerializerInterface $serializer): Response
+    {
+        $id=$req->query->get('id');
+        $reclamation=$rep->find($id);
+        //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
+        //dump($json);
+        //die;
+        //return new Response(json_encode($json));
+
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($reclamation, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+
+        return $response;
+    }
+
+    /**
      * @param ReclamationRepository $rep
      * @param SerializerInterface $serializer
      * @Route("/ajouterReclamation" , name="ajouterRecJSON")
      */
     public function ajouterReclamationJson(Request $request, ReclamationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer,UtilisateurRepository $repU):Response
     {
+        try{
         $reclamation= new Reclamation();
         $reclamation->setSujet($request->get('sujet'));
         $reclamation->setContenu($request->get('contenu'));
@@ -296,7 +323,8 @@ class ReclamationController extends AbstractController
         $normalizers=[new ObjectNormalizer()];
         $serializer =new Serializer($normalizers,$encoders);
         $json=$normalizer->normalize($reclamation,'json',['groups'=>'post:read']);
-        return new Response(json_encode($json));
+        return new Response(json_encode($json),200);}
+        catch (IOException $exception){new Response ("Problem",500);}
 
     }
 
@@ -313,6 +341,8 @@ class ReclamationController extends AbstractController
         $reclamationReponse->setReclamation($reclamation);
         $em=$this->getDoctrine()->getManager();
         $em->persist($reclamationReponse);
+        $em->flush();
+        $reclamation->setReclamationRep($reclamationReponse);
         $em->flush();
         $encoders= [new JsonEncoder()];
         $normalizers=[new ObjectNormalizer()];

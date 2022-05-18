@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=HotelRepository::class)
@@ -17,24 +18,28 @@ class Hotel
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("hotels")
      */
     private $id;
 
     /**
      * @Assert\NotBlank(message = "Un nom est obligatoire")
      * @ORM\Column(type="string", length=255)
+     * @Groups ("hotels")
      */
     private $Nom;
 
     /**
      * @Assert\NotBlank(message="TEST 123")
      * @ORM\Column(type="string", length=255)
+     * @Groups ("hotels")
      */
     private $adresse;
 
     /**
      * @Assert\Email(message = "l'email '{{ value }}' n'est pas valide.")
      * @ORM\Column(type="string", length=255)
+     * @Groups ("hotels")
      */
     private $Email;
 
@@ -42,11 +47,13 @@ class Hotel
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message = "le numero ne doit pas etre vide.")
      * @Assert\Positive(message = "le numero doit etre positive.")
+     * @Groups ("hotels")
      */
     private $NumTel;
 
     /**
      * @ORM\ManyToMany(targetEntity=Planning::class, mappedBy="hotels")
+     * @Groups ("hotels")
      */
     private $plannings;
 

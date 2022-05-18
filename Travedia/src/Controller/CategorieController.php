@@ -13,6 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Serializer;
 
 class CategorieController extends AbstractController
 {
@@ -73,7 +81,7 @@ class CategorieController extends AbstractController
         $categorie = $paginator->paginate(
             $categorie,
             $request->query->getInt('page', 1)/*page number*/,
-            $request->query->getInt('limit', 3)/*limit per page*/
+            $request->query->getInt('limit', 5)/*limit per page*/
         );
         return $this->render('categorie/show.html.twig', [
             'categorie' => $categorie,
@@ -134,5 +142,105 @@ class CategorieController extends AbstractController
         return $this->redirectToRoute('categorie_show');
     }
 
+    /**
+     * @Route("/afficherCategories" , name="afficherCategoriesJson")
+     */
+    public function afficherCategoriesJson(CategorieRepository $rep, SerializerInterface $serializer): Response
+    {
+        $categoeies=$rep->findAll();
+        $categorieList =[];
+        foreach ($categoeies as $categorie ){
+            $categorieList[] = [
+                'id' => $categorie->getId(),
+                'nom' => $categorie->getNom(),
+                'image' => $categorie->getImage()
+            ];
+
+        }
+        return new Response(json_encode($categorieList));
+
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($categoeie, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+
+    /**
+     * @param CategorieRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/add" , name="ajouterCatJSON")
+     */
+    public function ajouterCategoriesJson(Request $request, CategorieRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $categorie= new Categorie();
+        $categorie->setNom($request->get('nom'));
+        $image = $request->files->get('image');
+
+        if ($image) {
+            $newFilename = uniqid().'.'.$image->guessExtension();
+
+            try {
+                $image->move(
+                    $this->getParameter('event_picture'),
+                    $newFilename
+                );
+            } catch (FileException $e) {}
+            $categorie->setPicture($newFilename);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($categorie);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($categorie,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+
+    }
+
+    /**
+     * @param Request $request
+     * @param CategorieRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierCategories", name="modifierCategoriesJson")
+     */
+    public function modifierCategoriesJson(Request $request,CategorieRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $categorie = $rep->find($request->get('id'));
+        $categorie->setNom($request->get('nom'));
+       // $image = $request->get('image')->getData();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($categorie,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param CategorieRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteCategories",name="deleteCategoriesJson")
+     */
+    public function deleteCategoriesJson(Request $request,CategorieRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $categorie = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($categorie);
+        $em->flush();
+        $json=$normalizer->normalize($categorie,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
 
 }

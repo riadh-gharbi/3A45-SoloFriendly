@@ -129,7 +129,9 @@ class HotelController extends AbstractController
     }
 
     /**
-     *  @Route("/Hotelsjson" , name="afficherHotelsjson")
+     * @param HotelRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/afficherHotel" , name="afficherHotelsjson")
      */
     public function afficherHotelJson(HotelRepository $rep, SerializerInterface $serializer): Response
     {
@@ -145,5 +147,66 @@ class HotelController extends AbstractController
         $response->headers->set('Content-Type','application/json');
         return $response;
     }
+    /**
+     * @param HotelRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/ajouterHotel" , name="ajouterHotelJSON")
+     */
+    public function ajouterHotelJson(Request $request,HotelRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $hotels= new Hotel();
+        $hotels->setNom($request->get('Nom'));
+        $hotels->setAdresse($request->get('adresse'));
+        $hotels->setEmail($request->get('Email'));
+        $hotels->setNumTel($request->get('NumTel'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($hotels);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($hotels,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
 
+    }
+    /**
+     * @param Request $request
+     * @param HotelRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierHotel", name="modifierHotelJSON")
+     */
+    public function modifierHotelRequest( $request,HotelRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $hotels = $rep->find($request->get('id'));
+        $hotels->setNom($request->get('Nom'));
+        $hotels->setAdresse($request->get('adresse'));
+        $hotels->setEmail($request->get('Email'));
+        $hotels->setNumTel($request->get('NumTel'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($hotels,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param HotelRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteHotel",name="deleteHotelJson")
+     */
+    public function deleteHotelJson(Request $request,HotelRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $hotels = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($hotels);
+        $em->flush();
+        $json=$normalizer->normalize($hotels,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
 }

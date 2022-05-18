@@ -31,7 +31,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
                 <a class="sidebar-brand brand-logo" href="index.html"><img
-                            src="{{ asset('/back/images/logo-titre2.png') }}" alt="logo"/></a>
+                            src="{{ asset('/front/images/logoWhite.png') }}" alt="logo"/></a>
                 <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img
                             src="{{ asset('/back/images/logo-mini.svg') }}" alt="logo"/></a>
             </div>
@@ -39,7 +39,9 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
                         <div class="nav-profile-image">
-                            <img src="{{ asset('back/images/upload/profile_image/' ~ app.user.profile.image)}}" alt="profile"/>
+
+                            <img src="{{  app.user.profile.image}}" />
+
                             <span class="login-status online"></span>
                             <!--change to offline or busy as needed-->
                         </div>

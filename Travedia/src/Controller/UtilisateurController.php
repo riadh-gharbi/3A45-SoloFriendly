@@ -10,6 +10,7 @@ use App\Repository\ProfileRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -17,14 +18,215 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+
 
 class UtilisateurController extends AbstractController
 {
+
+    public function __construct(VerifyEmailHelperInterface $helper, Swift_Mailer $mailer)
+    {
+        $this->verifyEmailHelper = $helper;
+        $this->mailer = $mailer;
+    }
+
+    //CODENAME ONE//
+    /**
+     * @Route("/user/signUp", name="signup_mobile")
+     */
+    public function signupMobile(Request $request, UserPasswordEncoderInterface $PasswordEncoder, Swift_Mailer $mailer)
+    {
+        $email = $request->query->get("email");
+        $nom = $request->query->get("nom");
+        //$cin= $request->query->get("cin");
+        $prenom = $request->query->get("prenom");
+        // $adresse= $request->query->get("adresse");
+        $roles = $request->query->get("roles");
+        $langue = $request->query->get("langue");
+        $password = $request->query->get("password");
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new Response("email invalid");
+        }
+
+
+        $user = new Utilisateur();
+        $profile = new Profile();
+        $user->setNom($nom);
+        $user->setEmail($email);
+        $profile->setUtilisateur($user);
+        $user->setPassword(
+            $PasswordEncoder->encodePassword($user, $password));
+        $user->setIsVerified(false);
+        $user->setPrenom($prenom);
+        $user->setLangue($langue);
+        $user->setRoles(array($roles));
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->persist($profile);
+            $em->flush();
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'registration_confirmation_route',
+                $user->getId(),
+                $user->getEmail()
+            );
+            $message = (new \Swift_Message('Vérifier Votre compte'))
+                ->setFrom('travediacontact@gmail.com')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->renderView('emails/registration.html.twig', [
+                            'signedUrl' => $signatureComponents->getSignedUrl()
+                        ]
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+
+
+            return new JsonResponse("Bienvenue à Travedia", 200);
+
+        } catch (\Exception $ex) {
+            return new Response("erreur de creation du compte" );
+        }
+    }
+
+    /**
+     * @Route("/user/signin", name="signin_mobile")
+     */
+
+    public function signinMobile(Request $request)
+    {
+        $email = $request->query->get("email");
+        $password = $request->query->get("password");
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Utilisateur::class)->findOneBy(['email' => $email]);
+
+        if ($user) {
+            if (password_verify($password, $user->getPassword())) {
+
+                /*             $serializer = new Serializer([new ObjectNormalizer()]);
+                             $formatted = $serializer->normalize($user);
+                             return new JsonResponse($formatted);*/
+
+
+                $encoders = [new JsonEncoder()];
+                $normalizers = [new ObjectNormalizer()];
+                $serializer = new Serializer($normalizers, $encoders);
+                $json = $serializer->serialize($user, 'json', ['circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+                ]);
+
+                $response = new Response($json);
+                $response->headers->set('Content-Type', 'application/json;charset=UTF-8');
+                return $response;
+            } else {
+
+                return new Response("password not found",500);
+            }
+        } else {
+            return new Response("user not found",500);
+        }
+    }
+
+
+    /**
+     * @Route("/user/editUserMobile", name="edituser_mobile")
+     */
+    public function editUserMobile(Request $request, UserPasswordEncoderInterface $PasswordEncoder):Response
+    {
+
+        $id = $request->get("id");
+
+        //hethi string
+        $profileId = $request->query->get("profileId");
+        $email = $request->query->get("email");
+        $nom = $request->query->get("nom");
+        //$cin = $request->query->get("cin");
+        $prenom = $request->query->get("prenom");
+        //$numTel = $request->query->get("numTel");
+        //$adresse = $request->query->get("adresse");
+        $roles = $request->query->get("roles");
+        $langue = $request->query->get("langue");
+        $password = $request->query->get("password");
+        $description = $request->query->get("description");
+        //$image = $request->query->get("image");
+        $evaluation = $request->query->get("evaluation");
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Utilisateur::class)->find($id);
+        $profile = $this->getDoctrine()->getRepository(Profile::class)->find($profileId);
+
+        if ($request->files->get("photo") != null) {
+
+            $file = $request->files->get("photo");
+            $fileName = $file->getClientOriginalName();
+
+            $file->move($fileName);
+            $user->setPhoto($fileName);
+        }
+        //set profile lezmou object de type profile mouch string
+        $profile->setDescription($description);
+        $profile->setEvaluation($evaluation);
+        //$profile->setImage($image);
+        $user->setProfile($profile);
+        $user->setNom($nom);
+        $user->setEmail($email);
+        $user->setPassword(
+            $PasswordEncoder->encodePassword(
+                $user,
+                $password));
+        $user->setIsVerified(true);
+        //$user->setNumTel($numTel);
+        //$user->setCin($cin);
+        $user->setPrenom($prenom);
+        //$user->setAdresse($adresse);
+        $user->setLangue($langue);
+        $user->setRoles(array($roles));
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            //$em->persist($profile);
+            //$em->persist($user);
+            $em->flush();
+
+            return new JsonResponse("Account Modified", 200);
+
+        } catch (\Exception $ex) {
+            return new Response("Failed" . $ex->getMessage(),500);
+        }
+    }
+
+    /**
+     * @Route("/mobile/user/delete", name="user_mobile_delete")
+     */
+    public function deleteUserMobile(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $user = $this->getDoctrine()->getRepository(Utilisateur::class)->findOneBy(['id' => $id]);
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+            return new JsonResponse("utilisateur supprimé");
+        } catch (\Exception $e) {
+            return new JsonResponse("erreur " . $e->getMessage());
+        }
+    }
+
+
     /**
      * @Route("/error", name="error")
      */

@@ -8,7 +8,7 @@ security:
                 property: email
     encoders:
         App\Entity\Utilisateur:
-            algorithm: auto
+            algorithm: bcrypt
 
     firewalls:
         dev:

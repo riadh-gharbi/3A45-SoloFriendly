@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Destination;
 use App\Entity\Region;
 use App\Entity\RegionType;
+use App\Repository\RegionRepository;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 //use MercurySeries\FlashyBundle\DependencyInjection\MercurySeriesFlashyExtension;
 
@@ -249,13 +250,13 @@ class DestinationController extends AbstractController
         ]);
 
     }
-   //jason
+    //jason
     /**
      * @Route("/afficherDestinations" , name="afficherDestinations")
      */
     public function afficherDestinationJson(DestinationRepository $rep, SerializerInterface $serializer): Response
     {
-       $Destinations=$rep->findAll();
+        $Destinations=$rep->findAll();
         //$json = $serializer->serialize($reclamations,'json',['groups'=>'reclamations']);
         //dump($json);
         //die;
@@ -278,13 +279,42 @@ class DestinationController extends AbstractController
      * @param SerializerInterface $serializer
      * @Route("/ajouterDestination" , name="ajouterDestinationJSON")
      */
-    public function ajouterDestinationJson(Request $request, DestinationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    public function ajouterDestinationJson(Request $request,RegionRepository $regrep,DestinationRepository $rep, SerializerInterface $serializer,NormalizerInterface $normalizer):Response
     {
+        //     $destination= new Destination();
+        //     $destination->setNom($request->get('nom'));
+        //     //$reclamation->setUtilisateur($request->get('utilisateurID'));
+        //   //  $destination->setUtilisateur($repU->find($request->get('utilisateurID')));
+        //     $destination->setDescription($request->get('description'));
+        //      $destination->setRegion($request->get('region'));
+
+        //    //  $destination->setImage($request->get('image'));
+        //     $em = $this->getDoctrine()->getManager();
+        //     $em->persist($destination);
+        //     $em->flush();
+        //     $encoders= [new JsonEncoder()];
+        //     $normalizers=[new ObjectNormalizer()];
+        //     $serializer =new Serializer($normalizers,$encoders);
+        //     $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
+        //     return new Response(json_encode($json));
+//***************
         $destination= new Destination();
         $destination->setNom($request->get('nom'));
-        //$reclamation->setUtilisateur($request->get('utilisateurID'));
-      //  $destination->setUtilisateur($repU->find($request->get('utilisateurID')));
+        $image = $request->files->get("image");
+        if ($image) {
+            $newFilename = uniqid().'.'.$image->guessExtension();
+
+            try {
+                $image->move(
+                    $this->getParameter('brochures_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {}
+            $destination->setImage($newFilename);
+        }
         $destination->setDescription($request->get('description'));
+
+        $destination->setRegion($regrep->find($request->get('region')));
         $em = $this->getDoctrine()->getManager();
         $em->persist($destination);
         $em->flush();
@@ -293,7 +323,6 @@ class DestinationController extends AbstractController
         $serializer =new Serializer($normalizers,$encoders);
         $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
         return new Response(json_encode($json));
-
     }
 
     /**
@@ -303,13 +332,13 @@ class DestinationController extends AbstractController
      * @param NormalizerInterface $normalize
      * @return Response
      * @throws ExceptionInterface
-     * @Route("/modifierDestinaation", name="modifierdestinationJson")
+     * @Route("/modifierDestinaationj", name="modifierdestinationJson")
      */
     public function modifierdestinationJson(Request $request,DestinationRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
     {
         $destination = $rep->find($request->get('id'));
         $destination->setNom($request->get('nom'));
-       // $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
+        // $reclamation->setUtilisateur($repU->find($request->get('utilisateurID')));
 
         $destination->setDescription($request->get('description'));
         $em = $this->getDoctrine()->getManager();
@@ -336,5 +365,30 @@ class DestinationController extends AbstractController
         $json=$normalizer->normalize($destination,'json',['groups'=>'post:read']);
         return new Response(json_encode($json));
     }
+    /**
+     * @Route("/alldest",name="alldest")
+     */
+    public function alldest($id)
+    {
+        $regions=$this->getDoctrine()->getRepository(Restaurant::class)->affdest($id);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($regions);
+
+        return new JsonResponse($formatted);
+
+    }
+    //--------------rating-------------
+//     /**
+//  * @Route("/destinationshowfront/{id}/Rating/{evaluation}", name="dest_rating")
+//  */
+// public function Rating(Request $request, Destination $destination, int $evaluation): Response
+// {
+//     $entityManager=$this->getDoctrine()->getManager();
+//     $destination->setEvaluation($evaluation);
+//     $entityManager->persist($destination);
+//     $entityManager->flush();
+
+//     return new Response("1");
+// }
 
 }

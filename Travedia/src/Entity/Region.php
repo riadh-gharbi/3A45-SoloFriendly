@@ -6,7 +6,8 @@ use App\Repository\RegionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert ; 
+use Symfony\Component\Validator\Constraints as Assert ;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -18,6 +19,7 @@ class Region
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("regions")
      */
     private $id;
 
@@ -25,16 +27,19 @@ class Region
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=100)
+     * @Groups ("regions")
      */
     private $nom;
 
     /**
      * @ORM\OneToMany(targetEntity=Destination::class, mappedBy="region", orphanRemoval=true)
+     * @Groups ("regions")
      */
     private $destination;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("regions")
      */
     private $image;
 

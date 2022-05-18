@@ -35,13 +35,11 @@
                                <div class="col-lg-3">
                                    <div class="main-left-sidebar">
                                        <div class="user_profile" style="margin-bottom: 90px; ">
-                                           <div class="user-pro-img">
-                                               {% if utilisateur.profile.image != null %}
+                                           {% if utilisateur.profile.image != null %}
                                                <img src="{{ asset('back/images/upload/profile_image/' ~ utilisateur.profile.image) }}" alt="">
-                                                {% else %}
-                                                    <img src="{{ asset("front/images/pdp.jpeg") }}" alt="">
-                                               {% endif %}
-                                           </div>
+                                           {% else %}
+                                               <img src="{{ asset("front/images/pdp.jpeg") }}" alt="">
+                                           {% endif %}
                                            <div class="user_pro_status">
                                                <ul class="flw-hr">
                                                    <li><a href="{{ path('edit_admin') }}" title="" class="flww">

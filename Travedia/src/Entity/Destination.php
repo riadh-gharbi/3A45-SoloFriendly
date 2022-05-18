@@ -6,7 +6,8 @@ use App\Repository\DestinationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert ; 
+use Symfony\Component\Validator\Constraints as Assert ;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 
@@ -19,6 +20,7 @@ class Destination
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("destinations")
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Destination
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="le nom ne peut pas etre vide ")
      * @Assert\Length(max=100)
+     * @Groups ("destinations")
      */
     private $nom;
 
@@ -33,16 +36,19 @@ class Destination
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="la description ne peut pas etre vide ")
      * @Assert\Length(max=250)
+     * @Groups ("destinations")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("destinations")
      */
     private $image;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups ("destinations")
      */
     private $evaluation;
 
@@ -53,32 +59,38 @@ class Destination
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="destination")
+     * @Groups ("destinations")
      */
     private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Evenement::class, inversedBy="destination")
+     * @Groups ("destinations")
      */
     private $evenement;
 
     /**
      * @ORM\ManyToMany(targetEntity=Planning::class, inversedBy="destinations")
+     * @Groups ("destinations")
      */
     private $planning;
 
     /**
      * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="destination")
-     * @ORM\JoinColumn(onDelete="CASCADE")    
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Groups ("destinations")
      */
     private $region;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("destinations")
      */
     private $longitude;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("destinations")
      */
     private $latitude;
 

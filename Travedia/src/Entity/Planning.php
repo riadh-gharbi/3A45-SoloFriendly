@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -18,6 +19,7 @@ class Planning
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ("plannings")
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Planning
      * @ORM\Column(type="date")
      * @Assert\Date
      * @Assert\GreaterThanOrEqual("today")
+     * @Groups ("plannings")
      */
     private $date_depart;
 
@@ -34,54 +37,61 @@ class Planning
      * @Assert\Date
      * @Assert\GreaterThanOrEqual(propertyPath="date_depart",
     message="La date du fin doit être supérieure à la date début")
+     *     @Groups ("plannings")
      */
     private $date_fin;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Assert\Positive(message="La Prix doit etre positive")
+     * @Groups ("plannings")
      */
     private $prix;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("plannings")
      */
     private $type_plan;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La description est necessaire")
+     * @Groups ("plannings")
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="planning")
+     * @Groups ("plannings")
      */
     private $utilisateur;
 
     /**
      * @ORM\ManyToMany(targetEntity=Evenement::class, inversedBy="plannings")
+     * @Groups ("plannings")
      */
     private $evenements;
 
     /**
      * @ORM\ManyToMany(targetEntity=Destination::class, inversedBy="plannings")
      * @Assert\NotBlank(message="La destination est necessaire")
+     * @Groups ("plannings")
      */
     private $destinations;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Actualite::class, inversedBy="plannings")
-     */
-    private $actualite;
+
+
 
     /**
      * @ORM\OneToMany(targetEntity=Paiement::class, mappedBy="planning")
+     * @Groups ("plannings")
      */
     private $paiement;
 
     /**
      * @ORM\ManyToMany(targetEntity=Hotel::class, inversedBy="plannings")
+     * @Groups ("plannings")
      */
     private $hotels;
 
@@ -224,17 +234,7 @@ class Planning
         return $this;
     }
 
-    public function getActualite(): ?Actualite
-    {
-        return $this->actualite;
-    }
 
-    public function setActualite(?Actualite $actualite): self
-    {
-        $this->actualite = $actualite;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Paiement[]

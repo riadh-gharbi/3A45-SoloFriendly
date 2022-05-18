@@ -43,10 +43,7 @@ class Poste
      */
     private $date;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Actualite::class, inversedBy="postes")
-     */
-    private $actualite;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=Profile::class, inversedBy="postes")
@@ -118,17 +115,7 @@ class Poste
         return $this;
     }
 
-    public function getActualite(): ?Actualite
-    {
-        return $this->actualite;
-    }
 
-    public function setActualite(?Actualite $actualite): self
-    {
-        $this->actualite = $actualite;
-
-        return $this;
-    }
 
     public function getProfile(): ?Profile
     {

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=EvenementRepository::class)
  * @UniqueEntity("nom")
@@ -19,18 +19,21 @@ class Evenement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("evenements")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("evenements")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("evenements")
      */
     private $description;
 
@@ -39,6 +42,7 @@ class Evenement
      * @Assert\GreaterThanOrEqual(
      *      value = "today"
      * )
+     * @Groups("evenements")
      */
     private $datedeb;
 
@@ -51,12 +55,14 @@ class Evenement
      *     "this.getDatefin() >= this.getDatedeb()",
      *     message="Verifier votre date"
      * )
+     * @Groups("evenements")
      */
     private $datefin;
 
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("evenements")
 
      */
     private $image;
@@ -69,6 +75,7 @@ class Evenement
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="evenements")
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Groups("evenements")
      */
     private $categorie;
 
@@ -82,10 +89,13 @@ class Evenement
      */
     private $planning;
 
+
+
+
     /**
-     * @ORM\ManyToOne(targetEntity=Actualite::class, inversedBy="evenements")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $actualite;
+    private $rating;
 
     public function __construct()
     {
@@ -244,14 +254,16 @@ class Evenement
         return $this;
     }
 
-    public function getActualite(): ?Actualite
+
+
+    public function getRating(): ?int
     {
-        return $this->actualite;
+        return $this->rating;
     }
 
-    public function setActualite(?Actualite $actualite): self
+    public function setRating(?int $rating): self
     {
-        $this->actualite = $actualite;
+        $this->rating = $rating;
 
         return $this;
     }

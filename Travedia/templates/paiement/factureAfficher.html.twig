@@ -2,12 +2,12 @@
 
 {% block body %}
 
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin card">
                 <div class="card">
 
 
                     <div class="card-body" style="margin: auto ">
-                        <h4 class="card-title">Table Facture</h4>
+                        <h4 class="card-title">Table Paiement</h4>
 
                         <div class=" table-responsive" >
                             <table class="table table-striped table-hover " style="margin-top: 100px; overflow-x: auto">
@@ -29,20 +29,20 @@
                                 <tbody>
 
                                 <tr  style="vertical-align: middle" >
-                                    <td style="word-break:break-all">{{ facture.id }}</td>
-                                    <td style="word-break:break-all">{{ facture.prix }} </td>
-                                    <td style="word-break:break-all">{{ facture.statut }} </td>
-                                    <td style="word-break:break-all">{{ facture.dateCreation|date('Y-m-d') }} </td>
-                                    <td style="word-break:break-all">{{ facture.datePaiement|date('Y-m-d') }} </td>
-                                    <td style="word-break:break-all">{{ facture.typePaiement }} </td>
-                                    <td style="word-break:break-all">{{ facture.owner.id }} </td>
-                                    <td style="word-break:break-all">{{ facture.client.id }} </td>
-                                    <td style="word-break:break-all">{{ facture.planning.id }} </td>
+                                    <td style="word-break:break-all">{{ paiement.id }}</td>
+                                    <td style="word-break:break-all">{{ paiement.prix }} </td>
+                                    <td style="word-break:break-all">{{ paiement.statut }} </td>
+                                    <td style="word-break:break-all">{{ paiement.dateCreation|date('Y-m-d') }} </td>
+                                    <td style="word-break:break-all">{{ paiement.datePaiement|date('Y-m-d') }} </td>
+                                    <td style="word-break:break-all">{{ paiement.typePaiement }} </td>
+                                    <td style="word-break:break-all">{{ paiement.owner.nom}} {{ paiement.owner.prenom }}</td>
+                                    <td style="word-break:break-all">{{ paiement.client.nom }} {{ paiement.client.prenom}}  </td>
+                                    <td style="word-break:break-all"><a href="{{ path('detailsPlanning' , {'id':paiement.planning.id}) }}">{{ paiement.planning.id }}</a> </td>
 
                                     <td>
                                         <div class="list-group-item btn-group-vertical" role="group">
-                                            <a class="btn-sm btn-success btn-block " href="{{ path('supprimerFacture',{'id':facture.id}) }}">Supprimer</a>
-                                            <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureFront',{'id':facture.id}) }}">Modifier</a>
+                                            <a class="btn-sm btn-success btn-block " href="{{ path('supprimerFacture',{'id':paiement.id}) }}">Supprimer</a>
+                                            <a class="btn-sm btn-success btn-block"  href="{{ path('modifierFactureFront',{'id':paiement.id}) }}">Modifier</a>
                                         </div>
                                     </td>
 

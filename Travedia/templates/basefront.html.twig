@@ -21,7 +21,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset("front/lib/slick/slick-theme.css") }}">
         <link rel="stylesheet" type="text/css" href="{{ asset("front/css/style.css") }}">
         <link rel="stylesheet" type="text/css" href="{{ asset("front/css/responsive.css") }}">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css') }}">
 
     {% endblock %}
     {% block extracss %}
@@ -36,7 +36,7 @@
         <div class="container">
             <div class="header-data">
                 <div class="logo">
-                    <a href="{{path('planningFront')}}" title=""><img src="{{asset("front/images/logo2-sansbg.png") }}" alt=""></a>
+                    <a href="{{path('afficherPoste')}}" title=""><img src="{{asset("front/images/logoBlanc.png") }}" alt=""></a>
                 </div>
                 <div class="search-bar">
                     <form>
@@ -54,7 +54,7 @@
                         </li>
                         <li>
                             <a href="{{path('PlanningFront_add')}}" title="">
-                                <span><img src="{{asset("front/images/icon1.png")}}" alt=""></span>
+                                <span><img src="{{asset("front/images/icon5.png")}}" alt=""></span>
                                 Planning
                             </a>
                         </li>
@@ -157,7 +157,7 @@
                     <li><a href="#" title="">Community Guidelines</a></li>
                 </ul>
                 <p><img src="{{ asset('front/images/copy-icon2.png') }}" alt="">Copyright 2022</p>
-                <img class="fl-rgt" src="{{ asset('front/images/logo-titre11.png') }}" alt="">
+                <img class="fl-rgt" src="{{ asset('front/images/logoDark2.png') }}" alt="">
             </div>
         </div>
     </footer>

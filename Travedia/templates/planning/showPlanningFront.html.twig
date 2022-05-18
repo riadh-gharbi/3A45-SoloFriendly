@@ -27,7 +27,7 @@
     {% for planning in planning %}
         <tr>
             <th>Id</th>
-            <td>{{ planning.id }}</td>
+            <td><a href="{{ path('detailsPlanning',{'id': planning.id }) }}">{{ planning.id }}</a></td>
         </tr>
         <tr>
             <th>Date Depart</th>
@@ -80,8 +80,9 @@
         <a href="{{ path('PlanningFront_edit', {'id':planning.id}) }}" class="btn btn-warning mr-2",style="width:80px;">Editer</a>
         <a href="{{ path('PlanningFront_del',{'id':planning.id}) }}"class="btn btn-danger mr-2" onclick="return confirm('Etes-vous sûr de supprimer ce planning?');">Supprimer</a>
         <a href="{{ path('pdfD', {'id':planning.id}) }}" class="btn btn-light mr-2",style="width:80px;">Telecharger PDF</a>
+        <a href="{{ path('createFactureFront', {'id':planning.id}) }}" class="btn btn-primary mr-2",style="height:40px; width:40px;">Vers Paiement</a>
 
-    {% endfor %}
+        {% endfor %}
     {{ knp_pagination_render(planning) }}
     </div>
 </div>

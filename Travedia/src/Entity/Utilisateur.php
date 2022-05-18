@@ -224,7 +224,7 @@ class Utilisateur implements UserInterface
         return $this->cin;
     }
 
-    public function setCin(int $cin): self
+    public function setCin(?int $cin): self
     {
         $this->cin = $cin;
 
@@ -260,7 +260,7 @@ class Utilisateur implements UserInterface
         return $this->adresse;
     }
 
-    public function setAdresse(string $adresse): self
+    public function setAdresse(?string $adresse): self
     {
         $this->adresse = $adresse;
 
@@ -272,7 +272,7 @@ class Utilisateur implements UserInterface
         return $this->numTel;
     }
 
-    public function setNumTel(int $numTel): self
+    public function setNumTel(?int $numTel): self
     {
         $this->numTel = $numTel;
 

@@ -6,7 +6,7 @@
 parameters:
     brochures_directory: '%kernel.project_dir%/public/uploads/brochures'
     event_picture: '%kernel.project_dir%/public\front\images\uploads\event_picture'
-
+    profile_image: '%kernel.project_dir%/public/back/images/upload/profile_image'
 
 services:
     # default configuration for services in *this* file

@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Hotel;
 use App\Entity\Utilisateur;
 use App\Entity\Destination;
 use App\Entity\Evenement;
 use App\Entity\Planning;
 use App\Form\PlanningType;
+use App\Repository\HotelRepository;
 use App\Repository\PlanningRepository;
 use App\Repository\UtilisateurRepository;
 use App\Repository\DestinationRepository;
 use App\Repository\EvenementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +23,13 @@ use Knp\Component\Pager\PaginatorInterface;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPaginationInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use App\Controller\pdf;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class PlanningController extends AbstractController
@@ -240,24 +249,24 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('PlanningFront_show');
     }
 
-/* /**
+ /**
      * @param $id
      * @param PlanningRepository $rep
      * @param Request $request
      * @return Response
-     * @Route("/planning/pdf/{id}",name="pdf")
+     * @Route("/planning/{id}",name="detailsPlanning")
      */
 
-   /* public function showplanningdetail($id,PlanningRepository $rep,Request $request)
+    public function showplanningdetail($id,PlanningRepository $rep,Request $request)
     {
         $planning=$rep->find($id);
         $form = $this->createForm(PlanningType::class, $planning);
         $form->handleRequest($request);
 
-        return $this->render('planning/detaillanningront.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('planning/detailplanning.html.twig', [
+            'form' => $form->createView(),'planning' => $planning
         ]);
-    }*/
+    }
     /**
      * @param Planning $planning
      * @return Response
@@ -283,10 +292,151 @@ class PlanningController extends AbstractController
     { $html=$this->renderView("planning/detailplanning.html.twig",[
         "planningg"=>$planning]);
         $pdf->show($html);
+    }
+
+    /**
+     * @param PlanningRepository $rep
+     * @param SerializerInterface $serializer
+     * @Route("/afficherPlanning" , name="afficherPlanningjson")
+     */
+    public function afficherPlanningJson(PlanningRepository $rep, SerializerInterface $serializer): Response
+    {
+        $plannings=$rep->findAll();
+        $planningsList =[];
+        $repU = $this->getDoctrine()->getRepository(Utilisateur::class);
+        foreach($plannings as $p)
+        {
+            $guide = $repU->find($p->getUtilisateur()->getId());
+            $evenements=[];
+            $destinations=[];
+            $hotels=[];
+            foreach($p->getEvenements() as $e){
+                $evenements[] = ['id'=>$e->getId()];
+            }
+            foreach ($p->getHotels() as $h){
+                $hotels[] = ['id'=>$h->getId()];
+
+            }
+            foreach($p->getDestinations() as $d)
+            {
+                $destinations[] = ['id'=>$d->getId() ];
+
+            }
+            $planningsList[] = [
+                'id'=>strval($p->getId()),
+                'dateDepart' => $p->getDateDepart(),
+                'dateFin' =>$p->getDateFin(),
+                'prix' => strval($p->getPrix()),
+                'typePlan' =>$p->getTypePlan(),
+                'description' =>$p->getDescription(),
+                'voyageurId' => ['id'=>strval($p->getUtilisateur()->getId()), 'nom'=>$guide->getNom(),'prenom'=>$guide->getPrenom()],
+                '$evenements'=>$evenements,
+                'destinations'=>$destinations,
+                'hotels'=>$hotels
+            ];
 
 
 
-}
+        }
+        return new JsonResponse($planningsList,200,['Content-Type'=>'application/json;charset=UTF-8']);
+
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(),new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json=$serializer->serialize($plannings, 'json',['circular_reference_handler'=>function ($object){return $object->getId();
+        }
+        ]);
+
+        $response=new Response($json);
+        $response->headers->set('Content-Type','application/json');
+        return $response;
+    }
+    /**
+     * @param PlanningRepository $rep
+     * @param UtilisateurRepository $uti
+     * @param EvenementRepository $ev
+     * @param HotelRepository $ho
+     * @param DestinationRepository $des
+     * @param SerializerInterface $serializer
+     * @Route("/ajouterPlanning" , name="ajouterPlanningJSON")
+     */
+    public function ajouterPlanningJson(Request $request,DestinationRepository $des,HotelRepository $ho,EvenementRepository $ev,UtilisateurRepository $uti,PlanningRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $plannings= new Planning();
+        $eve = new Evenement();
+        $eve->getId();
+        $ho = new Hotel();
+        $ho ->getId();
+        $des = new Destination();
+        //$plannings->setDateDepart($request->get('date_depart'));
+        $plannings->setDateDepart(\DateTime::createFromFormat( 'Y-m-d',$request->get('date_depart')));
+        //$plannings->setDateFin($request->get('date_fin'));
+        $plannings->setDateFin(\DateTime::createFromFormat( 'Y-m-d',$request->get('date_fin')));
+        $plannings->setPrix($request->get('prix'));
+        $plannings->setTypePlan($request->get('type_plan'));
+        $plannings->setDescription($request->get('description'));
+        //$plannings->setUtilisateur($request->get('utilisateur'));
+        $plannings->setUtilisateur($uti->find($request->get('utilisateur')));
+        $plannings->addEvenement($eve);
+        //$plannings->addEvenement($request->get('evenements'));
+        $plannings->addHotel($ho);
+        $plannings->addDestination($des);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($plannings);
+        $em->flush();
+        $encoders= [new JsonEncoder()];
+        $normalizers=[new ObjectNormalizer()];
+        $serializer =new Serializer($normalizers,$encoders);
+        $json=$normalizer->normalize($plannings,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+
+    }
+    /**
+     * @param Request $request
+     * @param PlanningRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/modifierPlanning", name="modifierPlanningJSON")
+     */
+    public function modifierPlanningJson(Request $request,PlanningRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer):Response
+    {
+        $plannings = $rep->find($request->get('id'));
+        $plannings->setDateDepart($request->get('date_depart'));
+        $plannings->setDateFin($request->get('date_Fin'));
+        $plannings->setPrix($request->get('prix'));
+        $plannings->setTypePlan($request->get('type_plan'));
+        $plannings->setDescription($request->get('type_plan'));
+        $plannings->setUtilisateur($request->get('utilisateur'));
+        $plannings->addEvenement($request->get('evenements'));
+        $plannings->addHotel($request->get('hotels'));
+        $plannings->addDestination($request->get('destinations'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $json=$normalizer->normalize($plannings,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
+    /**
+     * @param Request $request
+     * @param PlanningRepository $rep
+     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deletePlanning",name="deletePlanningJson")
+     */
+    public function deletePlanningJson(Request $request,PlanningRepository $rep,SerializerInterface $serializer,NormalizerInterface $normalizer)
+    {
+        $planning = $rep->find($request->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($planning);
+        $em->flush();
+        $json=$normalizer->normalize($planning,'json',['groups'=>'post:read']);
+        return new Response(json_encode($json));
+    }
+
 
 
 

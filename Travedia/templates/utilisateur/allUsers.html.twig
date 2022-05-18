@@ -135,7 +135,7 @@
                         </table>
                     </div>
                     <div class="navigation">
-                        {{ knp_pagination_render(utilisateur) }}
+                        {{ knp_pagination_render(utilisateur,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig',{'rounded': true,'size': 'small' }) }}
                     </div>
                 </div>
             </div>
@@ -158,8 +158,6 @@
                                     <th>Nom</th>
                                     <th>Prenom</th>
                                     <th>Image</th>
-                                    <th>Description</th>
-                                    <th>Evaluation</th>
                                     <th>Modifier</th>
                                     <th>supprimer</th>
                                 </tr>
@@ -170,11 +168,19 @@
                                         <td>{{ c.nom }}</td>
                                         <td>{{ c.prenom }}</td>
                                         <td>
-                                            <img src="{{ asset('back/images/upload/profile_image/' ~ c.profile.image) }}"
-                                                 alt="">
+
+                                            {% if c.profile.image == null %}
+
+                                            {% else %}
+
+                                                <img src="{{ asset('back/images/upload/profile_image/' ~ c.profile.image) }}"
+                                                     alt="">
+
+                                            {% endif %}
+
                                         </td>
-                                        <td>{{ c.profile.description }}</td>
-                                        <td>{{ c.profile.evaluation }}</td>
+
+
                                         <td>
                                             <a onclick="AdmineditConfirmation()"
                                                href="{{ path('edit_account',{'id':c.id}) }}"
@@ -191,7 +197,7 @@
                             </table>
                         </div>
                         <div class="navigation">
-                            {{ knp_pagination_render(profile) }}
+                            {{ knp_pagination_render(profile,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig',{'rounded': true,'size': 'small' }) }}
                         </div>
                     </div>
                 </div>
